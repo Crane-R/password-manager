@@ -1,12 +1,12 @@
 package crane.test;
 
-import crane.view.MainFrame;
+import crane.view.LookFrame;
 
 /**
  * @author Crane Resigned
  */
 public class PasswordManagerApplication {
     public static void main(String[] args) {
-        new MainFrame().setVisible(true);
+        new LookFrame().setVisible(true);
     }
 }
