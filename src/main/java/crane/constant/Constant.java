@@ -22,4 +22,11 @@ public class Constant {
      */
     public static final Object[] TITLES = {"唯一标识＞﹏＜", "账户╰(*°▽°*)╯", "用户名φ(*￣0￣)", "密码（＾∀＾●）ﾉｼ", "说明(❁´◡`❁)"};
 
+    /**
+     * 数字正则常量
+     * Author: Crane Resigned
+     * Date: 2022-11-30 19:23:48
+     */
+    public static final String IS_NUMBER = "^\\d+$";
+
 }

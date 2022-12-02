@@ -1,5 +1,7 @@
 package crane.model.jdbc;
 
+import crane.view.LookFrame;
+
 import java.sql.*;
 
 /**
@@ -7,11 +9,18 @@ import java.sql.*;
  */
 public class JDBCConnection {
 
-    private static final String URL = "jdbc:mysql://106.55.196.224:3306/password_manager4.0?useUnicode=true&characterEncoding=utf-8";
-    private static final String USER = "root";
-    private static final String PASSWORD = "yun12345678@";
+    private static String URL = "jdbc:mysql://106.55.196.224:3306/password_manager4.0?useUnicode=true&characterEncoding=utf-8";
+    private static String USER = "root";
+    private static String PASSWORD = "yun12345678@";
 
     static {
+        //本地
+        if (LookFrame.isLocal.isSelected()) {
+            URL = "jdbc:mysql://127.0.0.1:3306/password_manager4.0?useUnicode=true&characterEncoding=utf-8";
+            USER = "root";
+            PASSWORD = "12345678";
+        }
+
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (Exception e) {

@@ -113,26 +113,35 @@ public class MainFrame extends JFrame {
         updateMenuItem.setActionCommand("更新");
         updateMenuItem.addActionListener(e -> {
             LinkedList<String> list = new AccountService().getRowValues(jTable);
-            if (StrUtil.equals(searchButton.getText(), SEARCH_BTN_TXT2)) {
-                //先解密
-                list.set(3, AccountService.decodeBase64Salt(list.get(3)));
-                list.set(2, AccountService.decodeBase64Salt(list.get(2)));
+            //如果是刚新增的id肯定不是数值
+            if (!String.valueOf(list.get(0)).matches(Constant.IS_NUMBER)) {
+                JOptionPane.showMessageDialog(null, "您需要先解密再搜索一次哦", "无法获取唯一标识", JOptionPane.WARNING_MESSAGE);
+            } else {
+                if (StrUtil.equals(searchButton.getText(), SEARCH_BTN_TXT2)) {
+                    //先解密
+                    list.set(3, AccountService.decodeBase64Salt(list.get(3)));
+                    list.set(2, AccountService.decodeBase64Salt(list.get(2)));
+                }
+                list.add("更新");
+                new AddFrame(list).setVisible(true);
             }
-            list.add("更新");
-            new AddFrame(list).setVisible(true);
         });
 
         JMenuItem deleteMenuItem = new JMenuItem("删除 · Delete");
         deleteMenuItem.setActionCommand("删除");
         deleteMenuItem.addActionListener(e -> {
             LinkedList<String> list = new AccountService().getRowValues(jTable);
-            if (StrUtil.equals(searchButton.getText(), SEARCH_BTN_TXT2)) {
-                //先解密
-                list.set(3, AccountService.decodeBase64Salt(list.get(3)));
-                list.set(2, AccountService.decodeBase64Salt(list.get(2)));
+            if (!String.valueOf(list.get(0)).matches(Constant.IS_NUMBER)) {
+                JOptionPane.showMessageDialog(null, "您需要先解密再搜索一次哦", "无法获取唯一标识", JOptionPane.WARNING_MESSAGE);
+            } else {
+                if (StrUtil.equals(searchButton.getText(), SEARCH_BTN_TXT2)) {
+                    //先解密
+                    list.set(3, AccountService.decodeBase64Salt(list.get(3)));
+                    list.set(2, AccountService.decodeBase64Salt(list.get(2)));
+                }
+                list.add("删除");
+                new AddFrame(list).setVisible(true);
             }
-            list.add("删除");
-            new AddFrame(list).setVisible(true);
         });
 
         jPopupMenu.add(updateMenuItem);
@@ -267,6 +276,7 @@ public class MainFrame extends JFrame {
         resultNumbers = new JLabel(AccountService.getLatestAccountNumberText());
         resultNumbers.setBounds(42, 725, 600, 30);
         resultNumbers.setForeground(Color.decode("#80001E"));
+        resultNumbers.setFont(new Font(null, Font.PLAIN, 13));
         this.add(resultNumbers);
 
         //清空按钮
@@ -299,6 +309,13 @@ public class MainFrame extends JFrame {
             }
         });
         this.add(realTimeSearchBtn);
+
+        //免责声明
+        JLabel disclaimerLabel = new JLabel("安全性声明：此程序不保证绝对安全，如您不是开发者请斟酌使用，造成的任何损失开发者不会负责。");
+        disclaimerLabel.setBounds(540, 725, 800, 30);
+        disclaimerLabel.setForeground(Color.RED);
+        disclaimerLabel.setFont(new Font("微软雅黑", Font.BOLD, 13));
+        this.add(disclaimerLabel);
 
     }
 

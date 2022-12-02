@@ -1,5 +1,6 @@
 package crane.model.service;
 
+import cn.hutool.core.text.ASCIIStrCache;
 import cn.hutool.core.util.StrUtil;
 import crane.constant.Constant;
 import crane.model.bean.Account;
@@ -214,8 +215,7 @@ public class AccountService {
         if (StrUtil.isEmpty(password)) {
             return password;
         }
-        Base64.Decoder decoder = Base64.getDecoder();
-        String decode = new String(decoder.decode(password), StandardCharsets.UTF_8);
+        String decode = new String(Base64.getDecoder().decode(secondStageDecode(password)), StandardCharsets.UTF_8);
         String key = getRealKey();
 
         int keyLastIndex = key.length() - 1;
@@ -247,7 +247,29 @@ public class AccountService {
      * Date: 2022-11-27 14:13:12
      */
     public static String encodeBase64Salt(String password) {
-        return Base64.getEncoder().encodeToString(password.concat("*").concat(getRealKey()).getBytes(StandardCharsets.UTF_8));
+        return secondStageEncode(Base64.getEncoder().encodeToString(password.concat("1").concat(getRealKey()).getBytes(StandardCharsets.UTF_8)));
     }
+
+    /**
+     * 二阶加密：掐头加密算法
+     * Author: Crane Resigned
+     * Date: 2022-12-01 19:01:18
+     */
+    public static String secondStageEncode(String firstEncodePassword) {
+        String realKey = getRealKey();
+        int re = firstEncodePassword.charAt(0) + realKey.charAt(0);
+        return String.valueOf((char) re).concat(firstEncodePassword.substring(1));
+    }
+
+    /**
+     * 二阶解密
+     * Author: Crane Resigned
+     * Date: 2022-12-01 19:44:23
+     */
+    public static String secondStageDecode(String secondEncodePassword) {
+        return String.valueOf((char) ((int) secondEncodePassword.charAt(0) - (int) getRealKey().charAt(0))).concat(secondEncodePassword.substring(1));
+    }
+
+
 
 }

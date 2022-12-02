@@ -23,6 +23,13 @@ import java.util.Arrays;
 public class LookFrame extends JFrame {
 
     /**
+     * 是否本地开关
+     * Author: Crane Resigned
+     * Date: 2022-12-01 20:43:35
+     */
+    public static JToggleButton isLocal;
+
+    /**
      * 检测密钥文件是否存在
      * true为有
      * Author: Crane Resigned
@@ -84,6 +91,13 @@ public class LookFrame extends JFrame {
         loginTip.setFont(new Font("微软雅黑", Font.BOLD, 13));
         this.add(loginTip);
 
+        isLocal = new JToggleButton("是否本地", true);
+        isLocal.setBounds(50, 200, 100, 30);
+        isLocal.setForeground(Color.decode("#7D2720"));
+        isLocal.setFont(new Font("微软雅黑", Font.PLAIN, 13));
+        isLocal.setBorder(null);
+        isLocal.setFocusPainted(false);
+        this.add(isLocal);
     }
 
     private void close() {

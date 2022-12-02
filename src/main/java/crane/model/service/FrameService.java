@@ -20,7 +20,10 @@ public class FrameService {
      */
     public static Image getTitleImage() {
         try {
-            return ImageIO.read(Files.newInputStream(Paths.get("src/main/java/crane/img/pass_black_500.png")));
+            //打包
+            return ImageIO.read(Objects.requireNonNull(FrameService.class.getResource("/img/pass_black_500.png")));
+            //本地调试
+//            return ImageIO.read(Files.newInputStream(Paths.get("src/main/java/crane/img/pass_black_500.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }

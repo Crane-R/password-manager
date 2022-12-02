@@ -44,7 +44,7 @@ public class AddFrame extends JFrame {
         System.out.println("改变窗口传入的list：" + list);
 
         String purpose = list.get(list.size() - 1);
-        this.setTitle(purpose + "账户");
+        this.setTitle(StrUtil.equals(purpose, DELETE) ? "真的真的要删除这个账户吗？" : purpose + "账户");
         this.setLayout(null);
         this.setResizable(false);
         this.setSize(400, 400);

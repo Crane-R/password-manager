@@ -5,6 +5,8 @@ import crane.view.AddFrame;
 import crane.view.LookFrame;
 import crane.view.MainFrame;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -15,7 +17,7 @@ import java.util.UUID;
  * @author Crane Resigned
  */
 public class Test {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws UnsupportedEncodingException {
 //        new MainFrame().setVisible(true);
 
 //        new AddFrame().setVisible(true);
@@ -52,5 +54,18 @@ public class Test {
 //
 //        System.out.println(new String(Base64.getEncoder().encode("456353".getBytes())));
 
+//
+//        String a = "你还哦是的的";
+//        System.out.println("原密码："+a);
+//
+//        String s = AccountService.encodeBase64Salt(a);
+//        System.out.println("加密后：" + s);
+//
+//
+//        String s1 = AccountService.decodeBase64Salt(s);
+//        System.out.println("解密后：" + s1);
+
+
     }
+
 }
