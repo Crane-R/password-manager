@@ -1,24 +1,28 @@
 package crane.test;
 
-import crane.model.service.AccountService;
-import crane.view.AddFrame;
-import crane.view.LookFrame;
+import crane.view.ExportImportDataFrame;
 import crane.view.MainFrame;
 
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
+import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.UUID;
+import java.util.Properties;
 
 /**
  * @author Crane Resigned
  */
 public class Test {
-    public static void main(String[] args) throws UnsupportedEncodingException {
-//        new MainFrame().setVisible(true);
+    public static void main(String[] args) throws IOException {
+        new MainFrame().setVisible(true);
+
+//
+//        String recentlyPath = ExportImportDataFrame.getRecentlyPath();
+//        System.out.println(recentlyPath);
+//        
+//        ExportImportDataFrame.setRecentlyPath("你倒是覅多少积分");
+
 
 //        new AddFrame().setVisible(true);
 
@@ -30,7 +34,50 @@ public class Test {
 
 //        System.out.println(Paths.get("1").toAbsolutePath().toString());
 //
-        new LookFrame().setVisible(true);
+//     new MainFrame().setVisible(true);
+//        String a = "config/recently_path.properties";
+//
+//        URL systemResource = ClassLoader.getSystemResource(a);
+//
+//        InputStream systemResourceAsStream = ClassLoader.getSystemResourceAsStream("config/recently_path.properties");
+//        OutputStream writer = null;
+//        try {
+//            writer = Files.newOutputStream(new File(systemResource.toURI()).toPath());
+//        } catch (URISyntaxException e) {
+//            throw new RuntimeException(e);
+//        }
+
+//        Properties props = new Properties();
+//        try {
+//            props.load(ClassLoader.getSystemResourceAsStream("config/recently_path.properties"));
+//            String b = props.getProperty("url");
+//            System.out.println(b);
+//            
+//            props.setProperty("abcdef","1213212121");
+//            
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//
+////        ClassLoader.getSystemResource()
+//        
+//        OutputStream writer = null;
+//        try {
+//            writer = new BufferedOutputStream(new FileOutputStream("src/main/resources/config/recently_path.properties"));
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        props.store(writer, "a");
+//
+
+//        try {
+//            new File("E:\\Record\\a.xlsx").createNewFile();
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+
+
 //        System.out.println(AccountService.getRealKey());
 
 //        AccountService.createKey("2002");

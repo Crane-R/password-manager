@@ -1,5 +1,6 @@
 package crane.model.dao;
 
+import cn.hutool.core.util.StrUtil;
 import crane.model.bean.Account;
 import crane.model.jdbc.JDBCConnection;
 import crane.model.service.AccountService;
@@ -27,7 +28,7 @@ public class AccountDao implements DaoMethod {
     public List<Account> select(String searchText) {
         String sql;
         String key = AccountService.getUuidKey();
-        if ("".equals(searchText)) {
+        if (StrUtil.isEmpty(searchText)) {
             System.out.println("空查询");
             sql = "SELECT * FROM `account` where `user_key` = '" + key + "';";
         } else {
@@ -48,6 +49,7 @@ public class AccountDao implements DaoMethod {
                 account.setUsername(resultSet.getString("username"));
                 account.setPassword(resultSet.getString("password"));
                 account.setOther(resultSet.getString("other"));
+                account.setUserKey(resultSet.getString("user_key"));
                 list.add(account);
             }
         } catch (SQLException e) {

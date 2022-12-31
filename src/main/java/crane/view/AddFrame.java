@@ -1,8 +1,8 @@
 package crane.view;
 
 import cn.hutool.core.util.StrUtil;
-import com.sun.deploy.util.StringUtils;
-import crane.constant.Constant;
+import crane.constant.DefaultFont;
+import crane.constant.MainFrameCst;
 import crane.model.bean.Account;
 import crane.model.dao.AccountDao;
 import crane.model.service.AccountService;
@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.LinkedList;
 import java.util.Objects;
 
@@ -24,6 +26,11 @@ import java.util.Objects;
 @Slf4j
 public class AddFrame extends JFrame {
 
+    /**
+     * 验证提示文本
+     * Author: Crane Resigned
+     * Date: 2022-12-30 21:36:05
+     */
     private final static String[] OUT_PUT_TEXTS = {"账户名不能为空", "用户名不能为空", "密码不能为空"};
 
     /**
@@ -36,7 +43,7 @@ public class AddFrame extends JFrame {
     private final String DELETE = "删除";
 
 
-    public AddFrame(LinkedList<String> list) {
+    public AddFrame(LinkedList<String> list, MainFrame mainFrame) {
 
         //当前处理账户的id
         Integer currentId = "".equals(list.get(0)) ? null : Integer.valueOf(list.get(0));
@@ -44,11 +51,11 @@ public class AddFrame extends JFrame {
         System.out.println("改变窗口传入的list：" + list);
 
         String purpose = list.get(list.size() - 1);
-        this.setTitle(StrUtil.equals(purpose, DELETE) ? "真的真的要删除这个账户吗？" : purpose + "账户");
+        this.setTitle(StrUtil.equals(purpose, DELETE) ? "真的真的要删除这个账户吗？" : purpose + "一个账户");
         this.setLayout(null);
         this.setResizable(false);
         this.setSize(400, 400);
-        this.setLocationRelativeTo(null);
+        this.setLocation(1100,330);
 
         //设置标题栏的图标
         Image image = FrameService.getTitleImage();
@@ -56,35 +63,43 @@ public class AddFrame extends JFrame {
 
         //四个标签和四个输入框
         JLabel jLabel = new JLabel("账户");
+        jLabel.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
         jLabel.setBounds(60, 25, 100, 40);
         this.add(jLabel);
 
         JLabel jLabel1 = new JLabel("用户名");
         jLabel1.setBounds(60, 85, 100, 40);
+        jLabel1.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
         this.add(jLabel1);
 
         JLabel jLabel2 = new JLabel("密码");
         jLabel2.setBounds(60, 145, 100, 40);
+        jLabel2.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
         this.add(jLabel2);
 
         JLabel jLabel3 = new JLabel("说明");
         jLabel3.setBounds(60, 205, 100, 40);
+        jLabel3.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
         this.add(jLabel3);
 
         JTextField jTextField = new JTextField(list.get(1));
         jTextField.setBounds(140, 30, 190, 30);
+        jTextField.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
         this.add(jTextField);
 
         JTextField jTextField1 = new JTextField(list.get(2));
         jTextField1.setBounds(140, 90, 190, 30);
+        jTextField1.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
         this.add(jTextField1);
 
         JTextField jTextField2 = new JTextField(list.get(3));
         jTextField2.setBounds(140, 150, 190, 30);
+        jTextField2.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
         this.add(jTextField2);
 
         JTextField jTextField3 = new JTextField(list.get(4));
         jTextField3.setBounds(140, 210, 190, 30);
+        jTextField3.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
         this.add(jTextField3);
 
         //两个按钮
@@ -93,7 +108,7 @@ public class AddFrame extends JFrame {
         resetButton.setFocusPainted(false);
         resetButton.setForeground(Color.WHITE);
         resetButton.setBackground(Color.decode("#F27635"));
-        resetButton.setFont(new Font("微软雅黑", Font.PLAIN, 13));
+        resetButton.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
         resetButton.setBorder(null);
         resetButton.addActionListener(e -> {
             //清空所有文本框
@@ -110,7 +125,7 @@ public class AddFrame extends JFrame {
         submitButton.setFocusPainted(false);
         submitButton.setForeground(Color.WHITE);
         submitButton.setBackground(Color.decode("#5697C4"));
-        submitButton.setFont(new Font("微软雅黑", Font.PLAIN, 13));
+        submitButton.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
         submitButton.setBorder(null);
         submitButton.addActionListener(e -> {
 
@@ -171,11 +186,52 @@ public class AddFrame extends JFrame {
                                         new Object[][]{{Objects.isNull(currentId) ?
                                                 "唯一标识刷新后查看"
                                                 : currentId, id, username, password, other}}
-                                        : new Object[0][0], Constant.TITLES));
+                                        : new Object[0][0], MainFrameCst.TITLES));
                 this.dispose();
             }
         });
         this.add(submitButton);
+
+        //增加关闭新增窗口的事件
+        this.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+                log.info("窗口打开");
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                log.info("窗口点击关闭");
+                mainFrame.setVisible(true);
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+                log.info("窗口关闭后（调用this.dispose）");
+                mainFrame.setVisible(true);
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+                log.info("窗口最小化");
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+                log.info("窗口取消最小化");
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+                log.info("窗口激活");
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+                log.info("窗口失活");
+            }
+        });
+
     }
 
 }

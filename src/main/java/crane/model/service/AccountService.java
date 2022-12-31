@@ -3,6 +3,7 @@ package crane.model.service;
 import cn.hutool.core.text.ASCIIStrCache;
 import cn.hutool.core.util.StrUtil;
 import crane.constant.Constant;
+import crane.constant.MainFrameCst;
 import crane.model.bean.Account;
 import crane.model.dao.AccountDao;
 import crane.view.MainFrame;
@@ -100,7 +101,7 @@ public class AccountService {
 
         try {
             //这里因为文本框事件频繁触发而导致的异常
-            MainFrame.jTable.setModel(new DefaultTableModel(new AccountService().selectData(text), Constant.TITLES));
+            MainFrame.jTable.setModel(new DefaultTableModel(new AccountService().selectData(text), MainFrameCst.TITLES));
         } catch (Exception e) {
             log.info("事件并发异常（使用了线程池）");
             e.printStackTrace();
@@ -110,9 +111,29 @@ public class AccountService {
     }
 
     public static void setTableMessages(Object[][] data) {
-        MainFrame.jTable.setModel(new DefaultTableModel(data, Constant.TITLES));
+        MainFrame.jTable.setModel(new DefaultTableModel(data, MainFrameCst.TITLES));
         //更新账户数量
         MainFrame.getResultNumbers().setText(AccountService.getLatestAccountNumberText());
+    }
+
+    /**
+     * 传入集合，设置表数据
+     * Author: Crane Resigned
+     * Date: 2022-12-31 17:09:28
+     */
+    public static void setTableMessagesByList(List<Account> list) {
+        //list转为二维数组
+        Object[][] result = new Object[list.size()][MainFrameCst.TITLES.length];
+        int len = list.size();
+        for (int i = 0; i < len; i++) {
+            Account account = list.get(i);
+            result[i][0] = "------";
+            result[i][1] = account.getAccountName();
+            result[i][2] = account.getUsername();
+            result[i][3] = account.getPassword();
+            result[i][4] = account.getOther();
+        }
+        setTableMessages(result);
     }
 
     /**
@@ -269,7 +290,6 @@ public class AccountService {
     public static String secondStageDecode(String secondEncodePassword) {
         return String.valueOf((char) ((int) secondEncodePassword.charAt(0) - (int) getRealKey().charAt(0))).concat(secondEncodePassword.substring(1));
     }
-
 
 
 }

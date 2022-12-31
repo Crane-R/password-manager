@@ -2,6 +2,9 @@ package crane.view;
 
 import cn.hutool.core.util.StrUtil;
 import crane.constant.Constant;
+import crane.constant.ExportImportCst;
+import crane.constant.DefaultFont;
+import crane.constant.MainFrameCst;
 import crane.model.service.AccountService;
 import crane.model.service.FrameService;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +17,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.LinkedList;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author Crane Resigned
@@ -81,7 +83,7 @@ public class MainFrame extends JFrame {
     private final JRadioButton realTimeSearchBtn;
 
     private final String SEARCH_BTN_TXT1 = "锁 · 手动搜索";
-    private final String SEARCH_BTN_TXT2 = "立即解密";
+    private final String SEARCH_BTN_TXT2 = "解码";
 
     /**
      * 搜索按钮
@@ -91,7 +93,7 @@ public class MainFrame extends JFrame {
     private final JButton searchButton = new JButton(SEARCH_BTN_TXT1);
 
     public MainFrame() {
-        this.setTitle(Constant.MAIN_TITLE);
+        this.setTitle(MainFrameCst.MAIN_TITLE);
         this.setSize(1200, 800);
         this.setLayout(null);
         this.setResizable(false);
@@ -102,7 +104,7 @@ public class MainFrame extends JFrame {
         this.setIconImage(FrameService.getTitleImage());
 
         //数据显示表格
-        jTable = new JTable(new DefaultTableModel(new Object[0][0], Constant.TITLES));
+        jTable = new JTable(new DefaultTableModel(new Object[0][0], MainFrameCst.TITLES));
         jTable.setRowHeight(30);
         JScrollPane jScrollPane = new JScrollPane(jTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         jScrollPane.setBounds(42, 125, 1100, 600);
@@ -123,7 +125,8 @@ public class MainFrame extends JFrame {
                     list.set(2, AccountService.decodeBase64Salt(list.get(2)));
                 }
                 list.add("更新");
-                new AddFrame(list).setVisible(true);
+                new AddFrame(list, this).setVisible(true);
+                this.setVisible(false);
             }
         });
 
@@ -140,7 +143,8 @@ public class MainFrame extends JFrame {
                     list.set(2, AccountService.decodeBase64Salt(list.get(2)));
                 }
                 list.add("删除");
-                new AddFrame(list).setVisible(true);
+                new AddFrame(list, this).setVisible(true);
+                this.setVisible(false);
             }
         });
 
@@ -167,7 +171,7 @@ public class MainFrame extends JFrame {
         //搜索文本
         searchText = new JTextField("");
         searchText.setBounds(280, 50, 380, 30);
-        searchText.setFont(new Font("微软雅黑", Font.PLAIN, 13));
+        searchText.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
         searchText.setForeground(Color.decode("#1A5599"));
         searchText.setBorder(BorderFactory.createLineBorder(Color.decode("#B8CE8E")));
         searchText.addKeyListener(new KeyAdapter() {
@@ -186,7 +190,7 @@ public class MainFrame extends JFrame {
         searchButton.setFocusPainted(false);
         searchButton.setForeground(Color.WHITE);
         searchButton.setBackground(Color.decode("#4FA485"));
-        searchButton.setFont(new Font("微软雅黑", Font.PLAIN, 13));
+        searchButton.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
         searchButton.setBorder(null);
         searchButton.addActionListener(e -> {
             if (!switchRecord) {
@@ -257,7 +261,7 @@ public class MainFrame extends JFrame {
         addButton.setFocusPainted(false);
         addButton.setForeground(Color.WHITE);
         addButton.setBackground(Color.decode("#4792B9"));
-        addButton.setFont(new Font("微软雅黑", Font.PLAIN, 13));
+        addButton.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
         addButton.setBorder(null);
         addButton.addActionListener(e -> {
             //添加按钮点击事件
@@ -268,7 +272,8 @@ public class MainFrame extends JFrame {
                 list.add("");
             }
             list.add("新增");
-            new AddFrame(list).setVisible(true);
+            new AddFrame(list, this).setVisible(true);
+            this.setVisible(false);
         });
         this.add(addButton);
 
@@ -285,16 +290,16 @@ public class MainFrame extends JFrame {
         clearBtn.setFocusPainted(false);
         clearBtn.setForeground(Color.WHITE);
         clearBtn.setBackground(Color.decode("#1A5599"));
-        clearBtn.setFont(new Font("微软雅黑", Font.PLAIN, 13));
+        clearBtn.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
         clearBtn.setBorder(null);
         clearBtn.addActionListener(e -> {
             searchText.setText(null);
-            jTable.setModel(new DefaultTableModel(new Object[0][0], Constant.TITLES));
+            jTable.setModel(new DefaultTableModel(new Object[0][0], MainFrameCst.TITLES));
         });
         this.add(clearBtn);
 
         realTimeSearchBtn = new JRadioButton("实时", true);
-        realTimeSearchBtn.setBounds(1123, 0, 60, 30);
+        realTimeSearchBtn.setBounds(1125, 0, 60, 30);
         realTimeSearchBtn.setFocusPainted(false);
         realTimeSearchBtn.setForeground(Color.WHITE);
         realTimeSearchBtn.setBackground(Color.decode("#7D2720"));
@@ -316,6 +321,30 @@ public class MainFrame extends JFrame {
         disclaimerLabel.setForeground(Color.RED);
         disclaimerLabel.setFont(new Font("微软雅黑", Font.BOLD, 13));
         this.add(disclaimerLabel);
+
+        //导出数据按钮
+        JButton exportBtn = new JButton("导出");
+        exportBtn.setBounds(1139, 32, 50, 30);
+        exportBtn.setFocusPainted(false);
+        exportBtn.setForeground(Color.WHITE);
+        exportBtn.setBackground(Color.decode("#046D35"));
+        exportBtn.setFont(DefaultFont.DEFAULT_FONT_ONE.setStyle(Font.BOLD).getFont());
+        exportBtn.setBorder(null);
+        exportBtn.setHorizontalAlignment(JLabel.CENTER);
+        exportBtn.addActionListener(e -> new ExportImportDataFrame(ExportImportCst.EXPORT).setVisible(true));
+        this.add(exportBtn);
+
+        //导入
+        JButton importBtn = new JButton("导入");
+        importBtn.setBounds(1139, 64, 50, 30);
+        importBtn.setFocusPainted(false);
+        importBtn.setForeground(Color.WHITE);
+        importBtn.setBackground(Color.decode("#5898C2"));
+        importBtn.setFont(DefaultFont.DEFAULT_FONT_ONE.setStyle(Font.BOLD).getFont());
+        importBtn.setBorder(null);
+        importBtn.setHorizontalAlignment(JLabel.CENTER);
+        importBtn.addActionListener(e -> new ExportImportDataFrame(ExportImportCst.IMPORT).setVisible(true));
+        this.add(importBtn);
 
     }
 
