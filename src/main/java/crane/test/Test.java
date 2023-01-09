@@ -1,7 +1,10 @@
 package crane.test;
 
+import crane.model.service.FrontLoading;
 import crane.view.ExportImportDataFrame;
+import crane.view.LockFrame;
 import crane.view.MainFrame;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 import java.net.URISyntaxException;
@@ -13,9 +16,15 @@ import java.util.Properties;
 /**
  * @author Crane Resigned
  */
+@Slf4j
 public class Test {
     public static void main(String[] args) throws IOException {
-        new MainFrame().setVisible(true);
+//        new MainFrame().setVisible(true);
+
+        FrontLoading.checkKeysDirectory();
+
+        new LockFrame().setVisible(true);
+
 
 //
 //        String recentlyPath = ExportImportDataFrame.getRecentlyPath();

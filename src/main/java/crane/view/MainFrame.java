@@ -7,6 +7,7 @@ import crane.constant.DefaultFont;
 import crane.constant.MainFrameCst;
 import crane.model.service.AccountService;
 import crane.model.service.FrameService;
+import crane.model.service.SecurityService;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -34,10 +35,6 @@ public class MainFrame extends JFrame {
 
     public static JTextField getSearchText() {
         return searchText;
-    }
-
-    public static void setSearchText(JTextField searchText) {
-        MainFrame.searchText = searchText;
     }
 
     /**
@@ -121,12 +118,11 @@ public class MainFrame extends JFrame {
             } else {
                 if (StrUtil.equals(searchButton.getText(), SEARCH_BTN_TXT2)) {
                     //先解密
-                    list.set(3, AccountService.decodeBase64Salt(list.get(3)));
-                    list.set(2, AccountService.decodeBase64Salt(list.get(2)));
+                    list.set(3, SecurityService.decodeBase64Salt(list.get(3)));
+                    list.set(2, SecurityService.decodeBase64Salt(list.get(2)));
                 }
                 list.add("更新");
                 new AddFrame(list, this).setVisible(true);
-                this.setVisible(false);
             }
         });
 
@@ -139,12 +135,11 @@ public class MainFrame extends JFrame {
             } else {
                 if (StrUtil.equals(searchButton.getText(), SEARCH_BTN_TXT2)) {
                     //先解密
-                    list.set(3, AccountService.decodeBase64Salt(list.get(3)));
-                    list.set(2, AccountService.decodeBase64Salt(list.get(2)));
+                    list.set(3, SecurityService.decodeBase64Salt(list.get(3)));
+                    list.set(2, SecurityService.decodeBase64Salt(list.get(2)));
                 }
                 list.add("删除");
                 new AddFrame(list, this).setVisible(true);
-                this.setVisible(false);
             }
         });
 
@@ -180,13 +175,21 @@ public class MainFrame extends JFrame {
                 //如果按下回车就触发搜索事件
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     log.info("回车键搜索");
-                    AccountService.setTableMessages();
+                    if (!switchRecord) {
+                        AccountService.setTableMessages();
+                        switchRecord = true;
+                        searchButton.setText(SEARCH_BTN_TXT2);
+                    } else {
+                        AccountService.setTableMessages(AccountService.getTableData());
+                        switchRecord = false;
+                        searchButton.setText(SEARCH_BTN_TXT1);
+                    }
                 }
             }
         });
         this.add(searchText);
 
-        searchButton.setBounds(750, 50, 100, 30);
+        searchButton.setBounds(720, 50, 100, 30);
         searchButton.setFocusPainted(false);
         searchButton.setForeground(Color.WHITE);
         searchButton.setBackground(Color.decode("#4FA485"));
@@ -257,7 +260,7 @@ public class MainFrame extends JFrame {
 
         //添加按钮
         JButton addButton = new JButton("新增账户");
-        addButton.setBounds(875, 50, 100, 30);
+        addButton.setBounds(845, 50, 100, 30);
         addButton.setFocusPainted(false);
         addButton.setForeground(Color.WHITE);
         addButton.setBackground(Color.decode("#4792B9"));
@@ -286,7 +289,7 @@ public class MainFrame extends JFrame {
 
         //清空按钮
         JButton clearBtn = new JButton("清空当前");
-        clearBtn.setBounds(1000, 50, 100, 30);
+        clearBtn.setBounds(970, 50, 100, 30);
         clearBtn.setFocusPainted(false);
         clearBtn.setForeground(Color.WHITE);
         clearBtn.setBackground(Color.decode("#1A5599"));
@@ -324,7 +327,7 @@ public class MainFrame extends JFrame {
 
         //导出数据按钮
         JButton exportBtn = new JButton("导出");
-        exportBtn.setBounds(1139, 32, 50, 30);
+        exportBtn.setBounds(1125, 32, 60, 30);
         exportBtn.setFocusPainted(false);
         exportBtn.setForeground(Color.WHITE);
         exportBtn.setBackground(Color.decode("#046D35"));
@@ -336,7 +339,7 @@ public class MainFrame extends JFrame {
 
         //导入
         JButton importBtn = new JButton("导入");
-        importBtn.setBounds(1139, 64, 50, 30);
+        importBtn.setBounds(1125, 64, 60, 30);
         importBtn.setFocusPainted(false);
         importBtn.setForeground(Color.WHITE);
         importBtn.setBackground(Color.decode("#5898C2"));

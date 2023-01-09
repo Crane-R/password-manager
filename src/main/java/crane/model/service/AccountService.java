@@ -1,8 +1,5 @@
 package crane.model.service;
 
-import cn.hutool.core.text.ASCIIStrCache;
-import cn.hutool.core.util.StrUtil;
-import crane.constant.Constant;
 import crane.constant.MainFrameCst;
 import crane.model.bean.Account;
 import crane.model.dao.AccountDao;
@@ -11,10 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Paths;
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author Crane Resigned
@@ -127,84 +123,13 @@ public class AccountService {
         int len = list.size();
         for (int i = 0; i < len; i++) {
             Account account = list.get(i);
-            result[i][0] = "------";
+            result[i][0] = "刷新查看唯一标识";
             result[i][1] = account.getAccountName();
             result[i][2] = account.getUsername();
             result[i][3] = account.getPassword();
             result[i][4] = account.getOther();
         }
         setTableMessages(result);
-    }
-
-    /**
-     * 检测密钥文件是否存在的方法
-     * Author: Crane Resigned
-     * Date: 2022-11-27 11:54:47
-     */
-    public static boolean checkKeyFileIsExist() {
-        File file = new File(Paths.get("key").toAbsolutePath().toString());
-        return file.exists() && Objects.isNull(file.listFiles());
-    }
-
-    /**
-     * 创建密匙的方法
-     * Author: Crane Resigned
-     * Date: 2022-11-27 12:07:28
-     */
-    public static void createKey(String keyPre) {
-        String checkoutKey = keyPre.replaceAll("\"", "'");
-        String finalKey = checkoutKey.concat(UUID.randomUUID().toString());
-
-        File targetKeyFile = new File(Paths.get("key").toAbsolutePath().toString());
-
-        //设为只读命令
-        String command1 = "attrib \"" + targetKeyFile.getAbsolutePath() + "\" +R";
-        //隐藏命令
-        String command2 = "attrib \"" + targetKeyFile.getAbsolutePath() + "\" +H";
-
-        FileOutputStream fileOutputStream;
-        try {
-            fileOutputStream = new FileOutputStream(targetKeyFile);
-            fileOutputStream.write(finalKey.getBytes());
-
-            Runtime.getRuntime().exec(command1);
-            Runtime.getRuntime().exec(command2);
-
-            fileOutputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 获取密匙
-     * Author: Crane Resigned
-     * Date: 2022-11-27 13:14:59
-     */
-    public static String getKey() {
-        BufferedReader bufferedReader;
-        String result = null;
-        try {
-            bufferedReader = new BufferedReader(new FileReader(Paths.get("key").toAbsolutePath().toAbsolutePath().toString()));
-            result = bufferedReader.readLine();
-            bufferedReader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    /**
-     * 获取密钥的uuid
-     * Author: Crane Resigned
-     * Date: 2022-11-27 17:01:41
-     */
-    public static String getUuidKey() {
-        String uuidKey = getKey();
-        if (uuidKey.length() < 37) {
-            return "密匙长度不对";
-        }
-        return new StringBuilder(new StringBuilder(uuidKey).reverse().substring(0, 36)).reverse().toString();
     }
 
     /**
@@ -220,76 +145,11 @@ public class AccountService {
 
         for (int i = 0; i < rowCount; i++) {
             for (int j = 0; j < columnCount; j++) {
-                resultData[i][j] = j == 3 || j == 2 ? decodeBase64Salt(String.valueOf(jTable.getValueAt(i, j))) : String.valueOf(jTable.getValueAt(i, j));
+                resultData[i][j] = j == 3 || j == 2 ? SecurityService.decodeBase64Salt(String.valueOf(jTable.getValueAt(i, j))) : String.valueOf(jTable.getValueAt(i, j));
             }
         }
 
         return resultData;
     }
-
-    /**
-     * 解密算法
-     * Author: Crane Resigned
-     * Date: 2022-11-27 13:43:29
-     */
-    public static String decodeBase64Salt(String password) {
-        if (StrUtil.isEmpty(password)) {
-            return password;
-        }
-        String decode = new String(Base64.getDecoder().decode(secondStageDecode(password)), StandardCharsets.UTF_8);
-        String key = getRealKey();
-
-        int keyLastIndex = key.length() - 1;
-        int decodeLastIndex = decode.length() - 1;
-        for (int i = 0; i < keyLastIndex + 1; i++) {
-            if (decode.charAt(decodeLastIndex--) != key.charAt(keyLastIndex--)) {
-                return "假密匙";
-            }
-        }
-        return new StringBuilder(decode).substring(0, decodeLastIndex - keyLastIndex - 1);
-    }
-
-    /**
-     * 获取真实密钥
-     * Author: Crane Resigned
-     * Date: 2022-11-27 13:52:51
-     */
-    public static String getRealKey() {
-        String uuidKey = getKey();
-        if (uuidKey.length() < 37) {
-            return "密匙长度不对";
-        }
-        return new StringBuilder(new StringBuilder(uuidKey).reverse().substring(36, uuidKey.length())).reverse().toString();
-    }
-
-    /**
-     * 加密算法
-     * Author: Crane Resigned
-     * Date: 2022-11-27 14:13:12
-     */
-    public static String encodeBase64Salt(String password) {
-        return secondStageEncode(Base64.getEncoder().encodeToString(password.concat("1").concat(getRealKey()).getBytes(StandardCharsets.UTF_8)));
-    }
-
-    /**
-     * 二阶加密：掐头加密算法
-     * Author: Crane Resigned
-     * Date: 2022-12-01 19:01:18
-     */
-    public static String secondStageEncode(String firstEncodePassword) {
-        String realKey = getRealKey();
-        int re = firstEncodePassword.charAt(0) + realKey.charAt(0);
-        return String.valueOf((char) re).concat(firstEncodePassword.substring(1));
-    }
-
-    /**
-     * 二阶解密
-     * Author: Crane Resigned
-     * Date: 2022-12-01 19:44:23
-     */
-    public static String secondStageDecode(String secondEncodePassword) {
-        return String.valueOf((char) ((int) secondEncodePassword.charAt(0) - (int) getRealKey().charAt(0))).concat(secondEncodePassword.substring(1));
-    }
-
-
+    
 }

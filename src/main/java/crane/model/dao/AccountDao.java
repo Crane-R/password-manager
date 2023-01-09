@@ -2,15 +2,14 @@ package crane.model.dao;
 
 import cn.hutool.core.util.StrUtil;
 import crane.model.bean.Account;
-import crane.model.jdbc.JDBCConnection;
-import crane.model.service.AccountService;
+import crane.model.jdbc.JdbcConnection;
+import crane.model.service.SecurityService;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,7 +26,7 @@ public class AccountDao implements DaoMethod {
     @Override
     public List<Account> select(String searchText) {
         String sql;
-        String key = AccountService.getUuidKey();
+        String key = SecurityService.getUuidKey();
         if (StrUtil.isEmpty(searchText)) {
             System.out.println("空查询");
             sql = "SELECT * FROM `account` where `user_key` = '" + key + "';";
@@ -39,7 +38,7 @@ public class AccountDao implements DaoMethod {
 
         LinkedList<Account> list = new LinkedList<>();
         try {
-            connection = JDBCConnection.getConnection();
+            connection = JdbcConnection.getConnection();
             preparedStatement = connection.prepareStatement(sql);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -55,7 +54,7 @@ public class AccountDao implements DaoMethod {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            JDBCConnection.close(preparedStatement, connection, resultSet);
+            JdbcConnection.close(preparedStatement, connection, resultSet);
         }
         return list;
     }
@@ -65,7 +64,7 @@ public class AccountDao implements DaoMethod {
         String sql = "INSERT INTO `account` (`account_name`, `username`, `password`, `other`, `user_key`) VALUES (?, ?, ?, ?, ?);";
 
         try {
-            connection = JDBCConnection.getConnection();
+            connection = JdbcConnection.getConnection();
             preparedStatement = connection.prepareStatement(sql);
             allSet(preparedStatement, account);
             preparedStatement.setString(5, account.getUserKey());
@@ -74,7 +73,7 @@ public class AccountDao implements DaoMethod {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            JDBCConnection.close(preparedStatement, connection, null);
+            JdbcConnection.close(preparedStatement, connection, null);
         }
         return null;
     }
@@ -84,7 +83,7 @@ public class AccountDao implements DaoMethod {
         String sql = "UPDATE `account` SET `account_name` = ?, `username` = ?, `password` = ?, `other` = ? WHERE `account_id` = ?;";
 
         try {
-            connection = JDBCConnection.getConnection();
+            connection = JdbcConnection.getConnection();
             preparedStatement = connection.prepareStatement(sql);
             allSet(preparedStatement, account);
             preparedStatement.setInt(5, account.getAccountId());
@@ -92,7 +91,7 @@ public class AccountDao implements DaoMethod {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            JDBCConnection.close(preparedStatement, connection, null);
+            JdbcConnection.close(preparedStatement, connection, null);
         }
         return null;
     }
@@ -107,13 +106,13 @@ public class AccountDao implements DaoMethod {
     public Boolean delete(Account account) {
         String sql = "DELETE FROM `account` WHERE `account_id` = " + account.getAccountId();
         try {
-            connection = JDBCConnection.getConnection();
+            connection = JdbcConnection.getConnection();
             preparedStatement = connection.prepareStatement(sql);
             return preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            JDBCConnection.close(preparedStatement, connection, null);
+            JdbcConnection.close(preparedStatement, connection, null);
         }
         return null;
     }

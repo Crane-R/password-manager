@@ -2,15 +2,14 @@ package crane.view;
 
 import cn.hutool.core.util.StrUtil;
 import crane.constant.DefaultFont;
-import crane.constant.MainFrameCst;
 import crane.model.bean.Account;
 import crane.model.dao.AccountDao;
 import crane.model.service.AccountService;
 import crane.model.service.FrameService;
+import crane.model.service.SecurityService;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -55,7 +54,11 @@ public class AddFrame extends JFrame {
         this.setLayout(null);
         this.setResizable(false);
         this.setSize(400, 400);
-        this.setLocation(1100,330);
+        if (StrUtil.equals(purpose, ADD)) {
+            this.setLocation(1100, 330);
+        } else {
+            this.setLocationRelativeTo(null);
+        }
 
         //设置标题栏的图标
         Image image = FrameService.getTitleImage();
@@ -145,10 +148,10 @@ public class AddFrame extends JFrame {
                 Boolean isTrue = null;
                 Integer effect = Integer.MIN_VALUE;
                 String id = jTextField.getText().trim();
-                String username = AccountService.encodeBase64Salt(jTextField1.getText().trim());
-                String password = AccountService.encodeBase64Salt(jTextField2.getText().trim());
+                String username = SecurityService.encodeBase64Salt(jTextField1.getText().trim());
+                String password = SecurityService.encodeBase64Salt(jTextField2.getText().trim());
                 String other = jTextField3.getText().trim();
-                String userKey = AccountService.getUuidKey();
+                String userKey = SecurityService.getUuidKey();
                 switch (purpose) {
                     case ADD:
                         isTrue = new AccountService().addAccount(id, username, password, other, userKey);
@@ -180,13 +183,15 @@ public class AddFrame extends JFrame {
                     log.error(errorText);
                 }
                 //关闭前刷新主界面
-                MainFrame.jTable.setModel(
-                        new DefaultTableModel(
-                                StrUtil.equals(ADD, purpose) || StrUtil.equals(UPDATE, purpose) ?
-                                        new Object[][]{{Objects.isNull(currentId) ?
-                                                "唯一标识刷新后查看"
-                                                : currentId, id, username, password, other}}
-                                        : new Object[0][0], MainFrameCst.TITLES));
+                //如果是更新或新增
+                if (StrUtil.equals(ADD, purpose) || StrUtil.equals(UPDATE, purpose)) {
+                    AccountService.setTableMessages(
+                            new Object[][]{{Objects.isNull(currentId) ? "唯一标识刷新后查看" : currentId, id, username, password, other}}
+                    );
+                } else if (StrUtil.equals(purpose, DELETE)) {
+                    //如果是删除就更新当前搜索的信息
+                    AccountService.setTableMessages();
+                }
                 this.dispose();
             }
         });

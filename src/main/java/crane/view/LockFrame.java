@@ -1,12 +1,11 @@
 package crane.view;
 
-import cn.hutool.core.util.StrUtil;
 import crane.constant.DefaultFont;
 import crane.constant.LockFrameCst;
 import crane.constant.MainFrameCst;
-import crane.model.jdbc.JDBCConnection;
-import crane.model.service.AccountService;
+import crane.model.jdbc.JdbcConnection;
 import crane.model.service.FrameService;
+import crane.model.service.SecurityService;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -32,12 +31,19 @@ public class LockFrame extends JFrame {
     public static JToggleButton isLocal;
 
     /**
+     * 是否创建新密钥登录开关
+     * Author: Crane Resigned
+     * Date: 2023-01-07 23:20:41
+     */
+    public static JToggleButton isCreateScene;
+
+    /**
      * 检测密钥文件是否存在
      * true为有
      * Author: Crane Resigned
      * Date: 2022-11-27 12:04:49
      */
-    private static final boolean IS_HAVE_KEY = AccountService.checkKeyFileIsExist();
+    private static final boolean IS_HAVE_KEY = SecurityService.checkKeyAmountIsNotZero();
 
     /**
      * 提示文本
@@ -96,22 +102,28 @@ public class LockFrame extends JFrame {
                 //回车触发
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     String passTxt = new String(secretText.getPassword());
-                    //是否有密匙
-                    if (IS_HAVE_KEY) {
-                        log.info("检测匹配");
-                        if (!StrUtil.equals(AccountService.getRealKey(), passTxt)) {
-                            log.info("密匙错误error");
-                            JOptionPane.showMessageDialog(null, "密钥不对(* ￣︿￣)", "星小花★", JOptionPane.WARNING_MESSAGE);
-                            return;
-                        }
+                    //是否为创建新密钥登录
+                    if (isCreateScene.isSelected()) {
+                        SecurityService.createKey(passTxt);
                     } else {
-                        log.info("创建密匙");
-                        AccountService.createKey(passTxt);
+                        //是否有密匙
+                        if (IS_HAVE_KEY) {
+                            log.info("检测匹配");
+                            //检测该密钥是否存在
+                            if (!SecurityService.checkKeyFileIsExist(passTxt)) {
+                                log.info("密钥文件不存在");
+                                JOptionPane.showMessageDialog(null, "密钥不对", "星小花★", JOptionPane.WARNING_MESSAGE);
+                                return;
+                            }
+                        } else {
+                            log.info("一个密匙都没有，创建密匙");
+                            SecurityService.createKey(passTxt);
+                        }
                     }
                     //关闭当前
                     close();
                     //判断是否是测试环境，如果是改一下标题
-                    if (JDBCConnection.IS_TEST) {
+                    if (JdbcConnection.IS_TEST) {
                         MainFrameCst.MAIN_TITLE = MainFrameCst.MAIN_TITLE + " -- 当前为测试环境，欢迎回来";
                     }
                     new MainFrame().setVisible(true);
@@ -128,13 +140,23 @@ public class LockFrame extends JFrame {
         loginTip.setFont(new Font("微软雅黑", Font.BOLD, 13));
         this.add(loginTip);
 
-        isLocal = new JToggleButton("是否本地", true);
+        isLocal = new JToggleButton("本地数据库", true);
         isLocal.setBounds(50, 200, 100, 30);
         isLocal.setForeground(Color.decode("#7D2720"));
         isLocal.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
         isLocal.setBorder(null);
         isLocal.setFocusPainted(false);
+        isLocal.setBackground(Color.white);
         this.add(isLocal);
+
+        isCreateScene = new JToggleButton("创建新密钥登录");
+        isCreateScene.setBounds(180, 200, 120, 30);
+        isCreateScene.setForeground(Color.decode("#7D2720"));
+        isCreateScene.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
+        isCreateScene.setBorder(null);
+        isCreateScene.setFocusPainted(false);
+        isCreateScene.setBackground(Color.white);
+        this.add(isCreateScene);
     }
 
     private void close() {

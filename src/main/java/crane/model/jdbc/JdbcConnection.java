@@ -11,7 +11,7 @@ import java.util.Properties;
  * @author Crane Resigned
  */
 @Slf4j
-public class JDBCConnection {
+public class JdbcConnection {
 
     /**
      * 配置文件加载流
