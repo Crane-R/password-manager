@@ -6,9 +6,11 @@ import crane.constant.MainFrameCst;
 import crane.model.jdbc.JdbcConnection;
 import crane.model.service.FrameService;
 import crane.model.service.SecurityService;
+import crane.model.service.ShowMessgae;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
+import javax.swing.plaf.FontUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -38,6 +40,13 @@ public class LockFrame extends JFrame {
      * Date: 2023-01-07 23:20:41
      */
     public static JToggleButton isCreateScene;
+
+    /**
+     * 是否启动轻量版
+     * Author: Crane Resigned
+     * Date: 2023-01-29 17:38:59
+     */
+    public static JToggleButton isLightWeightVersion;
 
     /**
      * 检测密钥文件是否存在
@@ -137,11 +146,12 @@ public class LockFrame extends JFrame {
 
         //回车登录提示
         loginTip = new JLabel("√Enter");
-        loginTip.setBounds(385, 200, 100, 30);
+        loginTip.setBounds(385, 155, 100, 30);
         loginTip.setForeground(Color.decode("#7D2720"));
         loginTip.setFont(new Font("微软雅黑", Font.BOLD, 13));
         this.add(loginTip);
 
+        //是否是本地数据库
         isLocal = new JToggleButton("本地数据库", true);
         isLocal.setBounds(50, 200, 100, 30);
         isLocal.setForeground(Color.decode("#7D2720"));
@@ -150,19 +160,40 @@ public class LockFrame extends JFrame {
         isLocal.setFocusPainted(false);
         isLocal.setBackground(Color.white);
         isLocal.addActionListener(e -> {
-            JOptionPane.showMessageDialog(null, "当前服务器已过期，无法开启此选项", "服务器无法使用", JOptionPane.WARNING_MESSAGE); 
+            if (isLocal.isSelected()) {
+                ShowMessgae.showWarningMessage("当前服务器已过期，无法开启此选项", "服务器无法使用");
+            }
             isLocal.setSelected(true);
         });
         this.add(isLocal);
 
-        isCreateScene = new JToggleButton("创建新密钥登录");
-        isCreateScene.setBounds(180, 200, 120, 30);
+        isCreateScene = new JToggleButton("以新密钥登录");
+        isCreateScene.setBounds(180, 200, 110, 30);
         isCreateScene.setForeground(Color.decode("#7D2720"));
         isCreateScene.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
         isCreateScene.setBorder(null);
         isCreateScene.setFocusPainted(false);
         isCreateScene.setBackground(Color.white);
+        isCreateScene.addActionListener(e -> {
+            if (isCreateScene.isSelected()) {
+                ShowMessgae.showInformationMessage("创建一个新密钥以启动新场景。密钥隔离，不可访问其他场景账户。", "以新密钥登录");
+            }
+        });
         this.add(isCreateScene);
+
+        isLightWeightVersion = new JToggleButton("轻量版启动");
+        isLightWeightVersion.setBounds(320, 200, 100, 30);
+        isLightWeightVersion.setForeground(Color.decode("#7D2720"));
+        isLightWeightVersion.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
+        isLightWeightVersion.setBorder(null);
+        isLightWeightVersion.setFocusPainted(false);
+        isLightWeightVersion.setBackground(Color.white);
+        isLightWeightVersion.addActionListener(e -> {
+            if (isLightWeightVersion.isSelected()) {
+                ShowMessgae.showPlainMessage("此版本无需使用数据库，凭借此程序即可使用。", MainFrameCst.SIMPLE_TITLE + " 轻量版");
+            }
+        });
+        this.add(isLightWeightVersion);
     }
 
     private void close() {

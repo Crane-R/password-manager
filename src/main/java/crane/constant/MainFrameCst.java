@@ -14,14 +14,14 @@ public class MainFrameCst {
      * Author: Crane Resigned
      * Date: 2022-11-27 18:25:35
      */
-    public static String MAIN_TITLE = "Password Manager v4.3.1 正式版·兼容版本";
+    public static String MAIN_TITLE = "Password Manager v4.4.0 正式版 & 轻量版本";
 
     /**
      * 版本简称
      * Author: Crane Resigned
      * Date: 2023-01-22 20:54:59
      */
-    public final static String SIMPLE_TITLE = "PM4.3.1";
+    public final static String SIMPLE_TITLE = "PM4.4";
 
     /**
      * 定义视图表标题
