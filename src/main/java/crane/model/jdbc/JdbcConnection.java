@@ -1,9 +1,15 @@
 package crane.model.jdbc;
 
+import crane.model.service.AccountService;
 import crane.view.LockFrame;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.swing.*;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.util.Properties;
 
@@ -23,7 +29,7 @@ public class JdbcConnection {
     private static final String LOCAL_TEST_NAME = "config/local_jdbc_test.properties";
 
     /**
-     * 是否是测试环境
+     * 是否是测试/开发环境
      * Author: Crane Resigned
      * Date: 2022-12-27 23:31:58
      */
@@ -43,11 +49,23 @@ public class JdbcConnection {
             //加载测试or本地or服务器
             String sureConfig = IS_TEST ? LOCAL_TEST_NAME : LockFrame.isLocal.isSelected() ? LOCAL : SERVER;
             log.info("加载数据库配置：" + sureConfig);
-            config.load(ClassLoader.getSystemResourceAsStream(sureConfig));
+            config.load(IS_TEST ? 
+                    ClassLoader.getSystemResourceAsStream(sureConfig) 
+                    : Files.newInputStream(new File(Paths.get("").toAbsolutePath() + "/resources/" + sureConfig).toPath()));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return DriverManager.getConnection(config.getProperty("url"), config.getProperty("user"), config.getProperty("password"));
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection(config.getProperty("url"), config.getProperty("user"), config.getProperty("password"));
+        } catch (SQLSyntaxErrorException e) {
+            e.printStackTrace();
+            //数据库连接失败
+            JOptionPane.showMessageDialog(null, "无法连接至数据库，请检查数据库配置", "数据库连接失败", JOptionPane.ERROR_MESSAGE);
+            //将按钮状态切换回来
+            AccountService.toggleStatus(false);
+        }
+        return connection;
     }
 
     public static void close(PreparedStatement preparedStatement, Connection connection, ResultSet resultSet) {

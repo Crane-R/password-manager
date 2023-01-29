@@ -6,9 +6,11 @@ import crane.constant.ExportImportCst;
 import crane.constant.DefaultFont;
 import crane.model.bean.Account;
 import crane.model.dao.AccountDao;
+import crane.model.jdbc.JdbcConnection;
 import crane.model.service.AccountService;
 import crane.model.service.ExcelFileFilter;
 import crane.model.service.ExcelService;
+import crane.model.service.SecurityService;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -18,6 +20,7 @@ import java.awt.event.KeyEvent;
 import java.io.*;
 import java.net.URLDecoder;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Properties;
 
@@ -44,6 +47,9 @@ public class ExportImportDataFrame extends LockFrame {
 
         //移除是否本地
         this.remove(isLocal);
+
+        //移除是否创建新密钥登录
+        this.remove(isCreateScene);
 
         //移除密码框
         this.remove(secretText);
@@ -120,10 +126,8 @@ public class ExportImportDataFrame extends LockFrame {
      * Date: 2022-12-31 14:07:18
      */
     private void exportFile() {
-        String path = pathTextField.getText();
-        //TODO:需要单独封装一个检验路径的方法
-        if (StrUtil.isEmpty(path)) {
-            JOptionPane.showMessageDialog(null, "路径不对(* ￣︿￣)", "星小花★", JOptionPane.WARNING_MESSAGE);
+        String path = getPath();
+        if (path == null) {
             return;
         }
         //执行导出
@@ -137,32 +141,63 @@ public class ExportImportDataFrame extends LockFrame {
      * Author: Crane Resigned
      * Date: 2022-12-31 16:52:46
      */
-    private void importFile() {
+    protected void importFile() {
+        String path = getPath();
+        if (path != null) {
+            List<Account> accounts = EasyExcel.read(path).head(Account.class).sheet().doReadSync();
+            //TODO：这个集合，每新增一条数据就需要重新连接一次数据库，因为是使用的jdbc，这样效率非常低，考虑建立线程池或上mybatis
+            AccountDao accountDao = new AccountDao();
+            //状态数组，成功，失败，总计
+            int[] records = new int[3];
+            for (Account account : accounts) {
+                Boolean add = accountDao.add(account);
+                if (!add) {
+                    records[0]++;
+                } else {
+                    records[1]++;
+                }
+                records[2]++;
+            }
+            JOptionPane.showMessageDialog(null,
+                    "成功：" + records[0] + "，失败：" + records[1] + "，总计：" + records[2],
+                    "星小花★", JOptionPane.INFORMATION_MESSAGE);
+            AccountService.setTableMessagesByList(accounts);
+            this.dispose();
+        }
+    }
+
+    /**
+     * 当前版本的导入数据至少需要做的操作
+     * 向以前的版本导入数据提供
+     * 这个方法也就是为3.0和4.2做的，不具有扩展性，仅作为不触发警告的封装方法
+     * Author: Crane Resigned
+     * Date: 2023-01-22 21:23:56
+     */
+    protected static void newEditionInsert(AccountDao accountDao, int[] records, Account account) {
+        account.setOther(SecurityService.encodeBase64Salt(account.getOther()));
+        account.setUserKey(SecurityService.getUuidKey());
+        Boolean add = accountDao.add(account);
+        if (!add) {
+            records[0]++;
+        } else {
+            records[1]++;
+        }
+        records[2]++;
+    }
+
+    /**
+     * 获取路径
+     * Author: Crane Resigned
+     * Date: 2023-01-22 21:02:58
+     */
+    protected String getPath() {
         String path = pathTextField.getText();
         //TODO:需要单独封装一个检验路径的方法
         if (StrUtil.isEmpty(path)) {
             JOptionPane.showMessageDialog(null, "路径不对(* ￣︿￣)", "星小花★", JOptionPane.WARNING_MESSAGE);
-            return;
+            return null;
         }
-        List<Account> accounts = EasyExcel.read(path).head(Account.class).sheet().doReadSync();
-        //TODO：这个集合，每新增一条数据就需要重新连接一次数据库，因为是使用的jdbc，这样效率非常低，考虑建立线程池或上mybatis
-        AccountDao accountDao = new AccountDao();
-        //状态数组，成功，失败，总计
-        int[] records = new int[3];
-        for (Account account : accounts) {
-            Boolean add = accountDao.add(account);
-            if (!add) {
-                records[0]++;
-            } else {
-                records[1]++;
-            }
-            records[2]++;
-        }
-        JOptionPane.showMessageDialog(null,
-                "成功：" + records[0] + "，失败：" + records[1] + "，总计：" + records[2],
-                "星小花★", JOptionPane.INFORMATION_MESSAGE);
-        AccountService.setTableMessagesByList(accounts);
-        this.dispose();
+        return path;
     }
 
     /**
@@ -172,11 +207,10 @@ public class ExportImportDataFrame extends LockFrame {
      */
     private static String getRecentlyPath() {
         Properties recentlyPath = new Properties();
-        String resourcePath;
         try {
-            resourcePath = URLDecoder.decode(ClassLoader.getSystemResource("records/recently_path.properties").getFile(), "utf-8");
-            log.info(resourcePath);
-            recentlyPath.load(Files.newInputStream(new File(resourcePath).toPath()));
+            recentlyPath.load(JdbcConnection.IS_TEST ?
+                    ClassLoader.getSystemResourceAsStream("records/recently_path.properties")
+                    : Files.newInputStream(new File(Paths.get("").toAbsolutePath() + "/resources/records/recently_path.properties").toPath()));
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
@@ -192,8 +226,9 @@ public class ExportImportDataFrame extends LockFrame {
         Properties recentlyPath = new Properties();
         String resourcePath;
         try {
-            resourcePath = URLDecoder.decode(ClassLoader.getSystemResource("records/recently_path.properties").getFile(), "utf-8");
-            log.info(resourcePath);
+            resourcePath = JdbcConnection.IS_TEST ?
+                    URLDecoder.decode(ClassLoader.getSystemResource("records/recently_path.properties").getFile(), "utf-8")
+                    : Paths.get("").toAbsolutePath() + "/resources/records/recently_path.properties";
             OutputStream writer = new BufferedOutputStream(Files.newOutputStream(new File(resourcePath).toPath()));
             recentlyPath.setProperty("recently_path", value);
             recentlyPath.store(writer, null);

@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -124,7 +126,7 @@ public class LockFrame extends JFrame {
                     close();
                     //判断是否是测试环境，如果是改一下标题
                     if (JdbcConnection.IS_TEST) {
-                        MainFrameCst.MAIN_TITLE = MainFrameCst.MAIN_TITLE + " -- 当前为测试环境，欢迎回来";
+                        MainFrameCst.MAIN_TITLE = MainFrameCst.MAIN_TITLE + " - 当前为测试环境，欢迎回来";
                     }
                     new MainFrame().setVisible(true);
                 }
@@ -147,6 +149,10 @@ public class LockFrame extends JFrame {
         isLocal.setBorder(null);
         isLocal.setFocusPainted(false);
         isLocal.setBackground(Color.white);
+        isLocal.addActionListener(e -> {
+            JOptionPane.showMessageDialog(null, "当前服务器已过期，无法开启此选项", "服务器无法使用", JOptionPane.WARNING_MESSAGE); 
+            isLocal.setSelected(true);
+        });
         this.add(isLocal);
 
         isCreateScene = new JToggleButton("创建新密钥登录");

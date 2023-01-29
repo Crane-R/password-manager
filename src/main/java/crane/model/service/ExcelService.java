@@ -2,6 +2,7 @@ package crane.model.service;
 
 import cn.hutool.core.date.DateUtil;
 import com.alibaba.excel.EasyExcel;
+import crane.constant.MainFrameCst;
 import crane.model.bean.Account;
 
 import java.io.File;
@@ -26,7 +27,7 @@ public class ExcelService {
     public static boolean exportDataToExcel(List<Account> dataList, String absolutePath) {
 
         if (!checkPathIsContainXlsx(absolutePath)) {
-            absolutePath = absolutePath + "/" + DateUtil.format(new Date(), "yyyyMMddHHmmss") + ".xlsx";
+            absolutePath = absolutePath + "/" + MainFrameCst.SIMPLE_TITLE + DateUtil.format(new Date(), "yyyyMMddHHmmss") + ".xlsx";
         }
 
         File targetFile = new File(absolutePath);

@@ -1,7 +1,0 @@
-视图层
-    ui
-
-模型层
-    dao
-    bean
-    service

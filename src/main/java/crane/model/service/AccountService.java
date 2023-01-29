@@ -1,5 +1,7 @@
 package crane.model.service;
 
+import cn.hutool.core.date.DateUtil;
+import crane.constant.Constant;
 import crane.constant.MainFrameCst;
 import crane.model.bean.Account;
 import crane.model.dao.AccountDao;
@@ -145,11 +147,69 @@ public class AccountService {
 
         for (int i = 0; i < rowCount; i++) {
             for (int j = 0; j < columnCount; j++) {
-                resultData[i][j] = j == 3 || j == 2 ? SecurityService.decodeBase64Salt(String.valueOf(jTable.getValueAt(i, j))) : String.valueOf(jTable.getValueAt(i, j));
+                resultData[i][j] = j == 3 || j == 2 || j == 4 ?
+                        SecurityService.decodeBase64Salt(String.valueOf(jTable.getValueAt(i, j)))
+                        : String.valueOf(jTable.getValueAt(i, j));
             }
         }
 
         return resultData;
     }
-    
+
+    /**
+     * 传入一条账户信息，生成要粘贴的账户信息字符串
+     * Author: Crane Resigned
+     * Date: 2023-01-22 15:25:45
+     */
+    public static String generateAccountMsg(List<String> list) {
+        if (list.size() < Constant.ACCOUNT_LIST_LENGTH) {
+            return "生成失败，集合长度小于5";
+        }
+        return "数据库ID：" +
+                list.get(0) +
+                "\r\n" +
+                "账户名称：" +
+                list.get(1) +
+                "\r\n" +
+                "用户名：" +
+                list.get(2) +
+                "\r\n" +
+                "密码：" +
+                list.get(3) +
+                "\r\n" +
+                "其他信息：" +
+                list.get(4) +
+                "\r\n" +
+                "生成日期：" +
+                DateUtil.now() +
+                "\r\n" +
+                "来自：" +
+                MainFrameCst.MAIN_TITLE +
+                "\r\n";
+    }
+
+    /**
+     * 搜索按钮状态切换
+     * Author: Crane Resigned
+     * Date: 2023-01-22 15:55:33
+     */
+    public static void toggleStatus(Boolean isDecode) {
+        MainFrame.switchRecord = isDecode != null ? isDecode : !MainFrame.switchRecord;
+        MainFrame.searchButton.setText(MainFrame.switchRecord ? MainFrame.SEARCH_BTN_TXT2 : MainFrame.SEARCH_BTN_TXT1);
+    }
+
+    /**
+     * 解密账户集合
+     * Author: Crane Resigned
+     * Date: 2023-01-22 16:25:35
+     */
+    public static void decodeList(List<String> list) {
+        //密码
+        list.set(3, SecurityService.decodeBase64Salt(list.get(3)));
+        //用户名
+        list.set(2, SecurityService.decodeBase64Salt(list.get(2)));
+        //其他信息
+        list.set(4, SecurityService.decodeBase64Salt(list.get(4)));
+    }
+
 }

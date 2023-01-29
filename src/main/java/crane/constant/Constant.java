@@ -39,4 +39,25 @@ public class Constant {
      */
     public static final String DIRECTORY_KEYS = "keys";
 
+    /**
+     * 一条账户数据最小的（正常的）list长度
+     * Author: Crane Resigned
+     * Date: 2023-01-22 15:35:46
+     */
+    public static final int ACCOUNT_LIST_LENGTH = 5;
+
+    /**
+     * 双击延迟
+     * Author: Crane Resigned
+     * Date: 2023-01-22 17:17:47
+     */
+    public static final long DOUBLE_ENTER_DELAY = 200;
+
+    /**
+     * 活性时间
+     * Author: Crane Resigned
+     * Date: 2023-01-22 18:39:49
+     */
+    public static final long ACTIVE_TIME = 1000 * 60 * 2;
+
 }

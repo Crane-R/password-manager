@@ -150,7 +150,7 @@ public class AddFrame extends JFrame {
                 String id = jTextField.getText().trim();
                 String username = SecurityService.encodeBase64Salt(jTextField1.getText().trim());
                 String password = SecurityService.encodeBase64Salt(jTextField2.getText().trim());
-                String other = jTextField3.getText().trim();
+                String other = SecurityService.encodeBase64Salt(jTextField3.getText().trim());
                 String userKey = SecurityService.getUuidKey();
                 switch (purpose) {
                     case ADD:

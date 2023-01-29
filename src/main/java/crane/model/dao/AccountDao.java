@@ -32,7 +32,7 @@ public class AccountDao implements DaoMethod {
             sql = "SELECT * FROM `account` where `user_key` = '" + key + "';";
         } else {
             System.out.println("模糊查询，关键字为：" + searchText);
-            sql = "SELECT * FROM `account` WHERE (`account_name` LIKE '%" + searchText + "%' OR `other` LIKE '%" + searchText + "%') and `user_key` = '" + key + "';";
+            sql = "SELECT * FROM `account` WHERE (`account_name` LIKE '%" + searchText + "%') and `user_key` = '" + key + "';";
         }
         log.info(sql);
 
