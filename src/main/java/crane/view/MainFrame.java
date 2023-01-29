@@ -7,6 +7,7 @@ import crane.constant.MainFrameCst;
 import crane.function.Tools;
 import crane.model.service.AccountService;
 import crane.model.service.FrameService;
+import crane.model.service.ShowMessgae;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -367,17 +368,11 @@ public class MainFrame extends JFrame {
             if (!realTimeSearchBtn.isSelected()) {
                 realTimeSearchBtn.setBackground(Color.decode("#2A3050"));
                 realTimeSearchBtn.setText("Double Enter");
-                JOptionPane.showMessageDialog(
-                        null,
-                        "单击回车搜索，双击回车搜索并解码，双击判断间隔为" + Constant.DOUBLE_ENTER_DELAY + "ms",
-                        "双击回车模式", JOptionPane.INFORMATION_MESSAGE);
+                ShowMessgae.showInformationMessage("单击回车搜索，双击回车搜索并解码，双击判断间隔为" + Constant.DOUBLE_ENTER_DELAY + "ms", "双击回车模式");
             } else {
                 realTimeSearchBtn.setBackground(Color.decode("#7D2720"));
                 realTimeSearchBtn.setText("Real Time");
-                JOptionPane.showMessageDialog(
-                        null,
-                        "根据文本框值的增减、改变进行实时搜索",
-                        "实时搜索模式", JOptionPane.INFORMATION_MESSAGE);
+                ShowMessgae.showInformationMessage("根据文本框值的增减、改变进行实时搜索", "实时搜索模式");
             }
             FrameService.activeTimeFresh();
         });
@@ -428,7 +423,7 @@ public class MainFrame extends JFrame {
 
         //激活活性时间定时器
         FrameService.activeTimeFresh();
-        
+
         //前期版本兼容性导入数据
         //3.0
         JButton importBtn3 = new JButton("PM3.0");

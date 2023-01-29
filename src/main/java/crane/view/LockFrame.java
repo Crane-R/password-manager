@@ -1,5 +1,6 @@
 package crane.view;
 
+import cn.hutool.core.date.DateUtil;
 import crane.constant.DefaultFont;
 import crane.constant.LockFrameCst;
 import crane.constant.MainFrameCst;
@@ -124,6 +125,7 @@ public class LockFrame extends JFrame {
                             if (!SecurityService.checkKeyFileIsExist(passTxt)) {
                                 log.info("密钥文件不存在");
                                 JOptionPane.showMessageDialog(null, "密钥不对", "星小花★", JOptionPane.WARNING_MESSAGE);
+                                secretText.setText(null);
                                 return;
                             }
                         } else {
@@ -131,6 +133,7 @@ public class LockFrame extends JFrame {
                             SecurityService.createKey(passTxt);
                         }
                     }
+                    log.info("密钥匹配成功" + DateUtil.now());
                     //关闭当前
                     close();
                     //判断是否是测试环境，如果是改一下标题

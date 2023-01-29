@@ -56,6 +56,9 @@ public class ExportImportDataFrame extends LockFrame {
 
         //移除回车标
         this.remove(loginTip);
+        
+        //移除是否轻量版
+        this.remove(isLightWeightVersion);
 
         //文本框
         pathTextField = new JTextField();
