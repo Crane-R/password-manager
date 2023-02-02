@@ -8,6 +8,7 @@ import crane.function.Tools;
 import crane.model.service.AccountService;
 import crane.model.service.FrameService;
 import crane.model.service.ShowMessgae;
+import crane.view.module.ScrollBarUi;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -119,6 +120,7 @@ public class MainFrame extends JFrame {
         jTable.setRowHeight(30);
         JScrollPane jScrollPane = new JScrollPane(jTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         jScrollPane.setBounds(42, 125, 1075, 600);
+        jScrollPane.getVerticalScrollBar().setUI(new ScrollBarUi());
         this.add(jScrollPane);
 
         //右键菜单

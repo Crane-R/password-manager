@@ -14,7 +14,7 @@ public class MainFrameCst {
      * Author: Crane Resigned
      * Date: 2022-11-27 18:25:35
      */
-    public static String MAIN_TITLE = "Password Manager v4.4.0 正式版 & 轻量版本";
+    public static String MAIN_TITLE = "Password Manager v4.4.1 正式版 & 轻量版本";
 
     /**
      * 版本简称
@@ -29,6 +29,6 @@ public class MainFrameCst {
      * @Author Crane Resigned
      * @Date 2022-06-11 22:55:44
      */
-    public static final Object[] TITLES = {"唯一标识", "账户名称", "用户名", "密码", "其他信息"};
+    public static final Object[] TITLES = {"唯一标识", "账户名", "用户名", "密码", "其他信息"};
 
 }
