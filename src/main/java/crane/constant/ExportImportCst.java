@@ -16,7 +16,7 @@ public enum ExportImportCst {
      */
     EXPORT(
             true,
-            "导出数据为xlsx，请输入正确的格式，否则程序可能会崩溃",
+            "导出账户数据为xlsx",
             "输入或选择目标路径"
     ),
     /**
@@ -26,8 +26,8 @@ public enum ExportImportCst {
      */
     IMPORT(
             false,
-            "导入账户，请使用文件选择器或输入文件路径",
-            "选择源文件或输入源文件绝对路径");
+            "导入账户数据",
+            "选择xlsx源文件或输入xlsx源文件绝对路径");
 
     /**
      * true是导出

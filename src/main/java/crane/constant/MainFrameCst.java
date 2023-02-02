@@ -10,18 +10,26 @@ package crane.constant;
 public class MainFrameCst {
 
     /**
+     * 版本号
+     *
+     * @Author Crane Resigned
+     * @Date 2023-02-02 21:33:50
+     */
+    private static final String VERSION = "v4.4.1";
+
+    /**
      * 主要标题
      * Author: Crane Resigned
      * Date: 2022-11-27 18:25:35
      */
-    public static String MAIN_TITLE = "Password Manager v4.4.1 正式版 & 轻量版本";
+    public static String MAIN_TITLE = "Password Manager " + VERSION + " 正式版&轻量版";
 
     /**
      * 版本简称
      * Author: Crane Resigned
      * Date: 2023-01-22 20:54:59
      */
-    public final static String SIMPLE_TITLE = "PM4.4";
+    public final static String SIMPLE_TITLE = "PManager " + VERSION;
 
     /**
      * 定义视图表标题

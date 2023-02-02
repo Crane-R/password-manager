@@ -119,7 +119,7 @@ public class MainFrame extends JFrame {
         jTable = new JTable(new DefaultTableModel(new Object[0][0], MainFrameCst.TITLES));
         jTable.setRowHeight(30);
         JScrollPane jScrollPane = new JScrollPane(jTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        jScrollPane.setBounds(42, 125, 1075, 600);
+        jScrollPane.setBounds(42, 125, 1100, 600);
         jScrollPane.getVerticalScrollBar().setUI(new ScrollBarUi());
         this.add(jScrollPane);
 
@@ -359,7 +359,7 @@ public class MainFrame extends JFrame {
         this.add(clearBtn);
 
         realTimeSearchBtn = new JRadioButton("Real Time", true);
-        realTimeSearchBtn.setBounds(1050, 0, 140, 30);
+        realTimeSearchBtn.setBounds(1058, 0, 140, 30);
         realTimeSearchBtn.setFocusPainted(false);
         realTimeSearchBtn.setForeground(Color.WHITE);
         realTimeSearchBtn.setBackground(Color.decode("#7D2720"));
@@ -381,15 +381,26 @@ public class MainFrame extends JFrame {
         this.add(realTimeSearchBtn);
 
         //免责声明
-        JLabel disclaimerLabel = new JLabel("安全性声明：此程序不保证绝对安全，如您不是开发者请斟酌使用，造成的任何损失开发者不会负责。");
+        JLabel disclaimerLabel = new JLabel("安全性声明：此程序不保证绝对安全，若您不是开发者请斟酌使用，造成的任何损失开发者不会负责。");
         disclaimerLabel.setBounds(540, 725, 800, 30);
         disclaimerLabel.setForeground(Color.RED);
         disclaimerLabel.setFont(new Font("微软雅黑", Font.BOLD, 13));
         this.add(disclaimerLabel);
 
+        //关于
+        JButton aboutBtn = new JButton("关于");
+        aboutBtn.setBounds(-8, 0, 60, 30);
+        aboutBtn.setFocusPainted(false);
+        aboutBtn.setForeground(Color.WHITE);
+        aboutBtn.setBackground(Color.decode("#58C3C3"));
+        aboutBtn.setFont(DefaultFont.DEFAULT_FONT_ONE.setStyle(Font.BOLD).getFont());
+        aboutBtn.setBorder(null);
+        aboutBtn.setHorizontalAlignment(JLabel.CENTER);
+        this.add(aboutBtn);
+
         //导出数据按钮
         JButton exportBtn = new JButton("导出");
-        exportBtn.setBounds(1130, 32, 60, 30);
+        exportBtn.setBounds(1138, 32, 60, 30);
         exportBtn.setFocusPainted(false);
         exportBtn.setForeground(Color.WHITE);
         exportBtn.setBackground(Color.decode("#046D35"));
@@ -404,7 +415,7 @@ public class MainFrame extends JFrame {
 
         //导入
         JButton importBtn = new JButton("导入");
-        importBtn.setBounds(1130, 64, 60, 30);
+        importBtn.setBounds(1138, 64, 60, 30);
         importBtn.setFocusPainted(false);
         importBtn.setForeground(Color.WHITE);
         importBtn.setBackground(Color.decode("#5898C2"));
@@ -418,7 +429,7 @@ public class MainFrame extends JFrame {
         this.add(importBtn);
 
         //到达活性时间后加密table
-        activistTimeLabel.setBounds(10, 0, 200, 30);
+        activistTimeLabel.setBounds(65, 0, 200, 30);
         activistTimeLabel.setForeground(Color.decode("#1A5599"));
         activistTimeLabel.setFont(DefaultFont.DEFAULT_FONT_ONE.setStyle(Font.BOLD).getFont());
         this.add(activistTimeLabel);
@@ -429,7 +440,7 @@ public class MainFrame extends JFrame {
         //前期版本兼容性导入数据
         //3.0
         JButton importBtn3 = new JButton("PM3.0");
-        importBtn3.setBounds(1130, 106, 60, 30);
+        importBtn3.setBounds(-8, 32, 60, 30);
         importBtn3.setFocusPainted(false);
         importBtn3.setForeground(Color.WHITE);
         importBtn3.setBackground(Color.decode("#002FA7"));
@@ -437,6 +448,7 @@ public class MainFrame extends JFrame {
         importBtn3.setBorder(null);
         importBtn3.setHorizontalAlignment(JLabel.CENTER);
         importBtn3.addActionListener(e -> {
+            ShowMessgae.showInformationMessage("该功能为v3.0准备，如导入非v3.0的数据，可能会导致数据错误等意外情况。", "导入v3.0的数据");
             new Import3DataFrame().setVisible(true);
             FrameService.activeTimeFresh();
         });
@@ -444,7 +456,7 @@ public class MainFrame extends JFrame {
 
         //4.0
         JButton importBtn4 = new JButton("PM4.2");
-        importBtn4.setBounds(1130, 138, 60, 30);
+        importBtn4.setBounds(-8, 64, 60, 30);
         importBtn4.setFocusPainted(false);
         importBtn4.setForeground(Color.WHITE);
         importBtn4.setBackground(Color.decode("#4FA485"));
@@ -452,6 +464,7 @@ public class MainFrame extends JFrame {
         importBtn4.setBorder(null);
         importBtn4.setHorizontalAlignment(JLabel.CENTER);
         importBtn4.addActionListener(e -> {
+            ShowMessgae.showInformationMessage("该功能为v4.2准备，如导入非v4.2的数据，可能会导致数据错误等意外情况。", "导入v4.2的数据");
             new Import4DataFrame().setVisible(true);
             FrameService.activeTimeFresh();
         });
