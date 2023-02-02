@@ -22,7 +22,7 @@ public class Import3DataFrame extends ExportImportDataFrame {
     public Import3DataFrame() {
         super(ExportImportCst.IMPORT);
         this.setTitle("导入PM3.0的数据");
-        tipLabel.setText("选择PM3.0的xlsx数据文件");
+        tipLabel.setText("选择Password Manager v3.0的xlsx数据文件");
         tipLabel.setForeground(Color.decode("#002FA7"));
     }
 

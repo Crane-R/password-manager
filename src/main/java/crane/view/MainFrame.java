@@ -357,7 +357,7 @@ public class MainFrame extends JFrame {
         this.add(clearBtn);
 
         realTimeSearchBtn = new JRadioButton("Real Time", true);
-        realTimeSearchBtn.setBounds(1044, 0, 140, 30);
+        realTimeSearchBtn.setBounds(1050, 0, 140, 30);
         realTimeSearchBtn.setFocusPainted(false);
         realTimeSearchBtn.setForeground(Color.WHITE);
         realTimeSearchBtn.setBackground(Color.decode("#7D2720"));
@@ -387,7 +387,7 @@ public class MainFrame extends JFrame {
 
         //导出数据按钮
         JButton exportBtn = new JButton("导出");
-        exportBtn.setBounds(1125, 32, 60, 30);
+        exportBtn.setBounds(1130, 32, 60, 30);
         exportBtn.setFocusPainted(false);
         exportBtn.setForeground(Color.WHITE);
         exportBtn.setBackground(Color.decode("#046D35"));
@@ -402,7 +402,7 @@ public class MainFrame extends JFrame {
 
         //导入
         JButton importBtn = new JButton("导入");
-        importBtn.setBounds(1125, 64, 60, 30);
+        importBtn.setBounds(1130, 64, 60, 30);
         importBtn.setFocusPainted(false);
         importBtn.setForeground(Color.WHITE);
         importBtn.setBackground(Color.decode("#5898C2"));
@@ -427,7 +427,7 @@ public class MainFrame extends JFrame {
         //前期版本兼容性导入数据
         //3.0
         JButton importBtn3 = new JButton("PM3.0");
-        importBtn3.setBounds(1125, 106, 60, 30);
+        importBtn3.setBounds(1130, 106, 60, 30);
         importBtn3.setFocusPainted(false);
         importBtn3.setForeground(Color.WHITE);
         importBtn3.setBackground(Color.decode("#002FA7"));
@@ -442,7 +442,7 @@ public class MainFrame extends JFrame {
 
         //4.0
         JButton importBtn4 = new JButton("PM4.2");
-        importBtn4.setBounds(1125, 138, 60, 30);
+        importBtn4.setBounds(1130, 138, 60, 30);
         importBtn4.setFocusPainted(false);
         importBtn4.setForeground(Color.WHITE);
         importBtn4.setBackground(Color.decode("#4FA485"));

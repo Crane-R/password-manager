@@ -22,7 +22,7 @@ public class Import4DataFrame extends ExportImportDataFrame {
     public Import4DataFrame() {
         super(ExportImportCst.IMPORT);
         this.setTitle("导入PM4.2的数据");
-        tipLabel.setText("选择PM4.2的xlsx数据文件");
+        tipLabel.setText("选择Password Manager v4.2的xlsx数据文件");
         tipLabel.setForeground(Color.decode("#4FA485"));
     }
 
