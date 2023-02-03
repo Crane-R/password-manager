@@ -16,10 +16,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -396,6 +393,10 @@ public class MainFrame extends JFrame {
         aboutBtn.setFont(DefaultFont.DEFAULT_FONT_ONE.setStyle(Font.BOLD).getFont());
         aboutBtn.setBorder(null);
         aboutBtn.setHorizontalAlignment(JLabel.CENTER);
+        aboutBtn.addActionListener(e -> {
+            new AboutFrame().setVisible(true);
+            FrameService.activeTimeFresh();
+        });
         this.add(aboutBtn);
 
         //导出数据按钮
