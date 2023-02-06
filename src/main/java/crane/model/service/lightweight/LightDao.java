@@ -7,6 +7,7 @@ import crane.model.jdbc.JdbcConnection;
 import crane.model.service.ExcelService;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -52,7 +53,9 @@ public class LightDao {
      */
     public List<Account> readData() {
         //读数据需要先写一个空文件进去，调用写以创建文件
-        writeData(null);
+        if(!new File(PATH).exists()){
+            writeData(null);
+        }
         return EasyExcel.read(PATH).head(Account.class).sheet("账户数据").doReadSync();
     }
 

@@ -83,6 +83,7 @@ public class LightService {
      */
     public void searchAndSetTableMsg() {
         List<Account> accounts = new LightDao().readData();
+        accounts.forEach(System.out::println);
         List<Account> resultList = new ArrayList<>();
         String keyword = MainFrame.getSearchText().getText();
         for (Account tempAccount : accounts) {
