@@ -33,7 +33,16 @@ public class AccountService {
         Collections.reverse(list);
         System.out.println("查询出的list:" + list);
         System.out.println("list.size:" + list.size());
+        return listToTwoObj(list);
+    }
 
+    /**
+     * 将list转换为二维obj
+     *
+     * @Author Crane Resigned
+     * @Date 2023-02-04 02:08:58
+     */
+    public static Object[][] listToTwoObj(List<Account> list) {
         //开始处理数据
         int length = list.size();
         Object[][] objects = new Object[length][5];

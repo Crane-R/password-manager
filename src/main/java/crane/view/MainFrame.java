@@ -8,6 +8,7 @@ import crane.function.Tools;
 import crane.model.service.AccountService;
 import crane.model.service.FrameService;
 import crane.model.service.ShowMessgae;
+import crane.model.service.lightweight.LightService;
 import crane.view.module.ScrollBarUi;
 import lombok.extern.slf4j.Slf4j;
 
@@ -219,7 +220,11 @@ public class MainFrame extends JFrame {
                         AccountService.setTableMessages(AccountService.getTableData());
                     } else {
                         //查询
-                        AccountService.setTableMessages();
+                        if (Constant.IS_LIGHT) {
+                            new LightService().searchAndSetTableMsg();
+                        } else {
+                            AccountService.setTableMessages();
+                        }
                     }
                     //切换按钮状态
                     AccountService.toggleStatus(null);
@@ -250,7 +255,11 @@ public class MainFrame extends JFrame {
                 AccountService.setTableMessages(AccountService.getTableData());
             } else {
                 //查询
-                AccountService.setTableMessages();
+                if (Constant.IS_LIGHT) {
+                    new LightService().searchAndSetTableMsg();
+                } else {
+                    AccountService.setTableMessages();
+                }
             }
             AccountService.toggleStatus(null);
             FrameService.activeTimeFresh();
@@ -267,7 +276,12 @@ public class MainFrame extends JFrame {
                         new ThreadPoolExecutor.AbortPolicy());
                 threadPool.execute(() -> {
                     if (realTimeSearchBtn.isSelected()) {
-                        AccountService.setTableMessages();
+                        //查询
+                        if (Constant.IS_LIGHT) {
+                            new LightService().searchAndSetTableMsg();
+                        } else {
+                            AccountService.setTableMessages();
+                        }
                     }
                 });
                 FrameService.activeTimeFresh();
@@ -283,7 +297,12 @@ public class MainFrame extends JFrame {
                         new ThreadPoolExecutor.AbortPolicy());
                 threadPool.execute(() -> {
                     if (realTimeSearchBtn.isSelected()) {
-                        AccountService.setTableMessages();
+                        //查询
+                        if (Constant.IS_LIGHT) {
+                            new LightService().searchAndSetTableMsg();
+                        } else {
+                            AccountService.setTableMessages();
+                        }
                     }
                 });
                 FrameService.activeTimeFresh();
@@ -299,7 +318,12 @@ public class MainFrame extends JFrame {
                         new ThreadPoolExecutor.AbortPolicy());
                 threadPool.execute(() -> {
                     if (realTimeSearchBtn.isSelected()) {
-                        AccountService.setTableMessages();
+                        //查询
+                        if (Constant.IS_LIGHT) {
+                            new LightService().searchAndSetTableMsg();
+                        } else {
+                            AccountService.setTableMessages();
+                        }
                     }
                 });
                 FrameService.activeTimeFresh();
@@ -376,7 +400,22 @@ public class MainFrame extends JFrame {
             FrameService.activeTimeFresh();
         });
         this.add(realTimeSearchBtn);
-
+        
+        //切换场景
+        JButton switchSceneBtn = new JButton("切换场景");
+        switchSceneBtn.setBounds(950, 0, 100, 30);
+        switchSceneBtn.setFocusPainted(false);
+        switchSceneBtn.setForeground(Color.WHITE);
+        switchSceneBtn.setBackground(Color.BLACK);
+        switchSceneBtn.setFont(new Font("微软雅黑", Font.BOLD, 13));
+        switchSceneBtn.setBorder(null);
+        switchSceneBtn.setHorizontalAlignment(JLabel.CENTER);
+        switchSceneBtn.addActionListener(e -> {
+            this.dispose();
+            new LockFrame().setVisible(true);
+        });
+        this.add(switchSceneBtn);
+        
         //免责声明
         JLabel disclaimerLabel = new JLabel("安全性声明：此程序不保证绝对安全，若您不是开发者请斟酌使用，造成的任何损失开发者不会负责。");
         disclaimerLabel.setBounds(540, 725, 800, 30);
@@ -412,6 +451,9 @@ public class MainFrame extends JFrame {
             new ExportImportDataFrame(ExportImportCst.EXPORT).setVisible(true);
             FrameService.activeTimeFresh();
         });
+        if(Constant.IS_LIGHT){
+            exportBtn.setEnabled(false);
+        }
         this.add(exportBtn);
 
         //导入
@@ -427,6 +469,9 @@ public class MainFrame extends JFrame {
             new ExportImportDataFrame(ExportImportCst.IMPORT).setVisible(true);
             FrameService.activeTimeFresh();
         });
+        if(Constant.IS_LIGHT){
+            importBtn.setEnabled(false);
+        }
         this.add(importBtn);
 
         //到达活性时间后加密table
@@ -453,6 +498,9 @@ public class MainFrame extends JFrame {
             new Import3DataFrame().setVisible(true);
             FrameService.activeTimeFresh();
         });
+        if(Constant.IS_LIGHT){
+            importBtn3.setEnabled(false);
+        }
         this.add(importBtn3);
 
         //4.0
@@ -469,6 +517,9 @@ public class MainFrame extends JFrame {
             new Import4DataFrame().setVisible(true);
             FrameService.activeTimeFresh();
         });
+        if(Constant.IS_LIGHT){
+            importBtn4.setEnabled(false);
+        }
         this.add(importBtn4);
     }
 

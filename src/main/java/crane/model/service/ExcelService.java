@@ -4,6 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import com.alibaba.excel.EasyExcel;
 import crane.constant.MainFrameCst;
 import crane.model.bean.Account;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +18,7 @@ import java.util.List;
  *
  * @author Crane Resigned
  */
+@Slf4j
 public class ExcelService {
 
     /**
@@ -25,20 +27,10 @@ public class ExcelService {
      * Date: 2022-12-30 23:20:09
      */
     public static boolean exportDataToExcel(List<Account> dataList, String absolutePath) {
-
         if (!checkPathIsContainXlsx(absolutePath)) {
             absolutePath = absolutePath + "/" + MainFrameCst.SIMPLE_TITLE + DateUtil.format(new Date(), "yyyyMMddHHmmss") + ".xlsx";
         }
-
-        File targetFile = new File(absolutePath);
-        boolean newFileIsCreated = false;
-        if (!targetFile.exists()) {
-            try {
-                newFileIsCreated = targetFile.createNewFile();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        boolean newFileIsCreated = fileIsExistElseCreate(absolutePath);
         if (newFileIsCreated) {
             EasyExcel.write(absolutePath, Account.class).sheet("账户数据").doWrite(dataList);
         }
@@ -57,6 +49,25 @@ public class ExcelService {
         for (int i = 0; i < len; i++) {
             if (stringBuilder.charAt(i) != checks[i]) {
                 return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 检查文件是否存在，不存在创建
+     *
+     * @Author Crane Resigned
+     * @Date 2023-02-04 00:12:58
+     */
+    public static boolean fileIsExistElseCreate(String path) {
+        File targetFile = new File(path);
+        if (!targetFile.exists()) {
+            try {
+                return targetFile.createNewFile();
+            } catch (IOException e) {
+                log.error(path);
+                throw new RuntimeException(e);
             }
         }
         return true;

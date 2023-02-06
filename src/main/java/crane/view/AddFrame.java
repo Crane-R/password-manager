@@ -1,12 +1,14 @@
 package crane.view;
 
 import cn.hutool.core.util.StrUtil;
+import crane.constant.Constant;
 import crane.constant.DefaultFont;
 import crane.model.bean.Account;
 import crane.model.dao.AccountDao;
 import crane.model.service.AccountService;
 import crane.model.service.FrameService;
 import crane.model.service.SecurityService;
+import crane.model.service.lightweight.LightService;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -147,29 +149,37 @@ public class AddFrame extends JFrame {
             } else {
                 Boolean isTrue = null;
                 Integer effect = Integer.MIN_VALUE;
-                String id = jTextField.getText().trim();
+                String accountName = jTextField.getText().trim();
                 String username = SecurityService.encodeBase64Salt(jTextField1.getText().trim());
                 String password = SecurityService.encodeBase64Salt(jTextField2.getText().trim());
                 String other = SecurityService.encodeBase64Salt(jTextField3.getText().trim());
                 String userKey = SecurityService.getUuidKey();
+                LightService lightService = new LightService();
                 switch (purpose) {
                     case ADD:
-                        isTrue = new AccountService().addAccount(id, username, password, other, userKey);
+                        //判断是否轻量
+                        isTrue = Constant.IS_LIGHT ?
+                                lightService.addAccount(accountName, username, password, other, userKey)
+                                : new AccountService().addAccount(accountName, username, password, other, userKey);
                         break;
                     case UPDATE:
-                        Account account = new Account(currentId, id, username, password, other, userKey);
-                        System.out.println("预备修改：" + account);
-                        effect = new AccountDao().update(account);
-                        System.out.println("是否修改成功(1为成功)：" + effect);
+                        Account account = new Account(currentId, accountName, username, password, other, userKey);
+                        log.info("预备修改：" + account);
+                        effect = Constant.IS_LIGHT ?
+                                lightService.updateAccount(account)
+                                : new AccountDao().update(account);
+                        log.info("是否修改成功(1为成功)：" + effect);
                         break;
                     case DELETE:
-                        Account readyDeleteAccount = new Account(currentId, id, username, password, other, userKey);
-                        System.out.println("预备删除：" + readyDeleteAccount);
-                        isTrue = new AccountDao().delete(readyDeleteAccount);
-                        System.out.println("是否删除成功(true为成功)：" + (isTrue.equals(false) ? "true" : "false"));
+                        Account readyDeleteAccount = new Account(currentId, accountName, username, password, other, userKey);
+                        log.info("预备删除：" + readyDeleteAccount);
+                        isTrue = Constant.IS_LIGHT ?
+                                lightService.deleteAccount(readyDeleteAccount)
+                                : new AccountDao().delete(readyDeleteAccount);
+                        log.info("是否删除成功(true为成功)：" + (isTrue.equals(false) ? "true" : "false"));
                         break;
                     default:
-                        System.out.println("未知错误");
+                        log.error("未知错误");
                 }
                 //The Dao add method : return false is true
                 if (Boolean.FALSE.equals(isTrue) || effect == 1) {
@@ -186,11 +196,15 @@ public class AddFrame extends JFrame {
                 //如果是更新或新增
                 if (StrUtil.equals(ADD, purpose) || StrUtil.equals(UPDATE, purpose)) {
                     AccountService.setTableMessages(
-                            new Object[][]{{Objects.isNull(currentId) ? "唯一标识刷新后查看" : currentId, id, username, password, other}}
+                            new Object[][]{{Objects.isNull(currentId) ? "唯一标识刷新后查看" : currentId, accountName, username, password, other}}
                     );
                 } else if (StrUtil.equals(purpose, DELETE)) {
                     //如果是删除就更新当前搜索的信息
-                    AccountService.setTableMessages();
+                    if (Constant.IS_LIGHT) {
+                        new LightService().searchAndSetTableMsg();
+                    } else {
+                        AccountService.setTableMessages();
+                    }
                 }
                 this.dispose();
             }

@@ -1,6 +1,7 @@
 package crane.view;
 
 import cn.hutool.core.date.DateUtil;
+import crane.constant.Constant;
 import crane.constant.DefaultFont;
 import crane.constant.LockFrameCst;
 import crane.constant.MainFrameCst;
@@ -120,7 +121,7 @@ public class LockFrame extends JFrame {
                             log.info("检测匹配");
                             //检测该密钥是否存在
                             if (!SecurityService.checkKeyFileIsExist(passTxt)) {
-                                log.info("密钥文件不存在");
+                                log.info("匹配失败，密钥文件不存在");
                                 JOptionPane.showMessageDialog(null, "密钥不对", "星小花★", JOptionPane.WARNING_MESSAGE);
                                 secretText.setText(null);
                                 return;
@@ -136,6 +137,10 @@ public class LockFrame extends JFrame {
                     //判断是否是测试环境，如果是改一下标题
                     if (JdbcConnection.IS_TEST) {
                         MainFrameCst.MAIN_TITLE = MainFrameCst.MAIN_TITLE + " - 当前为测试环境，欢迎回来";
+                    }
+                    //赋值轻量版标识
+                    if (isLightWeightVersion.isSelected()) {
+                        Constant.IS_LIGHT = true;
                     }
                     new MainFrame().setVisible(true);
                 }
@@ -160,9 +165,7 @@ public class LockFrame extends JFrame {
         isLocal.setFocusPainted(false);
         isLocal.setBackground(Color.white);
         isLocal.addActionListener(e -> {
-            if (isLocal.isSelected()) {
-                ShowMessgae.showWarningMessage("当前服务器已过期，无法开启此选项", "服务器无法使用");
-            }
+            ShowMessgae.showWarningMessage("当前服务器已过期，无法开启此选项", "服务器无法使用");
             isLocal.setSelected(true);
         });
         this.add(isLocal);
@@ -181,7 +184,7 @@ public class LockFrame extends JFrame {
         });
         this.add(isCreateScene);
 
-        isLightWeightVersion = new JToggleButton("轻量版启动");
+        isLightWeightVersion = new JToggleButton("数据库模式");
         isLightWeightVersion.setBounds(320, 200, 100, 30);
         isLightWeightVersion.setForeground(Color.decode("#7D2720"));
         isLightWeightVersion.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
@@ -190,7 +193,15 @@ public class LockFrame extends JFrame {
         isLightWeightVersion.setBackground(Color.white);
         isLightWeightVersion.addActionListener(e -> {
             if (isLightWeightVersion.isSelected()) {
-                ShowMessgae.showPlainMessage("此版本无需使用数据库，凭借此程序即可使用。", MainFrameCst.SIMPLE_TITLE + " 轻量版");
+                isLightWeightVersion.setText("轻量模式");
+                ShowMessgae.showPlainMessage(
+                        "此版本无需使用数据库，凭借此程序即可使用，但会有些功能不可用\r\n\n" +
+                                "因为轻量模式开发时间短，未经严格的测试，建议临时使用\r\n\n" +
+                                "源文件在resources/light_weight_data目录下，可随时移走",
+                        MainFrameCst.SIMPLE_TITLE + " 轻量版");
+            } else {
+                isLightWeightVersion.setText("数据库模式");
+                ShowMessgae.showPlainMessage("请确保本机安装有MySQL服务，数据库所需配置见说明文档", "数据库模式");
             }
         });
         this.add(isLightWeightVersion);

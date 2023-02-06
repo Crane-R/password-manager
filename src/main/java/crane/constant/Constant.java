@@ -33,6 +33,14 @@ public class Constant {
     public static String CURRENT_KEY = null;
 
     /**
+     * 记录是否是轻量版
+     *
+     * @Author Crane Resigned
+     * @Date 2023-02-04 00:26:00
+     */
+    public static boolean IS_LIGHT = false;
+
+    /**
      * keys目录前缀
      * Author: Crane Resigned
      * Date: 2023-01-07 23:46:51
