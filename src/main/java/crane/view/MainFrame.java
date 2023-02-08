@@ -1,5 +1,6 @@
 package crane.view;
 
+import cn.hutool.core.util.StrUtil;
 import crane.constant.Constant;
 import crane.constant.DefaultFont;
 import crane.constant.ExportImportCst;
@@ -15,7 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.plaf.metal.MetalToggleButtonUI;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.LinkedList;
@@ -83,7 +86,7 @@ public class MainFrame extends JFrame {
      * Author: Crane Resigned
      * Date: 2022-11-26 23:50:37
      */
-    private final JRadioButton realTimeSearchBtn;
+    private final JToggleButton realTimeSearchBtn;
 
     public final static String SEARCH_BTN_TXT1 = "锁 · 手动搜索";
     public final static String SEARCH_BTN_TXT2 = "解码";
@@ -102,6 +105,14 @@ public class MainFrame extends JFrame {
      */
     public static JLabel activistTimeLabel = new JLabel(String.valueOf(Constant.ACTIVE_TIME));
 
+    /**
+     * 复制提醒消息
+     *
+     * @Author Crane Resigned
+     * @Date 2023-02-08 23:03:35
+     */
+    private final JLabel copyAlertLabel;
+
     public MainFrame() {
         this.setTitle(MainFrameCst.MAIN_TITLE);
         this.setSize(1200, 800);
@@ -109,16 +120,21 @@ public class MainFrame extends JFrame {
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         //设置标题栏的图标
         this.setIconImage(FrameService.getTitleImage());
+        this.getContentPane().setBackground(Color.decode("#DAE4E6"));
 
         //数据显示表格
         jTable = new JTable(new DefaultTableModel(new Object[0][0], MainFrameCst.TITLES));
         jTable.setRowHeight(30);
+        JTableHeader tableHeader = jTable.getTableHeader();
+        tableHeader.setBorder(null);
+        tableHeader.setBackground(Color.WHITE);
+        jTable.setBackground(Color.decode("#EEF5FF"));
         JScrollPane jScrollPane = new JScrollPane(jTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         jScrollPane.setBounds(42, 125, 1100, 600);
         jScrollPane.getVerticalScrollBar().setUI(new ScrollBarUi());
+        jScrollPane.getViewport().setBackground(Color.decode("#DAE4E6"));
         this.add(jScrollPane);
 
         //右键菜单
@@ -169,7 +185,7 @@ public class MainFrame extends JFrame {
                 AccountService.decodeList(rowValues);
             }
             String generateStr = AccountService.generateAccountMsg(rowValues);
-            Tools.stick(generateStr);
+            stickAndShowCopySuccessMsg(generateStr, "复制账号信息成功");
             FrameService.activeTimeFresh();
         });
 
@@ -177,7 +193,7 @@ public class MainFrame extends JFrame {
         JMenuItem copyFunctionItem = new JMenuItem("复制 · Copy");
         copyFunctionItem.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
         copyFunctionItem.addActionListener(e -> {
-            Tools.stick(String.valueOf(jTable.getValueAt(jTable.getSelectedRow(), jTable.getSelectedColumn())));
+            stickAndShowCopySuccessMsg(String.valueOf(jTable.getValueAt(jTable.getSelectedRow(), jTable.getSelectedColumn())), null);
             FrameService.activeTimeFresh();
         });
 
@@ -189,6 +205,13 @@ public class MainFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+                //鼠标左键
+                if (e.getButton() == MouseEvent.BUTTON1 && jTable.getSelectedRow() != -1) {
+                    log.info("监测到鼠标左键");
+                    //复制当前单元格
+                    stickAndShowCopySuccessMsg(jTable.getValueAt(jTable.getSelectedRow(), jTable.getSelectedColumn()).toString(), null);
+                }
+                //鼠标右键
                 if (e.getButton() == MouseEvent.BUTTON3 && jTable.getSelectedRow() != -1) {
                     log.info("监测到鼠标右键");
                     jPopupMenu.show(e.getComponent(), e.getX(), e.getY());
@@ -244,7 +267,6 @@ public class MainFrame extends JFrame {
         this.add(searchText);
 
         searchButton.setBounds(720, 50, 100, 30);
-        searchButton.setFocusPainted(false);
         searchButton.setForeground(Color.WHITE);
         searchButton.setBackground(Color.decode("#4FA485"));
         searchButton.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
@@ -335,7 +357,6 @@ public class MainFrame extends JFrame {
         //添加按钮
         JButton addButton = new JButton("新增账户");
         addButton.setBounds(845, 50, 100, 30);
-        addButton.setFocusPainted(false);
         addButton.setForeground(Color.WHITE);
         addButton.setBackground(Color.decode("#4792B9"));
         addButton.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
@@ -357,15 +378,22 @@ public class MainFrame extends JFrame {
 
         //显示结果状态文本（有多少条数据）
         resultNumbers = new JLabel(AccountService.getLatestAccountNumberText());
-        resultNumbers.setBounds(42, 725, 600, 30);
-        resultNumbers.setForeground(Color.decode("#80001E"));
-        resultNumbers.setFont(new Font(null, Font.PLAIN, 13));
+        resultNumbers.setBounds(42, 725, 200, 30);
+        resultNumbers.setForeground(Color.decode("#382C78"));
+        resultNumbers.setFont(new Font("微软雅黑", Font.BOLD, 13));
         this.add(resultNumbers);
+
+        //复制消息提醒
+        copyAlertLabel = new JLabel();
+        copyAlertLabel.setBounds(200, 725, 200, 30);
+        copyAlertLabel.setForeground(Color.decode("#E41A16"));
+        copyAlertLabel.setFont(new Font("微软雅黑", Font.BOLD, 13));
+        copyAlertLabel.setVisible(false);
+        this.add(copyAlertLabel);
 
         //清空按钮
         JButton clearBtn = new JButton("清空当前");
         clearBtn.setBounds(970, 50, 100, 30);
-        clearBtn.setFocusPainted(false);
         clearBtn.setForeground(Color.WHITE);
         clearBtn.setBackground(Color.decode("#1A5599"));
         clearBtn.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
@@ -379,32 +407,34 @@ public class MainFrame extends JFrame {
         });
         this.add(clearBtn);
 
-        realTimeSearchBtn = new JRadioButton("Real Time", true);
-        realTimeSearchBtn.setBounds(1058, 0, 140, 30);
-        realTimeSearchBtn.setFocusPainted(false);
+        realTimeSearchBtn = new JToggleButton("实时模式", true);
+        realTimeSearchBtn.setBounds(1095, 0, 100, 30);
         realTimeSearchBtn.setForeground(Color.WHITE);
-        realTimeSearchBtn.setBackground(Color.decode("#7D2720"));
+        realTimeSearchBtn.setBackground(Color.decode("#2A3050"));
+        realTimeSearchBtn.setUI(new MetalToggleButtonUI() {
+            @Override
+            protected Color getSelectColor() {
+                return Color.decode("#7D2720");
+            }
+        });
         realTimeSearchBtn.setFont(new Font("微软雅黑", Font.BOLD, 13));
         realTimeSearchBtn.setBorder(null);
         realTimeSearchBtn.setHorizontalAlignment(JLabel.CENTER);
         realTimeSearchBtn.addActionListener(e -> {
             if (!realTimeSearchBtn.isSelected()) {
-                realTimeSearchBtn.setBackground(Color.decode("#2A3050"));
-                realTimeSearchBtn.setText("Double Enter");
+                realTimeSearchBtn.setText("双击模式");
                 ShowMessgae.showInformationMessage("单击回车搜索，双击回车搜索并解码，双击判断间隔为" + Constant.DOUBLE_ENTER_DELAY + "ms", "双击回车模式");
             } else {
-                realTimeSearchBtn.setBackground(Color.decode("#7D2720"));
-                realTimeSearchBtn.setText("Real Time");
+                realTimeSearchBtn.setText("实时模式");
                 ShowMessgae.showInformationMessage("根据文本框值的增减、改变进行实时搜索", "实时搜索模式");
             }
             FrameService.activeTimeFresh();
         });
         this.add(realTimeSearchBtn);
-        
+
         //切换场景
         JButton switchSceneBtn = new JButton("切换场景");
-        switchSceneBtn.setBounds(950, 0, 100, 30);
-        switchSceneBtn.setFocusPainted(false);
+        switchSceneBtn.setBounds(990, 0, 100, 30);
         switchSceneBtn.setForeground(Color.WHITE);
         switchSceneBtn.setBackground(Color.BLACK);
         switchSceneBtn.setFont(new Font("微软雅黑", Font.BOLD, 13));
@@ -415,18 +445,17 @@ public class MainFrame extends JFrame {
             new LockFrame().setVisible(true);
         });
         this.add(switchSceneBtn);
-        
+
         //免责声明
         JLabel disclaimerLabel = new JLabel("安全性声明：此程序不保证绝对安全，若您不是开发者请斟酌使用，造成的任何损失开发者不会负责。");
         disclaimerLabel.setBounds(540, 725, 800, 30);
-        disclaimerLabel.setForeground(Color.RED);
+        disclaimerLabel.setForeground(Color.decode("#9A2734"));
         disclaimerLabel.setFont(new Font("微软雅黑", Font.BOLD, 13));
         this.add(disclaimerLabel);
 
         //关于
         JButton aboutBtn = new JButton("关于");
         aboutBtn.setBounds(-8, 0, 60, 30);
-        aboutBtn.setFocusPainted(false);
         aboutBtn.setForeground(Color.WHITE);
         aboutBtn.setBackground(Color.decode("#58C3C3"));
         aboutBtn.setFont(DefaultFont.DEFAULT_FONT_ONE.setStyle(Font.BOLD).getFont());
@@ -441,7 +470,6 @@ public class MainFrame extends JFrame {
         //导出数据按钮
         JButton exportBtn = new JButton("导出");
         exportBtn.setBounds(1138, 32, 60, 30);
-        exportBtn.setFocusPainted(false);
         exportBtn.setForeground(Color.WHITE);
         exportBtn.setBackground(Color.decode("#046D35"));
         exportBtn.setFont(DefaultFont.DEFAULT_FONT_ONE.setStyle(Font.BOLD).getFont());
@@ -451,7 +479,7 @@ public class MainFrame extends JFrame {
             new ExportImportDataFrame(ExportImportCst.EXPORT).setVisible(true);
             FrameService.activeTimeFresh();
         });
-        if(Constant.IS_LIGHT){
+        if (Constant.IS_LIGHT) {
             exportBtn.setEnabled(false);
         }
         this.add(exportBtn);
@@ -459,7 +487,6 @@ public class MainFrame extends JFrame {
         //导入
         JButton importBtn = new JButton("导入");
         importBtn.setBounds(1138, 64, 60, 30);
-        importBtn.setFocusPainted(false);
         importBtn.setForeground(Color.WHITE);
         importBtn.setBackground(Color.decode("#5898C2"));
         importBtn.setFont(DefaultFont.DEFAULT_FONT_ONE.setStyle(Font.BOLD).getFont());
@@ -469,7 +496,7 @@ public class MainFrame extends JFrame {
             new ExportImportDataFrame(ExportImportCst.IMPORT).setVisible(true);
             FrameService.activeTimeFresh();
         });
-        if(Constant.IS_LIGHT){
+        if (Constant.IS_LIGHT) {
             importBtn.setEnabled(false);
         }
         this.add(importBtn);
@@ -487,7 +514,6 @@ public class MainFrame extends JFrame {
         //3.0
         JButton importBtn3 = new JButton("PM3.0");
         importBtn3.setBounds(-8, 32, 60, 30);
-        importBtn3.setFocusPainted(false);
         importBtn3.setForeground(Color.WHITE);
         importBtn3.setBackground(Color.decode("#002FA7"));
         importBtn3.setFont(DefaultFont.DEFAULT_FONT_ONE.setStyle(Font.BOLD).getFont());
@@ -498,7 +524,7 @@ public class MainFrame extends JFrame {
             new Import3DataFrame().setVisible(true);
             FrameService.activeTimeFresh();
         });
-        if(Constant.IS_LIGHT){
+        if (Constant.IS_LIGHT) {
             importBtn3.setEnabled(false);
         }
         this.add(importBtn3);
@@ -506,7 +532,6 @@ public class MainFrame extends JFrame {
         //4.0
         JButton importBtn4 = new JButton("PM4.2");
         importBtn4.setBounds(-8, 64, 60, 30);
-        importBtn4.setFocusPainted(false);
         importBtn4.setForeground(Color.WHITE);
         importBtn4.setBackground(Color.decode("#4FA485"));
         importBtn4.setFont(DefaultFont.DEFAULT_FONT_ONE.setStyle(Font.BOLD).getFont());
@@ -517,10 +542,28 @@ public class MainFrame extends JFrame {
             new Import4DataFrame().setVisible(true);
             FrameService.activeTimeFresh();
         });
-        if(Constant.IS_LIGHT){
+        if (Constant.IS_LIGHT) {
             importBtn4.setEnabled(false);
         }
         this.add(importBtn4);
+    }
+
+    /**
+     * 复制成功显示的方法
+     *
+     * @Author Crane Resigned
+     * @Date 2023-02-08 23:12:52
+     */
+    public void stickAndShowCopySuccessMsg(String value, String specialMsg) {
+        Tools.stick(value);
+        copyAlertLabel.setText(StrUtil.isEmpty(specialMsg) ? "复制成功：".concat(value) : specialMsg);
+        copyAlertLabel.setVisible(true);
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                copyAlertLabel.setVisible(false);
+            }
+        }, 1000);
     }
 
 }

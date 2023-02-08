@@ -56,7 +56,7 @@ public class ExportImportDataFrame extends LockFrame {
 
         //移除回车标
         this.remove(loginTip);
-        
+
         //移除是否轻量版
         this.remove(isLightWeightVersion);
 
@@ -133,8 +133,11 @@ public class ExportImportDataFrame extends LockFrame {
         if (path == null) {
             return;
         }
+        List<Account> accounts = new AccountDao().select(null);
+        //清除key
+        accounts.forEach(account -> account.setUserKey(null));
         //执行导出
-        boolean b = ExcelService.exportDataToExcel(new AccountDao().select(null), path);
+        boolean b = ExcelService.exportDataToExcel(accounts, path);
         JOptionPane.showMessageDialog(null, b ? "导出成功" : "导出失败", "星小花★", JOptionPane.INFORMATION_MESSAGE);
         this.dispose();
     }
@@ -153,6 +156,8 @@ public class ExportImportDataFrame extends LockFrame {
             //状态数组，成功，失败，总计
             int[] records = new int[3];
             for (Account account : accounts) {
+                //替换密钥
+                account.setUserKey(SecurityService.getUuidKey());
                 Boolean add = accountDao.add(account);
                 if (!add) {
                     records[0]++;

@@ -92,7 +92,7 @@ public class AccountService {
      * Date: 2022-11-26 20:02:11
      */
     public static String getLatestAccountNumberText() {
-        return "星小花★(✿◡‿◡)：当前共有 ".concat(String.valueOf(MainFrame.jTable.getRowCount())).concat(" 个账户");
+        return "当前共有 ".concat(String.valueOf(MainFrame.jTable.getRowCount())).concat(" 个账户");
     }
 
     /**

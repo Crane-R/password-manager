@@ -118,7 +118,7 @@ public class ScrollBarUi extends BasicScrollBarUI {
 
         // 设置把手颜色
 
-        g.setColor(Color.decode("#80D8CF"));
+        g.setColor(Color.decode("#382C78"));
 
         // 画一个圆角矩形
 
@@ -142,7 +142,7 @@ public class ScrollBarUi extends BasicScrollBarUI {
 
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
 
-                0.5f));
+                1f));
 
         // 设置填充颜色，这里设置了渐变，由下往上
 

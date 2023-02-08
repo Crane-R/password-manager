@@ -137,8 +137,7 @@ public final class SecurityService {
         try {
             decode = new String(Base64.getDecoder().decode(secondStageDecode(password)), StandardCharsets.UTF_8);
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            log.error("该信息未加密，返回原值");
+            log.error("该信息未加密，返回原值" + password);
             return password;
         }
         String key = getRealKey();

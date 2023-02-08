@@ -61,28 +61,29 @@ public class AddFrame extends JFrame {
         } else {
             this.setLocationRelativeTo(null);
         }
+        this.getContentPane().setBackground(Color.decode("#DAE4E6"));
 
         //设置标题栏的图标
         Image image = FrameService.getTitleImage();
         this.setIconImage(image);
 
         //四个标签和四个输入框
-        JLabel jLabel = new JLabel("账户");
+        JLabel jLabel = new JLabel("账号名：");
         jLabel.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
         jLabel.setBounds(60, 25, 100, 40);
         this.add(jLabel);
 
-        JLabel jLabel1 = new JLabel("用户名");
+        JLabel jLabel1 = new JLabel("用户名：");
         jLabel1.setBounds(60, 85, 100, 40);
         jLabel1.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
         this.add(jLabel1);
 
-        JLabel jLabel2 = new JLabel("密码");
+        JLabel jLabel2 = new JLabel("密码：");
         jLabel2.setBounds(60, 145, 100, 40);
         jLabel2.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
         this.add(jLabel2);
 
-        JLabel jLabel3 = new JLabel("说明");
+        JLabel jLabel3 = new JLabel("其他信息：");
         jLabel3.setBounds(60, 205, 100, 40);
         jLabel3.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
         this.add(jLabel3);

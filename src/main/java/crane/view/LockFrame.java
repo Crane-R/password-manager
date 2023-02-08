@@ -12,6 +12,8 @@ import crane.model.service.ShowMessgae;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
+import javax.swing.plaf.metal.MetalButtonUI;
+import javax.swing.plaf.metal.MetalToggleButtonUI;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -48,14 +50,6 @@ public class LockFrame extends JFrame {
     public static JToggleButton isLightWeightVersion;
 
     /**
-     * 检测密钥文件是否存在
-     * true为有
-     * Author: Crane Resigned
-     * Date: 2022-11-27 12:04:49
-     */
-    private static final boolean IS_HAVE_KEY = SecurityService.checkKeyAmountIsNotZero();
-
-    /**
      * 提示文本
      * Author: Crane Resigned
      * Date: 2022-12-30 23:36:25
@@ -84,17 +78,20 @@ public class LockFrame extends JFrame {
     protected JLabel loginTip;
 
     public LockFrame() {
+        //检测密钥文件是否存在
+        final boolean isHaveKey = SecurityService.checkKeyAmountIsNotZero();
 
         //窗体初始化
-        this.setTitle(IS_HAVE_KEY ? MainFrameCst.MAIN_TITLE : LockFrameCst.HAVE_NOT_SECRET_KEY_TITLE);
+        this.setTitle(isHaveKey ? MainFrameCst.MAIN_TITLE : LockFrameCst.HAVE_NOT_SECRET_KEY_TITLE);
         this.setSize(500, 300);
         this.setLayout(null);
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setIconImage(FrameService.getTitleImage());
+        this.getContentPane().setBackground(Color.decode("#DAE4E6"));
 
-        tipLabel = new JLabel(IS_HAVE_KEY ? LockFrameCst.HAVE_SECRET_KEY : LockFrameCst.HAVE_NOT_SECRET_KEY);
+        tipLabel = new JLabel(isHaveKey ? LockFrameCst.HAVE_SECRET_KEY : LockFrameCst.HAVE_NOT_SECRET_KEY);
         tipLabel.setBounds(50, 50, 400, 40);
         tipLabel.setForeground(Color.decode("#407E54"));
         tipLabel.setFont(new Font("微软雅黑", Font.BOLD, 25));
@@ -103,7 +100,7 @@ public class LockFrame extends JFrame {
         secretText = new JPasswordField();
         secretText.setBounds(50, 120, 380, 35);
         secretText.setFont(new Font("微软雅黑", Font.PLAIN, 18));
-        secretText.setForeground(Color.decode("#1A5599"));
+        secretText.setForeground(Color.decode("#046D35"));
         secretText.setBorder(BorderFactory.createLineBorder(Color.decode("#B8CE8E")));
         secretText.setHorizontalAlignment(JPasswordField.CENTER);
         enterEvent = new KeyAdapter() {
@@ -117,7 +114,7 @@ public class LockFrame extends JFrame {
                         SecurityService.createKey(passTxt);
                     } else {
                         //是否有密匙
-                        if (IS_HAVE_KEY) {
+                        if (isHaveKey) {
                             log.info("检测匹配");
                             //检测该密钥是否存在
                             if (!SecurityService.checkKeyFileIsExist(passTxt)) {
@@ -157,13 +154,19 @@ public class LockFrame extends JFrame {
         this.add(loginTip);
 
         //是否是本地数据库
-        isLocal = new JToggleButton("本地数据库", true);
+        isLocal = new JToggleButton("本地数据库", false);
         isLocal.setBounds(50, 200, 100, 30);
-        isLocal.setForeground(Color.decode("#7D2720"));
+        isLocal.setForeground(Color.WHITE);
         isLocal.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
+        isLocal.setBackground(Color.decode("#68A694"));
+        //设置选中的颜色
+        isLocal.setUI(new MetalToggleButtonUI() {
+            @Override
+            protected Color getSelectColor() {
+                return Color.decode("#046D35");
+            }
+        });
         isLocal.setBorder(null);
-        isLocal.setFocusPainted(false);
-        isLocal.setBackground(Color.white);
         isLocal.addActionListener(e -> {
             ShowMessgae.showWarningMessage("当前服务器已过期，无法开启此选项", "服务器无法使用");
             isLocal.setSelected(true);
@@ -172,11 +175,16 @@ public class LockFrame extends JFrame {
 
         isCreateScene = new JToggleButton("以新密钥登录");
         isCreateScene.setBounds(180, 200, 110, 30);
-        isCreateScene.setForeground(Color.decode("#7D2720"));
+        isCreateScene.setForeground(Color.WHITE);
         isCreateScene.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
+        isCreateScene.setUI(new MetalToggleButtonUI() {
+            @Override
+            protected Color getSelectColor() {
+                return Color.decode("#2A3050");
+            }
+        });
         isCreateScene.setBorder(null);
-        isCreateScene.setFocusPainted(false);
-        isCreateScene.setBackground(Color.white);
+        isCreateScene.setBackground(Color.decode("#65BAD1"));
         isCreateScene.addActionListener(e -> {
             if (isCreateScene.isSelected()) {
                 ShowMessgae.showInformationMessage("创建一个新密钥以启动新场景。密钥隔离，不可访问其他场景账户。", "以新密钥登录");
@@ -186,11 +194,16 @@ public class LockFrame extends JFrame {
 
         isLightWeightVersion = new JToggleButton("数据库模式");
         isLightWeightVersion.setBounds(320, 200, 100, 30);
-        isLightWeightVersion.setForeground(Color.decode("#7D2720"));
+        isLightWeightVersion.setForeground(Color.WHITE);
         isLightWeightVersion.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
+        isLightWeightVersion.setUI(new MetalToggleButtonUI() {
+            @Override
+            protected Color getSelectColor() {
+                return Color.decode("#9AB3CD");
+            }
+        });
         isLightWeightVersion.setBorder(null);
-        isLightWeightVersion.setFocusPainted(false);
-        isLightWeightVersion.setBackground(Color.white);
+        isLightWeightVersion.setBackground(Color.decode("#407E54"));
         isLightWeightVersion.addActionListener(e -> {
             if (isLightWeightVersion.isSelected()) {
                 isLightWeightVersion.setText("轻量模式");
