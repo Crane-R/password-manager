@@ -53,7 +53,7 @@ public class FrameService {
      */
     public static Image getTitleImage() {
         try {
-            return ImageIO.read(Objects.requireNonNull(FrameService.class.getResource("/img/blue3.png")));
+            return ImageIO.read(Objects.requireNonNull(FrameService.class.getResource("/img/4.5.0.1.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }
