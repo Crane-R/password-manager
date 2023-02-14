@@ -97,7 +97,7 @@ public class MainFrame extends JFrame {
      * Author: Crane Resigned
      * Date: 2022-11-27 15:22:53
      */
-    public static JButton searchButton = new JButton(SEARCH_BTN_TXT1);
+    public static JButton searchButton;
 
     /**
      * 活性时间
@@ -267,6 +267,7 @@ public class MainFrame extends JFrame {
         });
         this.add(searchText);
 
+        searchButton = new JButton(SEARCH_BTN_TXT1);
         searchButton.setBounds(720, 50, 100, 30);
         searchButton.setForeground(Color.WHITE);
         searchButton.setBackground(Color.decode("#4FA485"));
