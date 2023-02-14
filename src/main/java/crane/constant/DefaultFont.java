@@ -4,7 +4,6 @@ import java.awt.*;
 
 /**
  * Description: 默认字体枚举
- * FIXME:有一个小漏洞，这个默认字体对象是已经被new出来的，当A使用过后调用了set方法，会改变属性的值，从而导致下一次调用时是A改过的值
  * Author: ZhouXingxue
  * Date: 2022/12/30 22:00
  *
@@ -17,28 +16,30 @@ public enum DefaultFont {
      * Author: Crane Resigned
      * Date: 2022-12-30 22:14:27
      */
-    DEFAULT_FONT_ONE("微软雅黑", Font.PLAIN, 13);
+    WEI_RUAN_PLAIN_13("微软雅黑", Font.PLAIN, 13),
+    WEI_RUAN_BOLD_13("微软雅黑", Font.BOLD, 13),
+    WEI_RUAN_BOLD_12("微软雅黑", Font.BOLD, 12);
 
     /**
      * 字体名称
      * Author: Crane Resigned
      * Date: 2022-12-30 23:41:50
      */
-    private String name;
+    private final String name;
 
     /**
      * 字体风格
      * Author: Crane Resigned
      * Date: 2022-12-30 23:42:10
      */
-    private int style;
+    private final int style;
 
     /**
      * 字体大小
      * Author: Crane Resigned
      * Date: 2022-12-30 23:42:26
      */
-    private int fontSize;
+    private final int fontSize;
 
     DefaultFont(String name, int style, int fontSize) {
         this.name = name;
@@ -48,26 +49,6 @@ public enum DefaultFont {
 
     public Font getFont() {
         return new Font(name, style, fontSize);
-    }
-
-    /**
-     * 连点设置方法
-     * Author: Crane Resigned
-     * Date: 2022-12-30 23:39:55
-     */
-    public DefaultFont setName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    public DefaultFont setStyle(int style) {
-        this.style = style;
-        return this;
-    }
-
-    public DefaultFont setFontSize(int fontSize) {
-        this.fontSize = fontSize;
-        return this;
     }
 
 }

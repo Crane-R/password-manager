@@ -43,7 +43,7 @@ public class ExportImportDataFrame extends LockFrame {
 
         //修改提示文本
         tipLabel.setText(exportImportCst.TIP_LABEL);
-        tipLabel.setFont(DefaultFont.DEFAULT_FONT_ONE.setStyle(Font.BOLD).setFontSize(18).getFont());
+        tipLabel.setFont(new Font("微软雅黑", Font.BOLD, 18));
 
         //移除是否本地
         this.remove(isLocal);
@@ -63,7 +63,7 @@ public class ExportImportDataFrame extends LockFrame {
         //文本框
         pathTextField = new JTextField();
         pathTextField.setBounds(50, 120, 380, 35);
-        pathTextField.setFont(DefaultFont.DEFAULT_FONT_ONE.setStyle(Font.BOLD).setFontSize(13).getFont());
+        pathTextField.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
         pathTextField.setForeground(Color.decode("#1A5599"));
         pathTextField.setBorder(BorderFactory.createLineBorder(Color.decode("#B8CE8E")));
         pathTextField.setHorizontalAlignment(JPasswordField.CENTER);
@@ -82,7 +82,7 @@ public class ExportImportDataFrame extends LockFrame {
         JButton chooseFile = new JButton("文件选择器");
         chooseFile.setBounds(50, 200, 100, 30);
         chooseFile.setForeground(Color.decode("#FFFFFF"));
-        chooseFile.setFont(DefaultFont.DEFAULT_FONT_ONE.setFontSize(12).setStyle(Font.BOLD).getFont());
+        chooseFile.setFont(DefaultFont.WEI_RUAN_BOLD_12.getFont());
         chooseFile.setBorder(null);
         chooseFile.setFocusPainted(false);
         chooseFile.setBackground(Color.decode("#BBCBDC"));
@@ -108,7 +108,7 @@ public class ExportImportDataFrame extends LockFrame {
         JButton sureBtn = new JButton(exportImportCst.IS_EXPORT ? "导出/√Enter" : "导入/√Enter");
         sureBtn.setBounds(330, 200, 100, 30);
         sureBtn.setForeground(Color.decode("#FFFFFF"));
-        sureBtn.setFont(DefaultFont.DEFAULT_FONT_ONE.setFontSize(12).setStyle(Font.BOLD).getFont());
+        sureBtn.setFont(DefaultFont.WEI_RUAN_BOLD_12.getFont());
         sureBtn.setBorder(null);
         sureBtn.setFocusPainted(false);
         sureBtn.setBackground(Color.decode("#046D35"));

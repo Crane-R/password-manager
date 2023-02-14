@@ -63,8 +63,8 @@ public class ShowMessgae {
      * Date: 2023-01-29 18:06:06
      */
     private static void setAlert() {
-        UIManager.put("OptionPane.messageFont", new FontUIResource(DefaultFont.DEFAULT_FONT_ONE.getFont()));
-        UIManager.put("OptionPane.buttonFont", new FontUIResource(DefaultFont.DEFAULT_FONT_ONE.getFont()));
+        UIManager.put("OptionPane.messageFont", new FontUIResource(DefaultFont.WEI_RUAN_PLAIN_13.getFont()));
+        UIManager.put("OptionPane.buttonFont", new FontUIResource(DefaultFont.WEI_RUAN_PLAIN_13.getFont()));
     }
 
 }

@@ -6,6 +6,7 @@ import crane.constant.DefaultFont;
 import crane.constant.ExportImportCst;
 import crane.constant.MainFrameCst;
 import crane.function.Tools;
+import crane.model.jdbc.JdbcConnection;
 import crane.model.service.AccountService;
 import crane.model.service.FrameService;
 import crane.model.service.ShowMessgae;
@@ -114,7 +115,7 @@ public class MainFrame extends JFrame {
     private final JLabel copyAlertLabel;
 
     public MainFrame() {
-        this.setTitle(MainFrameCst.MAIN_TITLE);
+        this.setTitle(JdbcConnection.IS_TEST ? MainFrameCst.TEST_TITLE : MainFrameCst.MAIN_TITLE);
         this.setSize(1200, 800);
         this.setLayout(null);
         this.setResizable(false);
@@ -140,7 +141,7 @@ public class MainFrame extends JFrame {
         //右键菜单
         JMenuItem updateMenuItem = new JMenuItem("修改 · Modify");
         updateMenuItem.setActionCommand("更新");
-        updateMenuItem.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
+        updateMenuItem.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         updateMenuItem.addActionListener(e -> {
             LinkedList<String> list = new AccountService().getRowValues(jTable);
             //如果是刚新增的id肯定不是数值
@@ -159,7 +160,7 @@ public class MainFrame extends JFrame {
 
         JMenuItem deleteMenuItem = new JMenuItem("删除 · Delete");
         deleteMenuItem.setActionCommand("删除");
-        deleteMenuItem.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
+        deleteMenuItem.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         deleteMenuItem.addActionListener(e -> {
             LinkedList<String> list = new AccountService().getRowValues(jTable);
             if (!String.valueOf(list.get(0)).matches(Constant.IS_NUMBER)) {
@@ -177,7 +178,7 @@ public class MainFrame extends JFrame {
 
         //右键点击复制快捷账户密码信息
         JMenuItem quickCopyItem = new JMenuItem("复制账户信息");
-        quickCopyItem.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
+        quickCopyItem.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         quickCopyItem.addActionListener(e -> {
             LinkedList<String> rowValues = new AccountService().getRowValues(jTable);
             //如果处于加密状态就解密
@@ -191,7 +192,7 @@ public class MainFrame extends JFrame {
 
         //复制功能
         JMenuItem copyFunctionItem = new JMenuItem("复制 · Copy");
-        copyFunctionItem.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
+        copyFunctionItem.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         copyFunctionItem.addActionListener(e -> {
             stickAndShowCopySuccessMsg(String.valueOf(jTable.getValueAt(jTable.getSelectedRow(), jTable.getSelectedColumn())), null);
             FrameService.activeTimeFresh();
@@ -229,7 +230,7 @@ public class MainFrame extends JFrame {
         //搜索文本
         searchText = new JTextField("");
         searchText.setBounds(280, 50, 380, 30);
-        searchText.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
+        searchText.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         searchText.setForeground(Color.decode("#1A5599"));
         searchText.setBorder(BorderFactory.createLineBorder(Color.decode("#B8CE8E")));
         searchText.addKeyListener(new KeyAdapter() {
@@ -269,7 +270,7 @@ public class MainFrame extends JFrame {
         searchButton.setBounds(720, 50, 100, 30);
         searchButton.setForeground(Color.WHITE);
         searchButton.setBackground(Color.decode("#4FA485"));
-        searchButton.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
+        searchButton.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         searchButton.setBorder(null);
         searchButton.addActionListener(e -> {
             if (switchRecord) {
@@ -359,7 +360,7 @@ public class MainFrame extends JFrame {
         addButton.setBounds(845, 50, 100, 30);
         addButton.setForeground(Color.WHITE);
         addButton.setBackground(Color.decode("#4792B9"));
-        addButton.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
+        addButton.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         addButton.setBorder(null);
         addButton.addActionListener(e -> {
             //添加按钮点击事件
@@ -396,7 +397,7 @@ public class MainFrame extends JFrame {
         clearBtn.setBounds(970, 50, 100, 30);
         clearBtn.setForeground(Color.WHITE);
         clearBtn.setBackground(Color.decode("#1A5599"));
-        clearBtn.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
+        clearBtn.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         clearBtn.setBorder(null);
         clearBtn.addActionListener(e -> {
             searchText.setText(null);
@@ -458,7 +459,7 @@ public class MainFrame extends JFrame {
         aboutBtn.setBounds(-8, 0, 60, 30);
         aboutBtn.setForeground(Color.WHITE);
         aboutBtn.setBackground(Color.decode("#58C3C3"));
-        aboutBtn.setFont(DefaultFont.DEFAULT_FONT_ONE.setStyle(Font.BOLD).getFont());
+        aboutBtn.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
         aboutBtn.setBorder(null);
         aboutBtn.setHorizontalAlignment(JLabel.CENTER);
         aboutBtn.addActionListener(e -> {
@@ -472,7 +473,7 @@ public class MainFrame extends JFrame {
         exportBtn.setBounds(1138, 32, 60, 30);
         exportBtn.setForeground(Color.WHITE);
         exportBtn.setBackground(Color.decode("#046D35"));
-        exportBtn.setFont(DefaultFont.DEFAULT_FONT_ONE.setStyle(Font.BOLD).getFont());
+        exportBtn.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
         exportBtn.setBorder(null);
         exportBtn.setHorizontalAlignment(JLabel.CENTER);
         exportBtn.addActionListener(e -> {
@@ -489,7 +490,7 @@ public class MainFrame extends JFrame {
         importBtn.setBounds(1138, 64, 60, 30);
         importBtn.setForeground(Color.WHITE);
         importBtn.setBackground(Color.decode("#5898C2"));
-        importBtn.setFont(DefaultFont.DEFAULT_FONT_ONE.setStyle(Font.BOLD).getFont());
+        importBtn.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
         importBtn.setBorder(null);
         importBtn.setHorizontalAlignment(JLabel.CENTER);
         importBtn.addActionListener(e -> {
@@ -504,7 +505,7 @@ public class MainFrame extends JFrame {
         //到达活性时间后加密table
         activistTimeLabel.setBounds(65, 0, 200, 30);
         activistTimeLabel.setForeground(Color.decode("#1A5599"));
-        activistTimeLabel.setFont(DefaultFont.DEFAULT_FONT_ONE.setStyle(Font.BOLD).getFont());
+        activistTimeLabel.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
         this.add(activistTimeLabel);
 
         //激活活性时间定时器
@@ -516,7 +517,7 @@ public class MainFrame extends JFrame {
         importBtn3.setBounds(-8, 32, 60, 30);
         importBtn3.setForeground(Color.WHITE);
         importBtn3.setBackground(Color.decode("#002FA7"));
-        importBtn3.setFont(DefaultFont.DEFAULT_FONT_ONE.setStyle(Font.BOLD).getFont());
+        importBtn3.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
         importBtn3.setBorder(null);
         importBtn3.setHorizontalAlignment(JLabel.CENTER);
         importBtn3.addActionListener(e -> {
@@ -534,7 +535,7 @@ public class MainFrame extends JFrame {
         importBtn4.setBounds(-8, 64, 60, 30);
         importBtn4.setForeground(Color.WHITE);
         importBtn4.setBackground(Color.decode("#4FA485"));
-        importBtn4.setFont(DefaultFont.DEFAULT_FONT_ONE.setStyle(Font.BOLD).getFont());
+        importBtn4.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
         importBtn4.setBorder(null);
         importBtn4.setHorizontalAlignment(JLabel.CENTER);
         importBtn4.addActionListener(e -> {

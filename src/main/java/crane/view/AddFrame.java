@@ -69,43 +69,43 @@ public class AddFrame extends JFrame {
 
         //四个标签和四个输入框
         JLabel jLabel = new JLabel("账号名：");
-        jLabel.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
+        jLabel.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         jLabel.setBounds(60, 25, 100, 40);
         this.add(jLabel);
 
         JLabel jLabel1 = new JLabel("用户名：");
         jLabel1.setBounds(60, 85, 100, 40);
-        jLabel1.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
+        jLabel1.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         this.add(jLabel1);
 
         JLabel jLabel2 = new JLabel("密码：");
         jLabel2.setBounds(60, 145, 100, 40);
-        jLabel2.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
+        jLabel2.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         this.add(jLabel2);
 
         JLabel jLabel3 = new JLabel("其他信息：");
         jLabel3.setBounds(60, 205, 100, 40);
-        jLabel3.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
+        jLabel3.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         this.add(jLabel3);
 
         JTextField jTextField = new JTextField(list.get(1));
         jTextField.setBounds(140, 30, 190, 30);
-        jTextField.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
+        jTextField.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         this.add(jTextField);
 
         JTextField jTextField1 = new JTextField(list.get(2));
         jTextField1.setBounds(140, 90, 190, 30);
-        jTextField1.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
+        jTextField1.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         this.add(jTextField1);
 
         JTextField jTextField2 = new JTextField(list.get(3));
         jTextField2.setBounds(140, 150, 190, 30);
-        jTextField2.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
+        jTextField2.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         this.add(jTextField2);
 
         JTextField jTextField3 = new JTextField(list.get(4));
         jTextField3.setBounds(140, 210, 190, 30);
-        jTextField3.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
+        jTextField3.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         this.add(jTextField3);
 
         //两个按钮
@@ -114,7 +114,7 @@ public class AddFrame extends JFrame {
         resetButton.setFocusPainted(false);
         resetButton.setForeground(Color.WHITE);
         resetButton.setBackground(Color.decode("#F27635"));
-        resetButton.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
+        resetButton.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         resetButton.setBorder(null);
         resetButton.addActionListener(e -> {
             //清空所有文本框
@@ -131,7 +131,7 @@ public class AddFrame extends JFrame {
         submitButton.setFocusPainted(false);
         submitButton.setForeground(Color.WHITE);
         submitButton.setBackground(Color.decode("#5697C4"));
-        submitButton.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
+        submitButton.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         submitButton.setBorder(null);
         submitButton.addActionListener(e -> {
 

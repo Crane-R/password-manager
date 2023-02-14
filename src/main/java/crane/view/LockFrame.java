@@ -119,7 +119,7 @@ public class LockFrame extends JFrame {
                             //检测该密钥是否存在
                             if (!SecurityService.checkKeyFileIsExist(passTxt)) {
                                 log.info("匹配失败，密钥文件不存在");
-                                JOptionPane.showMessageDialog(null, "密钥不对", "星小花★", JOptionPane.WARNING_MESSAGE);
+                                ShowMessgae.showWarningMessage("密钥错误", "未知密钥");
                                 secretText.setText(null);
                                 return;
                             }
@@ -131,10 +131,6 @@ public class LockFrame extends JFrame {
                     log.info("密钥匹配成功" + DateUtil.now());
                     //关闭当前
                     close();
-                    //判断是否是测试环境，如果是改一下标题
-                    if (JdbcConnection.IS_TEST) {
-                        MainFrameCst.MAIN_TITLE = MainFrameCst.MAIN_TITLE + " - 当前为测试环境，欢迎回来";
-                    }
                     //赋值轻量版标识
                     if (isLightWeightVersion.isSelected()) {
                         Constant.IS_LIGHT = true;
@@ -154,10 +150,10 @@ public class LockFrame extends JFrame {
         this.add(loginTip);
 
         //是否是本地数据库
-        isLocal = new JToggleButton("本地数据库", false);
+        isLocal = new JToggleButton("本地数据库", true);
         isLocal.setBounds(50, 200, 100, 30);
         isLocal.setForeground(Color.WHITE);
-        isLocal.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
+        isLocal.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         isLocal.setBackground(Color.decode("#68A694"));
         //设置选中的颜色
         isLocal.setUI(new MetalToggleButtonUI() {
@@ -176,7 +172,7 @@ public class LockFrame extends JFrame {
         isCreateScene = new JToggleButton("以新密钥登录");
         isCreateScene.setBounds(180, 200, 110, 30);
         isCreateScene.setForeground(Color.WHITE);
-        isCreateScene.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
+        isCreateScene.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         isCreateScene.setUI(new MetalToggleButtonUI() {
             @Override
             protected Color getSelectColor() {
@@ -195,7 +191,7 @@ public class LockFrame extends JFrame {
         isLightWeightVersion = new JToggleButton("数据库模式");
         isLightWeightVersion.setBounds(320, 200, 100, 30);
         isLightWeightVersion.setForeground(Color.WHITE);
-        isLightWeightVersion.setFont(DefaultFont.DEFAULT_FONT_ONE.getFont());
+        isLightWeightVersion.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         isLightWeightVersion.setUI(new MetalToggleButtonUI() {
             @Override
             protected Color getSelectColor() {

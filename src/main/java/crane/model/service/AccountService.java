@@ -174,10 +174,7 @@ public class AccountService {
         if (list.size() < Constant.ACCOUNT_LIST_LENGTH) {
             return "生成失败，集合长度小于5";
         }
-        return "数据库ID：" +
-                list.get(0) +
-                "\r\n" +
-                "账户名称：" +
+        return "账户名：" +
                 list.get(1) +
                 "\r\n" +
                 "用户名：" +
@@ -193,7 +190,7 @@ public class AccountService {
                 DateUtil.now() +
                 "\r\n" +
                 "来自：" +
-                MainFrameCst.MAIN_TITLE +
+                MainFrameCst.SIMPLE_TITLE +
                 "\r\n";
     }
 
