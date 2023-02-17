@@ -174,24 +174,19 @@ public class AccountService {
         if (list.size() < Constant.ACCOUNT_LIST_LENGTH) {
             return "生成失败，集合长度小于5";
         }
-        return "账户名：" +
-                list.get(1) +
-                "\r\n" +
-                "用户名：" +
-                list.get(2) +
-                "\r\n" +
-                "密码：" +
-                list.get(3) +
-                "\r\n" +
-                "其他信息：" +
-                list.get(4) +
-                "\r\n" +
-                "生成日期：" +
-                DateUtil.now() +
-                "\r\n" +
-                "来自：" +
-                MainFrameCst.SIMPLE_TITLE +
-                "\r\n";
+
+        int maxAmount = 28;
+        StringBuilder lacework = new StringBuilder();
+        for (int i = 0; i < maxAmount; i++) {
+            lacework.append("*");
+        }
+        lacework.append("\r\n");
+        return lacework
+                + "账户名：" + list.get(1) + "\r\n"
+                + "用户名：" + list.get(2) + "\r\n"
+                + "密码：" + list.get(3) + "\r\n"
+                + "其他信息：" + list.get(4) + "\r\n"
+                + lacework;
     }
 
     /**
