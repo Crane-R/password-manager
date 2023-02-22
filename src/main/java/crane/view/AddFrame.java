@@ -8,6 +8,7 @@ import crane.model.dao.AccountDao;
 import crane.model.service.AccountService;
 import crane.model.service.FrameService;
 import crane.model.service.SecurityService;
+import crane.model.service.ShowMessgae;
 import crane.model.service.lightweight.LightService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,6 +34,14 @@ public class AddFrame extends JFrame {
      * Date: 2022-12-30 21:36:05
      */
     private final static String[] OUT_PUT_TEXTS = {"账户名不能为空", "用户名不能为空", "密码不能为空"};
+
+    /**
+     * 字段长度最长数
+     *
+     * @Author Crane Resigned
+     * @Date 2023-02-22 19:31:28
+     */
+    private final static int[] MAX_LENGTH = {100, 100, 100, 255};
 
     /**
      * 常量标识符
@@ -135,21 +144,46 @@ public class AddFrame extends JFrame {
         submitButton.setBorder(null);
         submitButton.addActionListener(e -> {
 
+            //长度验证
+            int[] curLength = {jTextField.getText().length(), jTextField1.getText().length(), jTextField2.getText().length(), jTextField3.getText().length()};
+            int len = 4;
+            for (int i = 0; i < len; i++) {
+                if (curLength[i] > MAX_LENGTH[i]) {
+                    ShowMessgae.showErrorMessage("长度限制为" + MAX_LENGTH[i] + "个字符", "超长错误");
+                    switch (i) {
+                        case 0:
+                            jTextField.setText("");
+                            return;
+                        case 1:
+                            jTextField1.setText("");
+                            return;
+                        case 2:
+                            jTextField2.setText("");
+                            return;
+                        case 3:
+                            jTextField3.setText("");
+                            return;
+                        default:
+                            return;
+                    }
+                }
+            }
+
             //账户为空
             if ("".equals(jTextField.getText())) {
                 log.info(OUT_PUT_TEXTS[0]);
-                JOptionPane.showMessageDialog(null, OUT_PUT_TEXTS[0], "Warning", JOptionPane.WARNING_MESSAGE);
+                ShowMessgae.showWarningMessage(OUT_PUT_TEXTS[0], "Warning");
                 //用户名为空
             } else if ("".equals(jTextField1.getText())) {
                 log.info(OUT_PUT_TEXTS[1]);
-                JOptionPane.showMessageDialog(null, OUT_PUT_TEXTS[1], "Warning", JOptionPane.WARNING_MESSAGE);
+                ShowMessgae.showWarningMessage(OUT_PUT_TEXTS[1], "Warning");
                 //密码为空
             } else if ("".equals(jTextField2.getText())) {
                 log.info(OUT_PUT_TEXTS[2]);
-                JOptionPane.showMessageDialog(null, OUT_PUT_TEXTS[2], "Warning", JOptionPane.WARNING_MESSAGE);
+                ShowMessgae.showWarningMessage(OUT_PUT_TEXTS[2], "Warning");
             } else {
                 Boolean isTrue = null;
-                Integer effect = Integer.MIN_VALUE;
+                int effect = Integer.MIN_VALUE;
                 String accountName = jTextField.getText().trim();
                 String username = SecurityService.encodeBase64Salt(jTextField1.getText().trim());
                 String password = SecurityService.encodeBase64Salt(jTextField2.getText().trim());
@@ -184,7 +218,7 @@ public class AddFrame extends JFrame {
                 }
                 //The Dao add method : return false is true
                 if (Boolean.FALSE.equals(isTrue) || effect == 1) {
-                    JOptionPane.showMessageDialog(null, purpose + "成功!", "Successful", JOptionPane.INFORMATION_MESSAGE);
+                    ShowMessgae.showInformationMessage(purpose + "成功!", "Successful");
                     //更新账户数量
                     MainFrame.getResultNumbers().setText(AccountService.getLatestAccountNumberText());
                     log.info(purpose.concat("操作成功"));
