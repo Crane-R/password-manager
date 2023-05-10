@@ -124,6 +124,7 @@ public class MainFrame extends JFrame {
         //设置标题栏的图标
         this.setIconImage(FrameService.getTitleImage());
         this.getContentPane().setBackground(Color.decode("#DAE4E6"));
+//        this.getContentPane().setBackground(Color.decode("#ffffff"));
 
         //数据显示表格
         jTable = new JTable(new DefaultTableModel(new Object[0][0], MainFrameCst.TITLES));
@@ -263,6 +264,38 @@ public class MainFrame extends JFrame {
                     }
                     FrameService.activeTimeFresh();
                 }
+            }
+        });
+        //点击事件：点击输入框清空内容
+        searchText.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON3) {
+                    log.info("鼠标右击，清空搜索框");
+                    searchText.setText(null);
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                log.info("鼠标移入输入框");
+                searchTip.setText("鼠标右击可清空关键字");
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                log.info("鼠标移出输入框");
+                searchTip.setText("输入任意信息搜索账户");
             }
         });
         this.add(searchText);

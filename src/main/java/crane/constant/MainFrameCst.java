@@ -29,7 +29,7 @@ public class MainFrameCst {
      * @Author Crane Resigned
      * @Date 2022-06-11 22:55:44
      */
-    public static final Object[] TITLES = {"唯一标识", "账户名", "用户名", "密码", "其他信息"};
+    public static final Object[] TITLES = {"唯一标识", "账户名称", "用户名", "密码", "其他信息"};
 
     /**
      * 测试环境标题

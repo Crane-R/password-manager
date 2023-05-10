@@ -135,10 +135,18 @@ public class ExportImportDataFrame extends LockFrame {
         }
         List<Account> accounts = new AccountDao().select(null);
         //清除key
-        accounts.forEach(account -> account.setUserKey(null));
+        accounts.forEach(account -> {
+            account.setUserKey(null);
+            account.setAccountId(null);
+            //解密
+            account.setUsername(SecurityService.decodeBase64Salt(account.getUsername()));
+            account.setPassword(SecurityService.decodeBase64Salt(account.getPassword()));
+            account.setOther(SecurityService.decodeBase64Salt(account.getOther()));
+        });
         //执行导出
         boolean b = ExcelService.exportDataToExcel(accounts, path);
-        JOptionPane.showMessageDialog(null, b ? "导出成功" : "导出失败", "星小花★", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, b ? "导出成功" + accounts.size() + "条" : "导出失败", 
+                "星小花★", JOptionPane.INFORMATION_MESSAGE);
         this.dispose();
     }
 
@@ -158,6 +166,10 @@ public class ExportImportDataFrame extends LockFrame {
             for (Account account : accounts) {
                 //替换密钥
                 account.setUserKey(SecurityService.getUuidKey());
+                //加密
+                account.setUsername(SecurityService.encodeBase64Salt(account.getUsername()));
+                account.setPassword(SecurityService.encodeBase64Salt(account.getPassword()));
+                account.setOther(SecurityService.encodeBase64Salt(account.getOther()));
                 Boolean add = accountDao.add(account);
                 if (!add) {
                     records[0]++;

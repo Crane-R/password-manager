@@ -4,6 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import com.alibaba.excel.EasyExcel;
 import crane.constant.MainFrameCst;
 import crane.model.bean.Account;
+import crane.model.vo.AccountVo;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -28,11 +29,11 @@ public class ExcelService {
      */
     public static boolean exportDataToExcel(List<Account> dataList, String absolutePath) {
         if (!checkPathIsContainXlsx(absolutePath)) {
-            absolutePath = absolutePath + "/" + MainFrameCst.SIMPLE_TITLE + DateUtil.format(new Date(), "yyyyMMddHHmmss") + ".xlsx";
+            absolutePath = absolutePath + "/" + MainFrameCst.SIMPLE_TITLE + "_" + DateUtil.format(new Date(), "yyMMddHHmmss") + ".xlsx";
         }
         boolean newFileIsCreated = fileIsExistElseCreate(absolutePath);
         if (newFileIsCreated) {
-            EasyExcel.write(absolutePath, Account.class).sheet("账户数据").doWrite(dataList);
+            EasyExcel.write(absolutePath, AccountVo.class).sheet("账户数据").doWrite(dataList);
         }
         return newFileIsCreated;
     }

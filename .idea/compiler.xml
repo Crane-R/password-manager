@@ -10,8 +10,5 @@
         <module name="password-manager" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="password-manager" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>
