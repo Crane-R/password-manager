@@ -85,17 +85,22 @@ public class AddFrame extends JFrame {
         this.add(jLabel);
 
         JLabel jLabel1 = new JLabel("用户名：");
-        jLabel1.setBounds(30, 85, 100, 40);
+        jLabel1.setBounds(30, 75, 100, 40);
         jLabel1.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         this.add(jLabel1);
 
         JLabel jLabel2 = new JLabel("明文密码：");
-        jLabel2.setBounds(30, 145, 100, 40);
+        jLabel2.setBounds(30, 125, 100, 40);
         jLabel2.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         this.add(jLabel2);
 
+        JLabel surePassLabel = new JLabel("确认密码：");
+        surePassLabel.setBounds(30, 175, 100, 40);
+        surePassLabel.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
+        this.add(surePassLabel);
+
         JLabel jLabel3 = new JLabel("其他信息：");
-        jLabel3.setBounds(30, 205, 100, 40);
+        jLabel3.setBounds(30, 225, 100, 40);
         jLabel3.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         this.add(jLabel3);
 
@@ -105,49 +110,28 @@ public class AddFrame extends JFrame {
         this.add(jTextField);
 
         JTextField jTextField1 = new JTextField(list.get(2));
-        jTextField1.setBounds(110, 90, 230, 30);
+        jTextField1.setBounds(110, 80, 230, 30);
         jTextField1.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         this.add(jTextField1);
 
         JTextField jTextField2 = new JTextField(list.get(3));
-        jTextField2.setBounds(110, 150, 230, 30);
+        jTextField2.setBounds(110, 130, 230, 30);
         jTextField2.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
-        jTextField2.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                log.info("新增页面鼠标移入");
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
-        });
         this.add(jTextField2);
 
+        JTextField surePassTextField = new JTextField(list.get(3));
+        surePassTextField.setBounds(110, 180, 230, 30);
+        surePassTextField.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
+        this.add(surePassTextField);
+
         JTextField jTextField3 = new JTextField(list.get(4));
-        jTextField3.setBounds(110, 210, 230, 30);
+        jTextField3.setBounds(110, 230, 230, 30);
         jTextField3.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         this.add(jTextField3);
 
         //两个按钮
         JButton resetButton = new JButton("重置");
-        resetButton.setBounds(40, 275, 80, 30);
+        resetButton.setBounds(40, 290, 80, 30);
         resetButton.setFocusPainted(false);
         resetButton.setForeground(Color.WHITE);
         resetButton.setBackground(Color.decode("#F27635"));
@@ -159,32 +143,40 @@ public class AddFrame extends JFrame {
             jTextField1.setText("");
             jTextField2.setText("");
             jTextField3.setText("");
+            surePassTextField.setText("");
         });
         this.add(resetButton);
 
         //生成随机强密码按钮
         JButton generatePassBtn = new JButton("生成密码");
-        generatePassBtn.setBounds(140, 275, 100, 30);
+        generatePassBtn.setBounds(140, 290, 100, 30);
         generatePassBtn.setFocusPainted(false);
         generatePassBtn.setForeground(Color.WHITE);
         generatePassBtn.setBackground(Color.decode("#EB89A6"));
         generatePassBtn.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         generatePassBtn.setBorder(null);
         generatePassBtn.addActionListener(e -> {
-            jTextField2.setText(SecurityService.generateRandomStrongPassword());
+            String randomPassword = SecurityService.generateRandomStrongPassword();
+            jTextField2.setText(randomPassword);
+            surePassTextField.setText(randomPassword);
         });
         this.add(generatePassBtn);
 
         //动态按钮信息
         JButton submitButton = new JButton(purpose);
-        submitButton.setBounds(260, 275, 80, 30);
+        submitButton.setBounds(260, 290, 80, 30);
         submitButton.setFocusPainted(false);
         submitButton.setForeground(Color.WHITE);
         submitButton.setBackground(Color.decode("#5697C4"));
         submitButton.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         submitButton.setBorder(null);
         submitButton.addActionListener(e -> {
-
+            //检验确认密码是否和密码相同
+            if (!StrUtil.equals(jTextField2.getText(), surePassTextField.getText())) {
+                ShowMessgae.showWarningMessage("明文密码和确认密码不相同", "密码校验错误");
+                return;
+            }
+            
             //长度验证
             int[] curLength = {jTextField.getText().length(), jTextField1.getText().length(), jTextField2.getText().length(), jTextField3.getText().length()};
             int len = 4;
@@ -209,7 +201,7 @@ public class AddFrame extends JFrame {
                     }
                 }
             }
-
+            
             //账户为空
             if ("".equals(jTextField.getText())) {
                 log.info(OUT_PUT_TEXTS[0]);

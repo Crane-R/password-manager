@@ -142,6 +142,7 @@ public class MainFrame extends JFrame {
         tableHeader.setBackground(Color.WHITE);
         jTable.setBackground(Color.decode("#EEF5FF"));
         jTable.getTableHeader().setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
+        jTable.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         JScrollPane jScrollPane = new JScrollPane(jTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         jScrollPane.setBounds(42, 125, 1100, 600);
         jScrollPane.getVerticalScrollBar().setUI(new ScrollBarUi());
@@ -429,7 +430,7 @@ public class MainFrame extends JFrame {
 
         //复制消息提醒
         copyAlertLabel = new JLabel();
-        copyAlertLabel.setBounds(200, 725, 200, 30);
+        copyAlertLabel.setBounds(200, 725, 300, 30);
         copyAlertLabel.setForeground(Color.decode("#E41A16"));
         copyAlertLabel.setFont(new Font("微软雅黑", Font.BOLD, 13));
         copyAlertLabel.setVisible(false);
@@ -553,6 +554,27 @@ public class MainFrame extends JFrame {
 
         //激活活性时间定时器
         FrameService.activeTimeFresh();
+
+        //活性时间锁
+        JToggleButton activistLockBtn = new JToggleButton("活性锁");
+        activistLockBtn.setBounds(220, 0, 60, 30);
+        activistLockBtn.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
+        activistLockBtn.setForeground(Color.WHITE);
+        activistLockBtn.setBackground(Color.decode("#EB89A6"));
+        activistLockBtn.setBorder(null);
+        activistLockBtn.setHorizontalAlignment(JLabel.CENTER);
+        activistLockBtn.addActionListener(e -> {
+            if (activistLockBtn.isSelected()) {
+                FrameService.activeTimeStop();
+                activistLockBtn.setText("已锁定");
+                activistLockBtn.setForeground(Color.BLACK);
+            } else {
+                FrameService.activeTimeFresh();
+                activistLockBtn.setText("活性锁");
+                activistLockBtn.setForeground(Color.WHITE);
+            }
+        });
+        this.add(activistLockBtn);
 
         //前期版本兼容性导入数据
         //3.0

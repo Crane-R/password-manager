@@ -7,6 +7,7 @@ import crane.view.MainFrame;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.util.Date;
@@ -57,6 +58,8 @@ public class FrameService {
         return null;
     }
 
+    private static ScheduledExecutorService ACTIVIST_TIMER;
+
     /**
      * 更新活性时间
      * Author: Crane Resigned
@@ -66,8 +69,8 @@ public class FrameService {
         MainFrame.activistTimeLabel.setForeground(Color.decode("#1A5599"));
         TIME[0] = Constant.ACTIVE_TIME;
         if (!isStart) {
-            ScheduledExecutorService activistTimer = Executors.newSingleThreadScheduledExecutor();
-            activistTimer.scheduleAtFixedRate(() -> {
+            ACTIVIST_TIMER = Executors.newSingleThreadScheduledExecutor();
+            ACTIVIST_TIMER.scheduleAtFixedRate(() -> {
                 if (TIME[0] >= 0) {
                     MainFrame.activistTimeLabel.setText("活性时间剩余：" + DateUtil.format(new Date(TIME[0]), "mm:ss"));
                 }
@@ -78,13 +81,29 @@ public class FrameService {
                     //表格失活
                     log.info("表格失活" + DateUtil.now());
                     MainFrame.mainFrame.dispose();
-                    new LockFrame().setVisible(true);
+                    LockFrame lockFrame = new LockFrame();
+                    //窗体最小化
+                    lockFrame.setExtendedState(JFrame.ICONIFIED);
+                    lockFrame.setVisible(true);
                     isStart = false;
-                    activistTimer.shutdown();
+                    ACTIVIST_TIMER.shutdown();
                 }
                 TIME[0] -= 1000;
             }, 0, 1, TimeUnit.SECONDS);
             isStart = true;
+        }
+    }
+
+    /**
+     * 停止活性时间计时
+     *
+     * @Author Crane Resigned
+     * @Date 2023-05-24 17:30:32
+     */
+    public static void activeTimeStop() {
+        if (Objects.nonNull(ACTIVIST_TIMER)) {
+            isStart = false;
+            ACTIVIST_TIMER.shutdown();
         }
     }
 

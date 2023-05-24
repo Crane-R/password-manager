@@ -64,8 +64,9 @@ public class Constant {
     /**
      * 活性时间
      * Author: Crane Resigned
-     * Date: 2023-01-22 18:39:49 1000 * 60 * 2
+     * Date: 2023-01-22 18:39:49
+     * 1000 * 60 * 2
      */
-    public static final long ACTIVE_TIME = 5*1000;
+    public static final long ACTIVE_TIME = 1000 * 60 * 2;
 
 }
