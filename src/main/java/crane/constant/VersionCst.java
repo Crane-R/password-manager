@@ -20,5 +20,5 @@ public interface VersionCst {
      * @Author Crane Resigned
      * @Date 2023-02-03 23:13:04
      */
-    String RECENTLY_UPDATE_DATE = "2023/05/10";
+    String RECENTLY_UPDATE_DATE = "2023/05/24";
 }
