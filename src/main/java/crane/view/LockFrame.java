@@ -5,14 +5,12 @@ import crane.constant.Constant;
 import crane.constant.DefaultFont;
 import crane.constant.LockFrameCst;
 import crane.constant.MainFrameCst;
-import crane.model.jdbc.JdbcConnection;
 import crane.model.service.FrameService;
 import crane.model.service.SecurityService;
 import crane.model.service.ShowMessgae;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
-import javax.swing.plaf.metal.MetalButtonUI;
 import javax.swing.plaf.metal.MetalToggleButtonUI;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -132,9 +130,7 @@ public class LockFrame extends JFrame {
                     //关闭当前
                     close();
                     //赋值轻量版标识
-                    if (isLightWeightVersion.isSelected()) {
-                        Constant.IS_LIGHT = true;
-                    }
+                    Constant.IS_LIGHT = isLightWeightVersion.isSelected();
                     new MainFrame().setVisible(true);
                 }
             }

@@ -89,7 +89,7 @@ public class MainFrame extends JFrame {
      */
     private final JToggleButton realTimeSearchBtn;
 
-    public final static String SEARCH_BTN_TXT1 = "锁 · 手动搜索";
+    public final static String SEARCH_BTN_TXT1 = "锁 | 手动搜索";
     public final static String SEARCH_BTN_TXT2 = "解码";
 
     /**
@@ -137,12 +137,13 @@ public class MainFrame extends JFrame {
         //数据显示表格
         jTable = new JTable(new DefaultTableModel(new Object[0][0], MainFrameCst.TITLES));
         jTable.setRowHeight(30);
+        jTable.setBackground(Color.decode("#EEF5FF"));
+        jTable.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
+        jTable.setForeground(Color.darkGray);
         JTableHeader tableHeader = jTable.getTableHeader();
         tableHeader.setBorder(null);
         tableHeader.setBackground(Color.WHITE);
-        jTable.setBackground(Color.decode("#EEF5FF"));
-        jTable.getTableHeader().setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
-        jTable.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
+        tableHeader.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         JScrollPane jScrollPane = new JScrollPane(jTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         jScrollPane.setBounds(42, 125, 1100, 600);
         jScrollPane.getVerticalScrollBar().setUI(new ScrollBarUi());
@@ -343,8 +344,10 @@ public class MainFrame extends JFrame {
                         new ThreadPoolExecutor.AbortPolicy());
                 threadPool.execute(() -> {
                     if (realTimeSearchBtn.isSelected()) {
-                        //查询
-                        if (Constant.IS_LIGHT) {
+                        if (StrUtil.isEmpty(searchText.getText())) {
+                            jTable.setModel(new DefaultTableModel(new Object[0][0], MainFrameCst.TITLES));
+                            //查询
+                        } else if (Constant.IS_LIGHT) {
                             new LightService().searchAndSetTableMsg();
                         } else {
                             AccountService.setTableMessages();
@@ -364,8 +367,10 @@ public class MainFrame extends JFrame {
                         new ThreadPoolExecutor.AbortPolicy());
                 threadPool.execute(() -> {
                     if (realTimeSearchBtn.isSelected()) {
-                        //查询
-                        if (Constant.IS_LIGHT) {
+                        if (StrUtil.isEmpty(searchText.getText())) {
+                            jTable.setModel(new DefaultTableModel(new Object[0][0], MainFrameCst.TITLES));
+                            //查询
+                        } else if (Constant.IS_LIGHT) {
                             new LightService().searchAndSetTableMsg();
                         } else {
                             AccountService.setTableMessages();
@@ -385,8 +390,10 @@ public class MainFrame extends JFrame {
                         new ThreadPoolExecutor.AbortPolicy());
                 threadPool.execute(() -> {
                     if (realTimeSearchBtn.isSelected()) {
-                        //查询
-                        if (Constant.IS_LIGHT) {
+                        if (StrUtil.isEmpty(searchText.getText())) {
+                            jTable.setModel(new DefaultTableModel(new Object[0][0], MainFrameCst.TITLES));
+                            //查询
+                        } else if (Constant.IS_LIGHT) {
                             new LightService().searchAndSetTableMsg();
                         } else {
                             AccountService.setTableMessages();
@@ -524,9 +531,7 @@ public class MainFrame extends JFrame {
             new ExportImportDataFrame(ExportImportCst.EXPORT).setVisible(true);
             FrameService.activeTimeFresh();
         });
-        if (Constant.IS_LIGHT) {
-            exportBtn.setEnabled(false);
-        }
+        exportBtn.setEnabled(!Constant.IS_LIGHT);
         this.add(exportBtn);
 
         //导入
@@ -541,9 +546,7 @@ public class MainFrame extends JFrame {
             new ExportImportDataFrame(ExportImportCst.IMPORT).setVisible(true);
             FrameService.activeTimeFresh();
         });
-        if (Constant.IS_LIGHT) {
-            importBtn.setEnabled(false);
-        }
+        importBtn.setEnabled(!Constant.IS_LIGHT);
         this.add(importBtn);
 
         //到达活性时间后加密table
@@ -590,9 +593,7 @@ public class MainFrame extends JFrame {
             new Import3DataFrame().setVisible(true);
             FrameService.activeTimeFresh();
         });
-        if (Constant.IS_LIGHT) {
-            importBtn3.setEnabled(false);
-        }
+        importBtn3.setEnabled(!Constant.IS_LIGHT);
         this.add(importBtn3);
 
         //4.0
@@ -608,9 +609,7 @@ public class MainFrame extends JFrame {
             new Import4DataFrame().setVisible(true);
             FrameService.activeTimeFresh();
         });
-        if (Constant.IS_LIGHT) {
-            importBtn4.setEnabled(false);
-        }
+        importBtn4.setEnabled(!Constant.IS_LIGHT);
         this.add(importBtn4);
 
         mainFrame = this;

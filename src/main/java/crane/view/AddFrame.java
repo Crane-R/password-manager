@@ -3,6 +3,7 @@ package crane.view;
 import cn.hutool.core.util.StrUtil;
 import crane.constant.Constant;
 import crane.constant.DefaultFont;
+import crane.constant.MainFrameCst;
 import crane.model.bean.Account;
 import crane.model.dao.AccountDao;
 import crane.model.service.AccountService;
@@ -63,7 +64,7 @@ public class AddFrame extends JFrame {
         System.out.println("改变窗口传入的list：" + list);
 
         String purpose = list.get(list.size() - 1);
-        this.setTitle(StrUtil.equals(purpose, DELETE) ? "真的真的要移除这个账户吗？" : purpose + "一个账户");
+        this.setTitle(StrUtil.equals(purpose, DELETE) ? "真的真的要移除这个账户吗？" : MainFrameCst.SIMPLE_TITLE + " -> " + purpose + "一个账户");
         this.setLayout(null);
         this.setResizable(false);
         this.setSize(400, 400);
@@ -176,7 +177,7 @@ public class AddFrame extends JFrame {
                 ShowMessgae.showWarningMessage("明文密码和确认密码不相同", "密码校验错误");
                 return;
             }
-            
+
             //长度验证
             int[] curLength = {jTextField.getText().length(), jTextField1.getText().length(), jTextField2.getText().length(), jTextField3.getText().length()};
             int len = 4;
@@ -201,7 +202,7 @@ public class AddFrame extends JFrame {
                     }
                 }
             }
-            
+
             //账户为空
             if ("".equals(jTextField.getText())) {
                 log.info(OUT_PUT_TEXTS[0]);
