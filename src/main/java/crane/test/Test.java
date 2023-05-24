@@ -1,6 +1,7 @@
 package crane.test;
 
 import crane.model.service.FrontLoading;
+import crane.view.AddFrame;
 import crane.view.ExportImportDataFrame;
 import crane.view.LockFrame;
 import crane.view.MainFrame;
@@ -24,8 +25,12 @@ public class Test {
         FrontLoading.checkKeysDirectory();
 
         new LockFrame().setVisible(true);
-
-
+        
+        
+//        new AddFrame(null,null).setVisible(true);
+        
+        
+        
 //
 //        String recentlyPath = ExportImportDataFrame.getRecentlyPath();
 //        System.out.println(recentlyPath);

@@ -1,5 +1,6 @@
 package crane.model.service;
 
+import cn.hutool.core.lang.generator.SnowflakeGenerator;
 import cn.hutool.core.util.StrUtil;
 import crane.constant.Constant;
 import lombok.extern.slf4j.Slf4j;
@@ -89,7 +90,8 @@ public final class SecurityService {
         BufferedReader bufferedReader;
         String result = null;
         try {
-            bufferedReader = new BufferedReader(new FileReader(Paths.get(Constant.DIRECTORY_KEYS + "/" + targetKey).toAbsolutePath().toString()));
+            bufferedReader = new BufferedReader(new FileReader(Paths.get(Constant.DIRECTORY_KEYS + "/" + targetKey)
+                    .toAbsolutePath().toString()));
             result = bufferedReader.readLine();
             bufferedReader.close();
         } catch (IOException e) {
@@ -161,7 +163,8 @@ public final class SecurityService {
         if (StrUtil.isBlank(password)) {
             return null;
         }
-        return secondStageEncode(Base64.getEncoder().encodeToString(password.concat("1").concat(getRealKey()).getBytes(StandardCharsets.UTF_8)));
+        return secondStageEncode(Base64.getEncoder().encodeToString(password.concat("1").concat(getRealKey())
+                .getBytes(StandardCharsets.UTF_8)));
     }
 
     /**
@@ -181,7 +184,19 @@ public final class SecurityService {
      * Date: 2022-12-01 19:44:23
      */
     private static String secondStageDecode(String secondEncodePassword) {
-        return String.valueOf((char) ((int) secondEncodePassword.charAt(0) - (int) getRealKey().charAt(0))).concat(secondEncodePassword.substring(1));
+        return String.valueOf((char) ((int) secondEncodePassword.charAt(0) - (int) getRealKey().charAt(0)))
+                .concat(secondEncodePassword.substring(1));
+    }
+
+    /**
+     * 生成强密码
+     * TODO:其实没有什么好办法
+     *
+     * @Author Crane Resigned
+     * @Date 2023-05-24 16:52:33
+     */
+    public static String generateRandomStrongPassword() {
+        return new SnowflakeGenerator().next().toString();
     }
 
 }

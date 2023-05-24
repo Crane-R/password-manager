@@ -1,22 +1,19 @@
 package crane.model.service;
 
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.StrUtil;
 import crane.constant.Constant;
-import crane.constant.MainFrameCst;
+import crane.view.LockFrame;
 import crane.view.MainFrame;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Date;
 import java.util.Objects;
-import java.util.concurrent.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Crane Resigned
@@ -80,10 +77,8 @@ public class FrameService {
                 if (TIME[0] <= 0) {
                     //表格失活
                     log.info("表格失活" + DateUtil.now());
-                    if (MainFrame.jTable.getRowCount() > 0) {
-                        AccountService.setTableMessages();
-                        AccountService.toggleStatus(true);
-                    }
+                    MainFrame.mainFrame.dispose();
+                    new LockFrame().setVisible(true);
                     isStart = false;
                     activistTimer.shutdown();
                 }
@@ -92,5 +87,5 @@ public class FrameService {
             isStart = true;
         }
     }
-    
+
 }

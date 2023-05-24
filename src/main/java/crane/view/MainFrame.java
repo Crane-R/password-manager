@@ -114,6 +114,14 @@ public class MainFrame extends JFrame {
      */
     private final JLabel copyAlertLabel;
 
+    /**
+     * 载存主窗体对象
+     *
+     * @Author Crane Resigned
+     * @Date 2023-05-24 17:16:36
+     */
+    public static MainFrame mainFrame;
+
     public MainFrame() {
         this.setTitle(JdbcConnection.IS_TEST ? MainFrameCst.TEST_TITLE : MainFrameCst.MAIN_TITLE);
         this.setSize(1200, 800);
@@ -133,6 +141,7 @@ public class MainFrame extends JFrame {
         tableHeader.setBorder(null);
         tableHeader.setBackground(Color.WHITE);
         jTable.setBackground(Color.decode("#EEF5FF"));
+        jTable.getTableHeader().setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         JScrollPane jScrollPane = new JScrollPane(jTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         jScrollPane.setBounds(42, 125, 1100, 600);
         jScrollPane.getVerticalScrollBar().setUI(new ScrollBarUi());
@@ -581,6 +590,8 @@ public class MainFrame extends JFrame {
             importBtn4.setEnabled(false);
         }
         this.add(importBtn4);
+
+        mainFrame = this;
     }
 
     /**
