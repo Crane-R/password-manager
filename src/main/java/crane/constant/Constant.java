@@ -67,6 +67,6 @@ public class Constant {
      * Date: 2023-01-22 18:39:49
      * 1000 * 60 * 2
      */
-    public static final long ACTIVE_TIME = 5000;
+    public static final long ACTIVE_TIME = 1000 * 60 * 2;
 
 }

@@ -9,16 +9,16 @@ import com.alibaba.excel.annotation.ExcelProperty;
  */
 public class AccountVo {
 
-    @ExcelProperty("账户名称")
+    @ExcelProperty("account_name")
     private String accountName;
 
-    @ExcelProperty("用户名")
+    @ExcelProperty("username")
     private String username;
 
-    @ExcelProperty("密码")
+    @ExcelProperty("password")
     private String password;
 
-    @ExcelProperty("其他")
+    @ExcelProperty("other")
     private String other;
 
     public AccountVo() {
