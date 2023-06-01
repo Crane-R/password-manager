@@ -22,6 +22,15 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class FrameService {
 
+   /**
+    * 开闭原则
+    * 设定一个活性时间定时器的总开关，
+    * 当锁住时修改此属性的值从而实现激活活性时间不会生效
+    * @Author Crane Resigned
+    * @Date 2023-06-01 19:19:17
+    */
+   private static boolean isActiveLock = false;
+
     /**
      * 启动标识
      * Author: Crane Resigned
@@ -66,6 +75,9 @@ public class FrameService {
      * Date: 2023-01-22 18:38:05
      */
     public static void activeTimeFresh() {
+        if(isActiveLock){
+            return;
+        }
         MainFrame.activistTimeLabel.setForeground(Color.decode("#1A5599"));
         TIME[0] = Constant.ACTIVE_TIME;
         if (!isStart) {
@@ -100,10 +112,14 @@ public class FrameService {
      * @Author Crane Resigned
      * @Date 2023-05-24 17:30:32
      */
-    public static void activeTimeStop() {
+    public static void activeTimeLock() {
         if (Objects.nonNull(ACTIVIST_TIMER)) {
             isStart = false;
             ACTIVIST_TIMER.shutdown();
+            isActiveLock = !isActiveLock;
+            if(!isActiveLock){
+                activeTimeFresh();
+            }
         }
     }
 

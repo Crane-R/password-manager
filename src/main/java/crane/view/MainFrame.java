@@ -568,14 +568,13 @@ public class MainFrame extends JFrame {
         activistLockBtn.setHorizontalAlignment(JLabel.CENTER);
         activistLockBtn.addActionListener(e -> {
             if (activistLockBtn.isSelected()) {
-                FrameService.activeTimeStop();
                 activistLockBtn.setText("已锁定");
                 activistLockBtn.setForeground(Color.BLACK);
             } else {
-                FrameService.activeTimeFresh();
                 activistLockBtn.setText("活性锁");
                 activistLockBtn.setForeground(Color.WHITE);
             }
+            FrameService.activeTimeLock();
         });
         this.add(activistLockBtn);
 
