@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import crane.constant.Constant;
 import crane.constant.DefaultFont;
 import crane.constant.MainFrameCst;
+import crane.function.Language;
 import crane.model.bean.Account;
 import crane.model.dao.AccountDao;
 import crane.model.service.AccountService;
@@ -11,12 +12,11 @@ import crane.model.service.FrameService;
 import crane.model.service.SecurityService;
 import crane.model.service.ShowMessgae;
 import crane.model.service.lightweight.LightService;
+import crane.view.main.MainFrame;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.LinkedList;
@@ -36,7 +36,7 @@ public class AddFrame extends JFrame {
      * Author: Crane Resigned
      * Date: 2022-12-30 21:36:05
      */
-    private final static String[] OUT_PUT_TEXTS = {"账户名不能为空", "用户名不能为空", "密码不能为空"};
+    private final String[] OUT_PUT_TEXTS = Language.get("nullTips").split(",");
 
     /**
      * 字段长度最长数
@@ -51,9 +51,9 @@ public class AddFrame extends JFrame {
      * Author: Crane Resigned
      * Date: 2022-11-27 01:16:16
      */
-    private final String ADD = "新增";
-    private final String UPDATE = "更新";
-    private final String DELETE = "删除";
+    private final String ADD = Language.get("purposeAdd");
+    private final String UPDATE = Language.get("purposeUpdate");
+    private final String DELETE = Language.get("purposeDelete");
 
 
     public AddFrame(LinkedList<String> list, MainFrame mainFrame) {
@@ -64,7 +64,8 @@ public class AddFrame extends JFrame {
         System.out.println("改变窗口传入的list：" + list);
 
         String purpose = list.get(list.size() - 1);
-        this.setTitle(StrUtil.equals(purpose, DELETE) ? "真的真的要移除这个账户吗？" : MainFrameCst.SIMPLE_TITLE + " -> " + purpose + "一个账户");
+        this.setTitle(StrUtil.equals(purpose, DELETE) ? Language.get("sureDelete") : MainFrameCst.SIMPLE_TITLE + " -> "
+                + purpose + Language.get("aAcount"));
         this.setLayout(null);
         this.setResizable(false);
         this.setSize(400, 400);
@@ -80,27 +81,27 @@ public class AddFrame extends JFrame {
         this.setIconImage(image);
 
         //四个标签和四个输入框
-        JLabel jLabel = new JLabel("账号名：");
+        JLabel jLabel = new JLabel(Language.get("accountName"));
         jLabel.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         jLabel.setBounds(30, 25, 100, 40);
         this.add(jLabel);
 
-        JLabel jLabel1 = new JLabel("用户名：");
+        JLabel jLabel1 = new JLabel(Language.get("addUsername"));
         jLabel1.setBounds(30, 75, 100, 40);
         jLabel1.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         this.add(jLabel1);
 
-        JLabel jLabel2 = new JLabel("明文密码：");
+        JLabel jLabel2 = new JLabel(Language.get("addPassword"));
         jLabel2.setBounds(30, 125, 100, 40);
         jLabel2.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         this.add(jLabel2);
 
-        JLabel surePassLabel = new JLabel("确认密码：");
+        JLabel surePassLabel = new JLabel(Language.get("surePassword"));
         surePassLabel.setBounds(30, 175, 100, 40);
         surePassLabel.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         this.add(surePassLabel);
 
-        JLabel jLabel3 = new JLabel("其他信息：");
+        JLabel jLabel3 = new JLabel(Language.get("others"));
         jLabel3.setBounds(30, 225, 100, 40);
         jLabel3.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         this.add(jLabel3);
@@ -131,7 +132,7 @@ public class AddFrame extends JFrame {
         this.add(jTextField3);
 
         //两个按钮
-        JButton resetButton = new JButton("重置");
+        JButton resetButton = new JButton(Language.get("resetBtn"));
         resetButton.setBounds(40, 290, 80, 30);
         resetButton.setFocusPainted(false);
         resetButton.setForeground(Color.WHITE);
@@ -149,7 +150,7 @@ public class AddFrame extends JFrame {
         this.add(resetButton);
 
         //生成随机强密码按钮
-        JButton generatePassBtn = new JButton("生成密码");
+        JButton generatePassBtn = new JButton(Language.get("generateBtn"));
         generatePassBtn.setBounds(140, 290, 100, 30);
         generatePassBtn.setFocusPainted(false);
         generatePassBtn.setForeground(Color.WHITE);
@@ -174,16 +175,18 @@ public class AddFrame extends JFrame {
         submitButton.addActionListener(e -> {
             //检验确认密码是否和密码相同
             if (!StrUtil.equals(jTextField2.getText(), surePassTextField.getText())) {
-                ShowMessgae.showWarningMessage("明文密码和确认密码不相同", "密码校验错误");
+                ShowMessgae.showWarningMessage(Language.get("errPassTipMsg"), Language.get("errPassTipTit"));
                 return;
             }
 
             //长度验证
-            int[] curLength = {jTextField.getText().length(), jTextField1.getText().length(), jTextField2.getText().length(), jTextField3.getText().length()};
+            int[] curLength = {jTextField.getText().length(), jTextField1.getText().length(), jTextField2.getText().length(),
+                    jTextField3.getText().length()};
             int len = 4;
             for (int i = 0; i < len; i++) {
                 if (curLength[i] > MAX_LENGTH[i]) {
-                    ShowMessgae.showErrorMessage("长度限制为" + MAX_LENGTH[i] + "个字符", "超长错误");
+                    ShowMessgae.showErrorMessage(Language.get("maxLengthTipMsg") + MAX_LENGTH[i]
+                            + Language.get("maxLengthTipMsg2"), Language.get("maxLengthTipTit"));
                     switch (i) {
                         case 0:
                             jTextField.setText("");
@@ -224,31 +227,31 @@ public class AddFrame extends JFrame {
                 String other = SecurityService.encodeBase64Salt(jTextField3.getText().trim());
                 String userKey = SecurityService.getUuidKey();
                 LightService lightService = new LightService();
-                switch (purpose) {
-                    case ADD:
-                        //判断是否轻量
-                        isTrue = Constant.IS_LIGHT ?
-                                lightService.addAccount(accountName, username, password, other, userKey)
-                                : new AccountService().addAccount(accountName, username, password, other, userKey);
-                        break;
-                    case UPDATE:
-                        Account account = new Account(currentId, accountName, username, password, other, userKey);
-                        log.info("预备修改：" + account);
-                        effect = Constant.IS_LIGHT ?
-                                lightService.updateAccount(account)
-                                : new AccountDao().update(account);
-                        log.info("是否修改成功(1为成功)：" + effect);
-                        break;
-                    case DELETE:
-                        Account readyDeleteAccount = new Account(currentId, accountName, username, password, other, userKey);
-                        log.info("预备删除：" + readyDeleteAccount);
-                        isTrue = Constant.IS_LIGHT ?
-                                lightService.deleteAccount(readyDeleteAccount)
-                                : new AccountDao().delete(readyDeleteAccount);
-                        log.info("是否删除成功(true为成功)：" + (isTrue.equals(false) ? "true" : "false"));
-                        break;
-                    default:
-                        log.error("未知错误");
+                if (StrUtil.isBlank(purpose)) {
+                    ShowMessgae.showErrorMessage(Language.get("purposeNullTipMsg"), Language.get("purposeNullTipTit"));
+                    return;
+                }
+                if (StrUtil.equals(purpose, ADD)) {
+                    //判断是否轻量
+                    isTrue = Constant.IS_LIGHT ?
+                            lightService.addAccount(accountName, username, password, other, userKey)
+                            : new AccountService().addAccount(accountName, username, password, other, userKey);
+                } else if (StrUtil.equals(purpose, UPDATE)) {
+                    Account account = new Account(currentId, accountName, username, password, other, userKey);
+                    log.info("预备修改：" + account);
+                    effect = Constant.IS_LIGHT ?
+                            lightService.updateAccount(account)
+                            : new AccountDao().update(account);
+                    log.info("是否修改成功(1为成功)：" + effect);
+                } else if (StrUtil.equals(purpose, DELETE)) {
+                    Account readyDeleteAccount = new Account(currentId, accountName, username, password, other, userKey);
+                    log.info("预备删除：" + readyDeleteAccount);
+                    isTrue = Constant.IS_LIGHT ?
+                            lightService.deleteAccount(readyDeleteAccount)
+                            : new AccountDao().delete(readyDeleteAccount);
+                    log.info("是否删除成功(true为成功)：" + (isTrue.equals(false) ? "true" : "false"));
+                } else {
+                    log.error("未知错误");
                 }
                 //The Dao add method : return false is true
                 if (Boolean.FALSE.equals(isTrue) || effect == 1) {
@@ -257,7 +260,7 @@ public class AddFrame extends JFrame {
                     MainFrame.getResultNumbers().setText(AccountService.getLatestAccountNumberText());
                     log.info(purpose.concat("操作成功"));
                 } else {
-                    String errorText = "遇到了不可预料的错误！";
+                    String errorText = Language.get("unKnowErr");
                     JOptionPane.showMessageDialog(null, errorText, "Error", JOptionPane.ERROR_MESSAGE);
                     log.error(errorText);
                 }
@@ -265,7 +268,7 @@ public class AddFrame extends JFrame {
                 //如果是更新或新增
                 if (StrUtil.equals(ADD, purpose) || StrUtil.equals(UPDATE, purpose)) {
                     AccountService.setTableMessages(
-                            new Object[][]{{Objects.isNull(currentId) ? "唯一标识刷新后查看" : currentId, accountName, username, password, other}}
+                            new Object[][]{{Objects.isNull(currentId) ? Language.get("addSuccessiveTip") : currentId, accountName, username, password, other}}
                     );
                 } else if (StrUtil.equals(purpose, DELETE)) {
                     //如果是删除就更新当前搜索的信息

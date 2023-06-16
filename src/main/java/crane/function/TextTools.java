@@ -11,9 +11,9 @@ import java.awt.datatransfer.Transferable;
  * Date: 2023/1/22 15:19
  * @author Crane Resigned
  */
-public class Tools {
+public final class TextTools {
     
-    private Tools() {
+    private TextTools() {
     }
     
     /**

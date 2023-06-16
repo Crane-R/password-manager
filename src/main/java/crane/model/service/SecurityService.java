@@ -3,6 +3,7 @@ package crane.model.service;
 import cn.hutool.core.lang.generator.SnowflakeGenerator;
 import cn.hutool.core.util.StrUtil;
 import crane.constant.Constant;
+import crane.model.bean.Account;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
@@ -57,23 +58,18 @@ public final class SecurityService {
     public static void createKey(String keyPre) {
         String checkoutKey = keyPre.replaceAll("\"", "'");
         String finalKey = checkoutKey.concat(UUID.randomUUID().toString());
-
         //以密钥作为文件名创建密匙
         File targetKeyFile = new File(Paths.get(Constant.DIRECTORY_KEYS + "/" + keyPre).toAbsolutePath().toString());
-
         //设为只读命令
         String command1 = "attrib \"" + targetKeyFile.getAbsolutePath() + "\" +R";
         //隐藏命令
         String command2 = "attrib \"" + targetKeyFile.getAbsolutePath() + "\" +H";
-
         FileOutputStream fileOutputStream;
         try {
             fileOutputStream = new FileOutputStream(targetKeyFile);
             fileOutputStream.write(finalKey.getBytes());
-
             Runtime.getRuntime().exec(command1);
             Runtime.getRuntime().exec(command2);
-
             fileOutputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -197,6 +193,34 @@ public final class SecurityService {
      */
     public static String generateRandomStrongPassword() {
         return new SnowflakeGenerator().next().toString();
+    }
+
+    /**
+     * 全局加密Account类
+     *
+     * @Author Crane Resigned
+     * @Date 2023-06-12 19:21:15
+     */
+    public static void encodeAccount(Account account) {
+        account.setAccountName(encodeBase64Salt(account.getAccountName()));
+        account.setUsername(encodeBase64Salt(account.getUsername()));
+        account.setPassword(encodeBase64Salt(account.getPassword()));
+        account.setOther(encodeBase64Salt(account.getOther()));
+        account.setUserKey(encodeBase64Salt(account.getUserKey()));
+    }
+
+    /**
+     * 全局解密
+     *
+     * @Author Crane Resigned
+     * @Date 2023-06-12 19:24:53
+     */
+    public static void decodeAccount(Account account) {
+        account.setAccountName(decodeBase64Salt(account.getAccountName()));
+        account.setUsername(decodeBase64Salt(account.getUsername()));
+        account.setPassword(decodeBase64Salt(account.getPassword()));
+        account.setOther(decodeBase64Salt(account.getOther()));
+        account.setUserKey(decodeBase64Salt(account.getUserKey()));
     }
 
 }

@@ -1,5 +1,7 @@
 package crane.constant;
 
+import crane.function.Language;
+
 /**
  * Description: 主界面常量类
  * Author: ZhouXingxue
@@ -29,7 +31,15 @@ public class MainFrameCst {
      * @Author Crane Resigned
      * @Date 2022-06-11 22:55:44
      */
-    public static final Object[] TITLES = {"唯一标识", "账户名称", "用户名", "密码", "其他信息"};
+    @Deprecated
+    public static final Object[] TITLES = Constant.IS_ENG ?
+            new Object[]{"ID", "Account Name", "Username", "Password", "Others"}
+            : new Object[]{"唯一标识", "账户名称", "用户名", "密码", "其他信息"};
+
+    public static Object[] getTitles() {
+        String tableTitle = Language.get("tableTitle");
+        return tableTitle.split(",");
+    }
 
     /**
      * 测试环境标题

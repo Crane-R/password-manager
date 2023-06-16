@@ -2,15 +2,15 @@ package crane.view;
 
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.excel.EasyExcel;
+import crane.constant.Constant;
 import crane.constant.ExportImportCst;
 import crane.constant.DefaultFont;
+import crane.function.Language;
 import crane.model.bean.Account;
 import crane.model.dao.AccountDao;
 import crane.model.jdbc.JdbcConnection;
-import crane.model.service.AccountService;
-import crane.model.service.ExcelFileFilter;
-import crane.model.service.ExcelService;
-import crane.model.service.SecurityService;
+import crane.model.service.*;
+import crane.model.service.lightweight.LightDao;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -23,6 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Description: 导出数据窗口
@@ -60,6 +61,8 @@ public class ExportImportDataFrame extends LockFrame {
         //移除是否轻量版
         this.remove(isLightWeightVersion);
 
+        this.remove(isEng);
+
         //文本框
         pathTextField = new JTextField();
         pathTextField.setBounds(50, 120, 380, 35);
@@ -79,7 +82,7 @@ public class ExportImportDataFrame extends LockFrame {
         this.add(pathTextField);
 
         //文件选择器
-        JButton chooseFile = new JButton("文件选择器");
+        JButton chooseFile = new JButton(Language.get("chooseFileBtn"));
         chooseFile.setBounds(50, 200, 100, 30);
         chooseFile.setForeground(Color.decode("#FFFFFF"));
         chooseFile.setFont(DefaultFont.WEI_RUAN_BOLD_12.getFont());
@@ -91,7 +94,7 @@ public class ExportImportDataFrame extends LockFrame {
             chooser.setSize(1000, 600);
             //导出为只选择目录模式，导入为只选择文件模式
             chooser.setFileSelectionMode(exportImportCst.IS_EXPORT ? JFileChooser.DIRECTORIES_ONLY : JFileChooser.FILES_ONLY);
-            chooser.setDialogTitle(exportImportCst.IS_EXPORT ? "选择保存的目录" : "选择源文件（只支持.xls和.xlsx）");
+            chooser.setDialogTitle(exportImportCst.IS_EXPORT ? Language.get("chooserDialogExportTitle") : Language.get("chooserDialogImportTitle"));
             if (!exportImportCst.IS_EXPORT) {
                 chooser.setFileFilter(new ExcelFileFilter());
             }
@@ -105,7 +108,7 @@ public class ExportImportDataFrame extends LockFrame {
         this.add(chooseFile);
 
         //确认按钮
-        JButton sureBtn = new JButton(exportImportCst.IS_EXPORT ? "导出/√Enter" : "导入/√Enter");
+        JButton sureBtn = new JButton(exportImportCst.IS_EXPORT ? Language.get("exportSureBtn") : Language.get("importSureBtn"));
         sureBtn.setBounds(330, 200, 100, 30);
         sureBtn.setForeground(Color.decode("#FFFFFF"));
         sureBtn.setFont(DefaultFont.WEI_RUAN_BOLD_12.getFont());
@@ -133,7 +136,13 @@ public class ExportImportDataFrame extends LockFrame {
         if (path == null) {
             return;
         }
-        List<Account> accounts = new AccountDao().select(null);
+        List<Account> accounts;
+        if (!Constant.IS_LIGHT) {
+            accounts = new AccountDao().select(null);
+        } else {
+            accounts = new LightDao().readData();
+            accounts.forEach(SecurityService::decodeAccount);
+        }
         //清除key
         accounts.forEach(account -> {
             account.setUserKey(null);
@@ -145,8 +154,8 @@ public class ExportImportDataFrame extends LockFrame {
         });
         //执行导出
         boolean b = ExcelService.exportDataToExcel(accounts, path);
-        JOptionPane.showMessageDialog(null, b ? "导出成功" + accounts.size() + "条" : "导出失败", 
-                "星小花★", JOptionPane.INFORMATION_MESSAGE);
+        ShowMessgae.showInformationMessage(b ? Language.get("exportSuccessiveTipMsg1") + accounts.size()
+                + Language.get("exportSuccessiveTipMsg2") : Language.get("exportSuccessiveTipMsg3"), Language.get("exportSuccessiveTipTit"));
         this.dispose();
     }
 
@@ -159,28 +168,48 @@ public class ExportImportDataFrame extends LockFrame {
         String path = getPath();
         if (path != null) {
             List<Account> accounts = EasyExcel.read(path).head(Account.class).sheet().doReadSync();
-            //TODO：这个集合，每新增一条数据就需要重新连接一次数据库，因为是使用的jdbc，这样效率非常低，考虑建立线程池或上mybatis
-            AccountDao accountDao = new AccountDao();
-            //状态数组，成功，失败，总计
-            int[] records = new int[3];
-            for (Account account : accounts) {
-                //替换密钥
-                account.setUserKey(SecurityService.getUuidKey());
-                //加密
-                account.setUsername(SecurityService.encodeBase64Salt(account.getUsername()));
-                account.setPassword(SecurityService.encodeBase64Salt(account.getPassword()));
-                account.setOther(SecurityService.encodeBase64Salt(account.getOther()));
-                Boolean add = accountDao.add(account);
-                if (!add) {
-                    records[0]++;
-                } else {
-                    records[1]++;
+            if (!Constant.IS_LIGHT) {
+                //TODO：这个集合，每新增一条数据就需要重新连接一次数据库，因为是使用的jdbc，这样效率非常低，考虑建立线程池或上mybatis
+                AccountDao accountDao = new AccountDao();
+                //状态数组，成功，失败，总计
+                int[] records = new int[3];
+                for (Account account : accounts) {
+                    //替换密钥
+                    account.setUserKey(SecurityService.getUuidKey());
+                    //加密
+                    account.setUsername(SecurityService.encodeBase64Salt(account.getUsername()));
+                    account.setPassword(SecurityService.encodeBase64Salt(account.getPassword()));
+                    account.setOther(SecurityService.encodeBase64Salt(account.getOther()));
+                    Boolean add = accountDao.add(account);
+                    if (!add) {
+                        records[0]++;
+                    } else {
+                        records[1]++;
+                    }
+                    records[2]++;
                 }
-                records[2]++;
+                ShowMessgae.showInformationMessage(Language.get("importLightSuccessiveTipMsg1")
+                        + records[0] + Language.get("importLightSuccessiveTipMsg2")
+                        + records[1] + Language.get("importLightSuccessiveTipMsg3")
+                        + records[2], Language.get("importLightSuccessiveTipTit"));
+            } else {
+                LightDao lightDao = new LightDao();
+                List<Account> deriveAccounts = lightDao.readData();
+                int newSize = accounts.size();
+                AtomicInteger id = new AtomicInteger(deriveAccounts.size() + 1);
+                accounts.forEach(account -> {
+                    account.setAccountId(id.getAndIncrement());
+                    account.setUserKey(SecurityService.getUuidKey());
+                    SecurityService.encodeAccount(account);
+                });
+                accounts.addAll(deriveAccounts);
+                lightDao.writeData(accounts);
+                ShowMessgae.showInformationMessage(
+                        Language.get("importSuccessiveTipMsg1") + newSize
+                                + Language.get("importSuccessiveTipMsg2") + deriveAccounts.size()
+                                + Language.get("importSuccessiveTipMsg3") + (newSize + deriveAccounts.size()),
+                        Language.get("importSuccessiveTipTit"));
             }
-            JOptionPane.showMessageDialog(null,
-                    "成功：" + records[0] + "，失败：" + records[1] + "，总计：" + records[2],
-                    "星小花★", JOptionPane.INFORMATION_MESSAGE);
             AccountService.setTableMessagesByList(accounts);
             this.dispose();
         }
@@ -214,7 +243,7 @@ public class ExportImportDataFrame extends LockFrame {
         String path = pathTextField.getText();
         //TODO:需要单独封装一个检验路径的方法
         if (StrUtil.isEmpty(path)) {
-            JOptionPane.showMessageDialog(null, "路径不对(* ￣︿￣)", "星小花★", JOptionPane.WARNING_MESSAGE);
+            ShowMessgae.showWarningMessage(Language.get("errPathTipMsg"),Language.get("errPathTipTit"));
             return null;
         }
         return path;

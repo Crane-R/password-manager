@@ -11,6 +11,6 @@ public class PmApplication {
         //检测keys
         FrontLoading.checkKeysDirectory();
         //启动窗口
-        new LockFrame().setVisible(true);
+        LockFrame.start();
     }
 }

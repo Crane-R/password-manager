@@ -1,18 +1,26 @@
 package crane.view;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import crane.constant.Constant;
 import crane.constant.DefaultFont;
 import crane.constant.LockFrameCst;
 import crane.constant.MainFrameCst;
+import crane.function.DefaultConfig;
 import crane.model.service.FrameService;
 import crane.model.service.SecurityService;
 import crane.model.service.ShowMessgae;
+import crane.function.Language;
+import crane.view.main.MainFrame;
+import crane.view.module.ComboBoxRender;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import javax.swing.plaf.metal.MetalToggleButtonUI;
 import java.awt.*;
+import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -75,12 +83,14 @@ public class LockFrame extends JFrame {
      */
     protected JLabel loginTip;
 
+    protected JComboBox<String> isEng;
+
     public LockFrame() {
         //检测密钥文件是否存在
         final boolean isHaveKey = SecurityService.checkKeyAmountIsNotZero();
 
         //窗体初始化
-        this.setTitle(isHaveKey ? MainFrameCst.MAIN_TITLE : LockFrameCst.HAVE_NOT_SECRET_KEY_TITLE);
+        this.setTitle(isHaveKey ? MainFrameCst.MAIN_TITLE : Language.get("haveNotKeyTitle"));
         this.setSize(500, 300);
         this.setLayout(null);
         this.setResizable(false);
@@ -89,7 +99,7 @@ public class LockFrame extends JFrame {
         this.setIconImage(FrameService.getTitleImage());
         this.getContentPane().setBackground(Color.decode("#DAE4E6"));
 
-        tipLabel = new JLabel(isHaveKey ? LockFrameCst.HAVE_SECRET_KEY : LockFrameCst.HAVE_NOT_SECRET_KEY);
+        tipLabel = new JLabel(isHaveKey ? Language.get("haveKey") : Language.get("haveNotKey"));
         tipLabel.setBounds(50, 50, 400, 40);
         tipLabel.setForeground(Color.decode("#407E54"));
         tipLabel.setFont(new Font("微软雅黑", Font.BOLD, 25));
@@ -109,7 +119,11 @@ public class LockFrame extends JFrame {
                     String passTxt = new String(secretText.getPassword());
                     //是否为创建新密钥登录
                     if (isCreateScene.isSelected()) {
-                        SecurityService.createKey(passTxt);
+                        if (!SecurityService.checkKeyFileIsExist(passTxt)) {
+                            SecurityService.createKey(passTxt);
+                        } else {
+                            ShowMessgae.showWarningMessage(Language.get("keyDuplicateTipMsg"), Language.get("keyDuplicateTipTitle"));
+                        }
                     } else {
                         //是否有密匙
                         if (isHaveKey) {
@@ -117,7 +131,7 @@ public class LockFrame extends JFrame {
                             //检测该密钥是否存在
                             if (!SecurityService.checkKeyFileIsExist(passTxt)) {
                                 log.info("匹配失败，密钥文件不存在");
-                                ShowMessgae.showWarningMessage("密钥错误", "未知密钥");
+                                ShowMessgae.showWarningMessage(Language.get("keyErrTipMsg"), Language.get("keyErrTipTitle"));
                                 secretText.setText(null);
                                 return;
                             }
@@ -131,7 +145,18 @@ public class LockFrame extends JFrame {
                     close();
                     //赋值轻量版标识
                     Constant.IS_LIGHT = isLightWeightVersion.isSelected();
-                    new MainFrame().setVisible(true);
+                    try {
+                        String className = Language.get("className");
+                        if (!className.startsWith("crane")) {
+                            throw new Exception();
+                        } else {
+                            MainFrame mainFrame = (MainFrame) Class.forName(className).getConstructor().newInstance();
+                            mainFrame.setVisible(true);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        ShowMessgae.showErrorMessage(Language.get("startMainFrameErrMsg"), Language.get("startMainFrameErrTitle"));
+                    }
                 }
             }
         };
@@ -146,7 +171,7 @@ public class LockFrame extends JFrame {
         this.add(loginTip);
 
         //是否是本地数据库
-        isLocal = new JToggleButton("本地数据库", true);
+        isLocal = new JToggleButton(Language.get("isLocal"), true);
         isLocal.setBounds(50, 200, 100, 30);
         isLocal.setForeground(Color.WHITE);
         isLocal.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
@@ -160,12 +185,16 @@ public class LockFrame extends JFrame {
         });
         isLocal.setBorder(null);
         isLocal.addActionListener(e -> {
-            ShowMessgae.showWarningMessage("当前服务器已过期，无法开启此选项", "服务器无法使用");
-            isLocal.setSelected(true);
+            if (!isLocal.isSelected()) {
+                ShowMessgae.showWarningMessage(Language.get("isLocal2TipMsg"), Language.get("isLocal2TipTitle"));
+                isLocal.setText(Language.get("isLocal2"));
+            } else {
+                isLocal.setText(Language.get("isLocal"));
+            }
         });
         this.add(isLocal);
 
-        isCreateScene = new JToggleButton("以新密钥登录");
+        isCreateScene = new JToggleButton(Language.get("isCreateScene"));
         isCreateScene.setBounds(180, 200, 110, 30);
         isCreateScene.setForeground(Color.WHITE);
         isCreateScene.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
@@ -179,12 +208,12 @@ public class LockFrame extends JFrame {
         isCreateScene.setBackground(Color.decode("#65BAD1"));
         isCreateScene.addActionListener(e -> {
             if (isCreateScene.isSelected()) {
-                ShowMessgae.showInformationMessage("创建一个新密钥以启动新场景。密钥隔离，不可访问其他场景账户。", "以新密钥登录");
+                ShowMessgae.showInformationMessage(Language.get("isCreateSceneTipMsg"), Language.get("isCreateSceneTipTitle"));
             }
         });
         this.add(isCreateScene);
 
-        isLightWeightVersion = new JToggleButton("数据库模式");
+        isLightWeightVersion = new JToggleButton(Language.get("isLightWeightVersion"), true);
         isLightWeightVersion.setBounds(320, 200, 100, 30);
         isLightWeightVersion.setForeground(Color.WHITE);
         isLightWeightVersion.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
@@ -198,22 +227,58 @@ public class LockFrame extends JFrame {
         isLightWeightVersion.setBackground(Color.decode("#407E54"));
         isLightWeightVersion.addActionListener(e -> {
             if (isLightWeightVersion.isSelected()) {
-                isLightWeightVersion.setText("轻量模式");
-                ShowMessgae.showPlainMessage(
-                        "此版本无需使用数据库，凭借此程序即可使用，但会有些功能不可用\r\n\n" +
-                                "因为轻量模式开发时间短，未经严格的测试，建议临时使用\r\n\n" +
-                                "源文件在resources/light_weight_data目录下，可随时移走",
-                        MainFrameCst.SIMPLE_TITLE + " 轻量版");
+                isLightWeightVersion.setText(Language.get("isLightWeightVersion"));
             } else {
-                isLightWeightVersion.setText("数据库模式");
-                ShowMessgae.showPlainMessage("请确保本机安装有MySQL服务，数据库所需配置见说明文档", "数据库模式");
+                isLightWeightVersion.setText(Language.get("isLightWeightVersion2"));
+                ShowMessgae.showPlainMessage(Language.get("isLightWeightVersion2TipMsg"), Language.get("isLightWeightVersion2TipTitle"));
             }
         });
         this.add(isLightWeightVersion);
+
+        isEng = new JComboBox<>(Language.getLanguages());
+        isEng.setSelectedItem(Language.get("language"));
+        isEng.setBounds(0, 0, 80, 25);
+        isEng.setForeground(Color.WHITE);
+        isEng.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
+        isEng.setBackground(Color.decode("#407E54"));
+        isEng.setRenderer(new ComboBoxRender(isEng.getRenderer()));
+        isEng.addPopupMenuListener(new PopupMenuListener() {
+            @Override
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+                log.info("菜单展开");
+            }
+
+            @Override
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+                log.info("菜单关闭");
+                String selectedItem = String.valueOf(isEng.getSelectedItem());
+                log.info("当前选择项为：" + selectedItem);
+                if (!StrUtil.equals(Language.get("language"), selectedItem)) {
+                    Language.refresh(selectedItem);
+                    close();
+                    new LockFrame().setVisible(true);
+                    DefaultConfig.setDefaultProperty("language", selectedItem);
+                }
+            }
+
+            @Override
+            public void popupMenuCanceled(PopupMenuEvent e) {
+                log.info("取消选择");
+            }
+        });
+        this.add(isEng);
     }
 
     private void close() {
         this.dispose();
+    }
+
+    public static void start() {
+        LockFrame lockFrame = new LockFrame();
+        lockFrame.setVisible(true);
+        //启动界面默认聚焦
+        lockFrame.secretText.dispatchEvent(new FocusEvent(lockFrame.secretText, FocusEvent.FOCUS_GAINED, true));
+        lockFrame.secretText.requestFocusInWindow();
     }
 
 }

@@ -1,18 +1,10 @@
 package crane.test;
 
 import crane.model.service.FrontLoading;
-import crane.view.AddFrame;
-import crane.view.ExportImportDataFrame;
 import crane.view.LockFrame;
-import crane.view.MainFrame;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Properties;
 
 /**
  * @author Crane Resigned
@@ -23,15 +15,11 @@ public class Test {
 //        new MainFrame().setVisible(true);
 
         FrontLoading.checkKeysDirectory();
+        LockFrame.start();
 
-        new LockFrame().setVisible(true);
-
-
-        
 //        new AddFrame(null,null).setVisible(true);
-        
-        
-        
+
+
 //
 //        String recentlyPath = ExportImportDataFrame.getRecentlyPath();
 //        System.out.println(recentlyPath);

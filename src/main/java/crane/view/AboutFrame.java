@@ -3,6 +3,7 @@ package crane.view;
 import crane.constant.DefaultFont;
 import crane.constant.MainFrameCst;
 import crane.constant.VersionCst;
+import crane.function.Language;
 import crane.model.service.FrameService;
 
 import javax.swing.*;
@@ -18,7 +19,7 @@ public class AboutFrame extends JFrame {
 
     public AboutFrame() {
 
-        this.setTitle("关于 " + MainFrameCst.SIMPLE_TITLE);
+        this.setTitle(Language.get("aboutFrameTitle") + MainFrameCst.SIMPLE_TITLE);
         this.setSize(450, 250);
         this.setLayout(null);
         this.setResizable(false);
@@ -30,25 +31,25 @@ public class AboutFrame extends JFrame {
         Font currentFrameFont = new Font("微软雅黑", Font.PLAIN, 13);
 
         //开发者标识
-        JLabel developerLabel = new JLabel("<html><b style='color:#382C78;'>开发者：</b>周星学</html>");
+        JLabel developerLabel = new JLabel("<html><b style='color:#382C78;'>" + Language.get("developer") + "</b>周星学</html>");
         developerLabel.setBounds(30, 15, 400, 30);
         developerLabel.setFont(currentFrameFont);
         this.add(developerLabel);
 
         //当前版本
-        JLabel versionLabel = new JLabel("<html><b style='color:#4D5BC6;'>当前版本：</b>" + VersionCst.VERSION + "</html>");
+        JLabel versionLabel = new JLabel("<html><b style='color:#4D5BC6;'>" + Language.get("currentVersion") + "</b>" + VersionCst.VERSION + "</html>");
         versionLabel.setBounds(30, 45, 400, 30);
         versionLabel.setFont(currentFrameFont);
         this.add(versionLabel);
 
         //最近更新日期
-        JLabel recentlyDate = new JLabel("<html><b style='color:#024DA1;'>最近更新日期：</b>" + VersionCst.RECENTLY_UPDATE_DATE + "</html>");
+        JLabel recentlyDate = new JLabel("<html><b style='color:#024DA1;'>" + Language.get("lastUpdatedDate") + "</b>" + VersionCst.RECENTLY_UPDATE_DATE + "</html>");
         recentlyDate.setBounds(30, 75, 400, 30);
         recentlyDate.setFont(currentFrameFont);
         this.add(recentlyDate);
 
         //声明
-        JLabel statement = new JLabel("<html><b style='color:#9A2734;'>版权声明：</b><br/>此软件仅用于学习探索，不可用于任何<br/>商业用途，不可谋利</html>");
+        JLabel statement = new JLabel("<html><b style='color:#9A2734;'>" + Language.get("copyrightNotice") + "</b><br/>" + Language.get("copyrightContent") + "</html>");
         statement.setBounds(30, 105, 400, 60);
         statement.setFont(currentFrameFont);
         this.add(statement);

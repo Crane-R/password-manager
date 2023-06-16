@@ -1,11 +1,11 @@
 package crane.model.service;
 
-import cn.hutool.core.date.DateUtil;
 import crane.constant.Constant;
 import crane.constant.MainFrameCst;
+import crane.function.Language;
 import crane.model.bean.Account;
 import crane.model.dao.AccountDao;
-import crane.view.MainFrame;
+import crane.view.main.MainFrame;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -92,7 +92,8 @@ public class AccountService {
      * Date: 2022-11-26 20:02:11
      */
     public static String getLatestAccountNumberText() {
-        return "当前共有 ".concat(String.valueOf(MainFrame.jTable.getRowCount())).concat(" 个账户");
+        return Language.get("lastestAccountNumberText1").concat(String.valueOf(MainFrame.jTable.getRowCount()))
+                .concat(Language.get("lastestAccountNumberText2"));
     }
 
     /**
@@ -108,7 +109,7 @@ public class AccountService {
 
         try {
             //这里因为文本框事件频繁触发而导致的异常
-            MainFrame.jTable.setModel(new DefaultTableModel(new AccountService().selectData(text), MainFrameCst.TITLES));
+            MainFrame.jTable.setModel(new DefaultTableModel(new AccountService().selectData(text), MainFrameCst.getTitles()));
         } catch (Exception e) {
             log.info("事件并发异常（使用了线程池）");
             e.printStackTrace();
@@ -118,7 +119,7 @@ public class AccountService {
     }
 
     public static void setTableMessages(Object[][] data) {
-        MainFrame.jTable.setModel(new DefaultTableModel(data, MainFrameCst.TITLES));
+        MainFrame.jTable.setModel(new DefaultTableModel(data, MainFrameCst.getTitles()));
         //更新账户数量
         MainFrame.getResultNumbers().setText(AccountService.getLatestAccountNumberText());
     }
@@ -130,7 +131,7 @@ public class AccountService {
      */
     public static void setTableMessagesByList(List<Account> list) {
         //list转为二维数组
-        Object[][] result = new Object[list.size()][MainFrameCst.TITLES.length];
+        Object[][] result = new Object[list.size()][MainFrameCst.getTitles().length];
         int len = list.size();
         for (int i = 0; i < len; i++) {
             Account account = list.get(i);
@@ -153,7 +154,6 @@ public class AccountService {
         int columnCount = jTable.getColumnCount();
         int rowCount = jTable.getRowCount();
         Object[][] resultData = new Object[rowCount][columnCount];
-
         for (int i = 0; i < rowCount; i++) {
             for (int j = 0; j < columnCount; j++) {
                 resultData[i][j] = j == 3 || j == 2 || j == 4 ?
@@ -161,7 +161,6 @@ public class AccountService {
                         : String.valueOf(jTable.getValueAt(i, j));
             }
         }
-
         return resultData;
     }
 
@@ -187,7 +186,7 @@ public class AccountService {
      */
     public static void toggleStatus(Boolean isDecode) {
         MainFrame.switchRecord = isDecode != null ? isDecode : !MainFrame.switchRecord;
-        MainFrame.searchButton.setText(MainFrame.switchRecord ? MainFrame.SEARCH_BTN_TXT2 : MainFrame.SEARCH_BTN_TXT1);
+        MainFrame.searchButton.setText(MainFrame.switchRecord ? Language.get("searchBtn2") : Language.get("searchBtn"));
     }
 
     /**

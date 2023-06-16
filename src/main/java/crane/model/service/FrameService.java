@@ -2,8 +2,9 @@ package crane.model.service;
 
 import cn.hutool.core.date.DateUtil;
 import crane.constant.Constant;
+import crane.function.Language;
 import crane.view.LockFrame;
-import crane.view.MainFrame;
+import crane.view.main.MainFrame;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.imageio.ImageIO;
@@ -22,14 +23,15 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class FrameService {
 
-   /**
-    * 开闭原则
-    * 设定一个活性时间定时器的总开关，
-    * 当锁住时修改此属性的值从而实现激活活性时间不会生效
-    * @Author Crane Resigned
-    * @Date 2023-06-01 19:19:17
-    */
-   private static boolean isActiveLock = false;
+    /**
+     * 开闭原则
+     * 设定一个活性时间定时器的总开关，
+     * 当锁住时修改此属性的值从而实现激活活性时间不会生效
+     *
+     * @Author Crane Resigned
+     * @Date 2023-06-01 19:19:17
+     */
+    private static boolean isActiveLock = false;
 
     /**
      * 启动标识
@@ -75,7 +77,7 @@ public class FrameService {
      * Date: 2023-01-22 18:38:05
      */
     public static void activeTimeFresh() {
-        if(isActiveLock){
+        if (isActiveLock) {
             return;
         }
         MainFrame.activistTimeLabel.setForeground(Color.decode("#1A5599"));
@@ -84,7 +86,7 @@ public class FrameService {
             ACTIVIST_TIMER = Executors.newSingleThreadScheduledExecutor();
             ACTIVIST_TIMER.scheduleAtFixedRate(() -> {
                 if (TIME[0] >= 0) {
-                    MainFrame.activistTimeLabel.setText("活性时间剩余：" + DateUtil.format(new Date(TIME[0]), "mm:ss"));
+                    MainFrame.activistTimeLabel.setText(Language.get("activistLabel") + DateUtil.format(new Date(TIME[0]), "mm:ss"));
                 }
                 if (TIME[0] <= RED_TIME) {
                     MainFrame.activistTimeLabel.setForeground(Color.RED);
@@ -117,7 +119,7 @@ public class FrameService {
             isStart = false;
             ACTIVIST_TIMER.shutdown();
             isActiveLock = !isActiveLock;
-            if(!isActiveLock){
+            if (!isActiveLock) {
                 activeTimeFresh();
             }
         }

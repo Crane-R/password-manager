@@ -5,6 +5,8 @@ import crane.constant.Constant;
 import crane.model.bean.Account;
 import crane.model.jdbc.JdbcConnection;
 import crane.model.service.ExcelService;
+import crane.model.service.SecurityService;
+import crane.model.service.ShowMessgae;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -25,8 +27,8 @@ public class LightDao {
         String userCurrentPath = System.getProperty("user.dir");
         log.info(userCurrentPath);
         PATH = JdbcConnection.IS_TEST ?
-                userCurrentPath + "\\src\\main\\resources\\light_weight_data\\light_weight_data.xlsx"
-                : userCurrentPath + "\\resources\\light_weight_data\\light_weight_data.xlsx";
+                userCurrentPath + "\\src\\main\\resources\\light_weight_data\\" + SecurityService.getUuidKey() + "_data.xlsx"
+                : userCurrentPath + "\\resources\\light_weight_data\\" + SecurityService.getUuidKey() + "_data.xlsx";
     }
 
 
@@ -40,7 +42,12 @@ public class LightDao {
         log.info(PATH);
         boolean isExist = ExcelService.fileIsExistElseCreate(PATH);
         if (isExist) {
-            EasyExcel.write(PATH, Account.class).sheet("账户数据").doWrite(dataList);
+            try {
+                EasyExcel.write(PATH, Account.class).sheet("账户数据").doWrite(dataList);
+            } catch (Exception e) {
+                ShowMessgae.showErrorMessage(String.valueOf(e.getCause()), e.getMessage());
+                return false;
+            }
         }
         return isExist;
     }
@@ -53,7 +60,7 @@ public class LightDao {
      */
     public List<Account> readData() {
         //读数据需要先写一个空文件进去，调用写以创建文件
-        if(!new File(PATH).exists()){
+        if (!new File(PATH).exists()) {
             writeData(null);
         }
         return EasyExcel.read(PATH).head(Account.class).sheet("账户数据").doReadSync();

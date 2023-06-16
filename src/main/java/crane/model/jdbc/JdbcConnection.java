@@ -5,7 +5,6 @@ import crane.model.service.ShowMessgae;
 import crane.view.LockFrame;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -24,9 +23,9 @@ public class JdbcConnection {
      * Author: Crane Resigned
      * Date: 2022-12-27 23:10:29
      */
-    private static final String LOCAL = "config/local_jdbc.properties";
-    private static final String SERVER = "config/server_jdbc.properties";
-    private static final String LOCAL_TEST_NAME = "config/local_jdbc_test.properties";
+    private static final String LOCAL = "config/jdbc/local_jdbc.properties";
+    private static final String SERVER = "config/jdbc/server_jdbc.properties";
+    private static final String LOCAL_TEST_NAME = "config/jdbc/local_jdbc_test.properties";
 
     /**
      * 是否是测试/开发环境

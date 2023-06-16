@@ -1,5 +1,7 @@
 package crane.constant;
 
+import crane.function.Language;
+
 /**
  * Description: 构建窗口枚举
  * Author: ZhouXingxue
@@ -16,8 +18,8 @@ public enum ExportImportCst {
      */
     EXPORT(
             true,
-            "导出账户数据为xlsx",
-            "输入或选择目标路径"
+            Language.get("exportFrameTitle"),
+            Language.get("exportTipLabel")
     ),
     /**
      * 导入
@@ -26,8 +28,8 @@ public enum ExportImportCst {
      */
     IMPORT(
             false,
-            "导入账户数据",
-            "选择xlsx源文件或输入xlsx源文件绝对路径");
+            Language.get("importFrameTitle"),
+            Language.get("importTipLabel"));
 
     /**
      * true是导出

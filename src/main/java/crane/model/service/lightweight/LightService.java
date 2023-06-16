@@ -1,9 +1,11 @@
 package crane.model.service.lightweight;
 
+import cn.hutool.core.util.StrUtil;
 import crane.constant.MainFrameCst;
 import crane.model.bean.Account;
 import crane.model.service.AccountService;
-import crane.view.MainFrame;
+import crane.model.service.SecurityService;
+import crane.view.main.MainFrame;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.table.DefaultTableModel;
@@ -27,6 +29,11 @@ public class LightService {
     public boolean addAccount(String accountName, String username, String password, String others, String useKey) {
         List<Account> accounts = new LightDao().readData();
         Account account = new Account(accounts.size() + 1, accountName, username, password, others, useKey);
+        account.setAccountId(accounts.size() + 1);
+        account.setUsername(SecurityService.decodeBase64Salt(account.getUsername()));
+        account.setPassword(SecurityService.decodeBase64Salt(account.getPassword()));
+        account.setOther(SecurityService.decodeBase64Salt(account.getOther()));
+        SecurityService.encodeAccount(account);
         accounts.add(account);
         //添加成功后是返回false的，所以这里取反
         return !new LightDao().writeData(accounts);
@@ -39,6 +46,7 @@ public class LightService {
      * @Date 2023-02-04 01:54:34
      */
     public int updateAccount(Account account) {
+        SecurityService.encodeAccount(account);
         List<Account> accounts = new LightDao().readData();
         for (Account tempAccount : accounts) {
             Integer accountId = tempAccount.getAccountId();
@@ -87,14 +95,16 @@ public class LightService {
         List<Account> resultList = new ArrayList<>();
         String keyword = MainFrame.getSearchText().getText();
         for (Account tempAccount : accounts) {
-            if (tempAccount.getAccountName().contains(keyword)) {
+            tempAccount.setUserKey(SecurityService.decodeBase64Salt(tempAccount.getUserKey()));
+            if (tempAccount.getAccountName().contains(keyword) && StrUtil.equals(tempAccount.getUserKey(), SecurityService.getUuidKey())) {
+                tempAccount.setAccountName(SecurityService.decodeBase64Salt(tempAccount.getAccountName()));
                 resultList.add(tempAccount);
             }
         }
         Object[][] data = AccountService.listToTwoObj(resultList);
         try {
             //这里因为文本框事件频繁触发而导致的异常
-            MainFrame.jTable.setModel(new DefaultTableModel(data, MainFrameCst.TITLES));
+            MainFrame.jTable.setModel(new DefaultTableModel(data, MainFrameCst.getTitles()));
         } catch (Exception e) {
             log.info("事件并发异常（使用了线程池）");
             e.printStackTrace();

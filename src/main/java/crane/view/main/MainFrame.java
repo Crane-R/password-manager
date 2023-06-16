@@ -1,16 +1,15 @@
-package crane.view;
+package crane.view.main;
 
 import cn.hutool.core.util.StrUtil;
-import crane.constant.Constant;
-import crane.constant.DefaultFont;
-import crane.constant.ExportImportCst;
-import crane.constant.MainFrameCst;
-import crane.function.Tools;
+import crane.constant.*;
+import crane.function.Language;
+import crane.function.TextTools;
 import crane.model.jdbc.JdbcConnection;
 import crane.model.service.AccountService;
 import crane.model.service.FrameService;
 import crane.model.service.ShowMessgae;
 import crane.model.service.lightweight.LightService;
+import crane.view.*;
 import crane.view.module.ScrollBarUi;
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,7 +38,7 @@ public class MainFrame extends JFrame {
      * @Author Crane Resigned
      * @Date 2022-06-11 23:49:42
      */
-    private static JTextField searchText;
+    protected static JTextField searchText;
 
     public static JTextField getSearchText() {
         return searchText;
@@ -51,7 +50,7 @@ public class MainFrame extends JFrame {
      * @Author Crane Resigned
      * @Date 2022-06-11 23:49:12
      */
-    private static JLabel resultNumbers;
+    protected static JLabel resultNumbers;
 
     public static JLabel getResultNumbers() {
         return resultNumbers;
@@ -71,7 +70,7 @@ public class MainFrame extends JFrame {
      * @Author Crane Resigned
      * @Date 2022-06-02 23:19:39
      */
-    private final JPopupMenu jPopupMenu = new JPopupMenu();
+    protected final JPopupMenu jPopupMenu = new JPopupMenu();
 
     /**
      * 搜索按钮的文本切换标记
@@ -87,10 +86,10 @@ public class MainFrame extends JFrame {
      * Author: Crane Resigned
      * Date: 2022-11-26 23:50:37
      */
-    private final JToggleButton realTimeSearchBtn;
+    protected final JToggleButton realTimeSearchBtn;
 
-    public final static String SEARCH_BTN_TXT1 = "锁 | 手动搜索";
-    public final static String SEARCH_BTN_TXT2 = "解码";
+    public String SEARCH_BTN_TXT1 = Language.get("searchBtn");
+    public String SEARCH_BTN_TXT2 = Language.get("searchBtn2");
 
     /**
      * 搜索按钮
@@ -112,7 +111,7 @@ public class MainFrame extends JFrame {
      * @Author Crane Resigned
      * @Date 2023-02-08 23:03:35
      */
-    private final JLabel copyAlertLabel;
+    protected final JLabel copyAlertLabel;
 
     /**
      * 载存主窗体对象
@@ -121,6 +120,18 @@ public class MainFrame extends JFrame {
      * @Date 2023-05-24 17:16:36
      */
     public static MainFrame mainFrame;
+
+    protected JButton aboutBtn;
+
+    protected JToggleButton activistLockBtn;
+
+    protected JLabel searchTip;
+
+    protected JButton exportBtn;
+
+    protected JButton importBtn;
+
+    protected JLabel disclaimerLabel;
 
     public MainFrame() {
         this.setTitle(JdbcConnection.IS_TEST ? MainFrameCst.TEST_TITLE : MainFrameCst.MAIN_TITLE);
@@ -135,7 +146,7 @@ public class MainFrame extends JFrame {
 //        this.getContentPane().setBackground(Color.decode("#ffffff"));
 
         //数据显示表格
-        jTable = new JTable(new DefaultTableModel(new Object[0][0], MainFrameCst.TITLES));
+        jTable = new JTable(new DefaultTableModel(new Object[0][0], MainFrameCst.getTitles()));
         jTable.setRowHeight(30);
         jTable.setBackground(Color.decode("#EEF5FF"));
         jTable.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
@@ -151,45 +162,47 @@ public class MainFrame extends JFrame {
         this.add(jScrollPane);
 
         //右键菜单
-        JMenuItem updateMenuItem = new JMenuItem("修改 · Modify");
+        JMenuItem updateMenuItem = new JMenuItem(Language.get("rightBtnMenuUpdate"));
         updateMenuItem.setActionCommand("更新");
         updateMenuItem.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         updateMenuItem.addActionListener(e -> {
             LinkedList<String> list = new AccountService().getRowValues(jTable);
             //如果是刚新增的id肯定不是数值
             if (!String.valueOf(list.get(0)).matches(Constant.IS_NUMBER)) {
-                JOptionPane.showMessageDialog(null, "您需要先解密再搜索一次哦", "无法获取唯一标识", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, Language.get("decodeThenSearchTipMsg"),
+                        Language.get("decodeThenSearchTipTit"), JOptionPane.WARNING_MESSAGE);
             } else {
                 if (switchRecord) {
                     //先解密
                     AccountService.decodeList(list);
                 }
-                list.add("更新");
+                list.add(Language.get("purposeUpdate"));
                 new AddFrame(list, this).setVisible(true);
             }
             FrameService.activeTimeFresh();
         });
 
-        JMenuItem deleteMenuItem = new JMenuItem("删除 · Delete");
+        JMenuItem deleteMenuItem = new JMenuItem(Language.get("deleteBtn"));
         deleteMenuItem.setActionCommand("删除");
         deleteMenuItem.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         deleteMenuItem.addActionListener(e -> {
             LinkedList<String> list = new AccountService().getRowValues(jTable);
             if (!String.valueOf(list.get(0)).matches(Constant.IS_NUMBER)) {
-                JOptionPane.showMessageDialog(null, "您需要先解密再搜索一次哦", "无法获取唯一标识", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, Language.get("decodeThenSearchTipMsg"),
+                        Language.get("decodeThenSearchTipTit"), JOptionPane.WARNING_MESSAGE);
             } else {
                 if (switchRecord) {
                     //先解密
                     AccountService.decodeList(list);
                 }
-                list.add("删除");
+                list.add(Language.get("purposeDelete"));
                 new AddFrame(list, this).setVisible(true);
             }
             FrameService.activeTimeFresh();
         });
 
         //右键点击复制快捷账户密码信息
-        JMenuItem quickCopyItem = new JMenuItem("复制账户信息");
+        JMenuItem quickCopyItem = new JMenuItem(Language.get("copyAccountBtn"));
         quickCopyItem.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         quickCopyItem.addActionListener(e -> {
             LinkedList<String> rowValues = new AccountService().getRowValues(jTable);
@@ -198,12 +211,12 @@ public class MainFrame extends JFrame {
                 AccountService.decodeList(rowValues);
             }
             String generateStr = AccountService.generateAccountMsg(rowValues);
-            stickAndShowCopySuccessMsg(generateStr, "复制账号信息成功");
+            stickAndShowCopySuccessMsg(generateStr, Language.get("copyAccountSuccessive"));
             FrameService.activeTimeFresh();
         });
 
         //复制功能
-        JMenuItem copyFunctionItem = new JMenuItem("复制 · Copy");
+        JMenuItem copyFunctionItem = new JMenuItem(Language.get("copyBtn"));
         copyFunctionItem.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         copyFunctionItem.addActionListener(e -> {
             stickAndShowCopySuccessMsg(String.valueOf(jTable.getValueAt(jTable.getSelectedRow(), jTable.getSelectedColumn())), null);
@@ -233,7 +246,7 @@ public class MainFrame extends JFrame {
         });
 
         //搜索
-        JLabel searchTip = new JLabel("输入任意信息搜索账户");
+        searchTip = new JLabel(Language.get("searchAny"));
         searchTip.setBounds(100, 45, 200, 40);
         searchTip.setForeground(Color.decode("#407E54"));
         searchTip.setFont(new Font("微软雅黑", Font.BOLD, 14));
@@ -300,13 +313,13 @@ public class MainFrame extends JFrame {
             @Override
             public void mouseEntered(MouseEvent e) {
                 log.info("鼠标移入输入框");
-                searchTip.setText("鼠标右击可清空关键字");
+                searchTip.setText(Language.get("searchTextMouseEntered"));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
                 log.info("鼠标移出输入框");
-                searchTip.setText("输入任意信息搜索账户");
+                searchTip.setText(Language.get("searchTextMouseExited"));
             }
         });
         this.add(searchText);
@@ -345,7 +358,7 @@ public class MainFrame extends JFrame {
                 threadPool.execute(() -> {
                     if (realTimeSearchBtn.isSelected()) {
                         if (StrUtil.isEmpty(searchText.getText())) {
-                            jTable.setModel(new DefaultTableModel(new Object[0][0], MainFrameCst.TITLES));
+                            jTable.setModel(new DefaultTableModel(new Object[0][0], MainFrameCst.getTitles()));
                             //查询
                         } else if (Constant.IS_LIGHT) {
                             new LightService().searchAndSetTableMsg();
@@ -368,7 +381,7 @@ public class MainFrame extends JFrame {
                 threadPool.execute(() -> {
                     if (realTimeSearchBtn.isSelected()) {
                         if (StrUtil.isEmpty(searchText.getText())) {
-                            jTable.setModel(new DefaultTableModel(new Object[0][0], MainFrameCst.TITLES));
+                            jTable.setModel(new DefaultTableModel(new Object[0][0], MainFrameCst.getTitles()));
                             //查询
                         } else if (Constant.IS_LIGHT) {
                             new LightService().searchAndSetTableMsg();
@@ -391,7 +404,7 @@ public class MainFrame extends JFrame {
                 threadPool.execute(() -> {
                     if (realTimeSearchBtn.isSelected()) {
                         if (StrUtil.isEmpty(searchText.getText())) {
-                            jTable.setModel(new DefaultTableModel(new Object[0][0], MainFrameCst.TITLES));
+                            jTable.setModel(new DefaultTableModel(new Object[0][0], MainFrameCst.getTitles()));
                             //查询
                         } else if (Constant.IS_LIGHT) {
                             new LightService().searchAndSetTableMsg();
@@ -407,7 +420,7 @@ public class MainFrame extends JFrame {
         this.add(searchButton);
 
         //添加按钮
-        JButton addButton = new JButton("新增账户");
+        JButton addButton = new JButton(Language.get("addBtn"));
         addButton.setBounds(845, 50, 100, 30);
         addButton.setForeground(Color.WHITE);
         addButton.setBackground(Color.decode("#4792B9"));
@@ -421,7 +434,7 @@ public class MainFrame extends JFrame {
             for (int i = 0; i < maxCol; i++) {
                 list.add("");
             }
-            list.add("新增");
+            list.add(Language.get("purposeAdd"));
             new AddFrame(list, this).setVisible(true);
             this.setVisible(false);
             FrameService.activeTimeFresh();
@@ -444,7 +457,7 @@ public class MainFrame extends JFrame {
         this.add(copyAlertLabel);
 
         //清空按钮
-        JButton clearBtn = new JButton("清空当前");
+        JButton clearBtn = new JButton(Language.get("clearBtn"));
         clearBtn.setBounds(970, 50, 100, 30);
         clearBtn.setForeground(Color.WHITE);
         clearBtn.setBackground(Color.decode("#1A5599"));
@@ -452,14 +465,14 @@ public class MainFrame extends JFrame {
         clearBtn.setBorder(null);
         clearBtn.addActionListener(e -> {
             searchText.setText(null);
-            jTable.setModel(new DefaultTableModel(new Object[0][0], MainFrameCst.TITLES));
+            jTable.setModel(new DefaultTableModel(new Object[0][0], MainFrameCst.getTitles()));
             resultNumbers.setText(AccountService.getLatestAccountNumberText());
             AccountService.toggleStatus(false);
             FrameService.activeTimeFresh();
         });
         this.add(clearBtn);
 
-        realTimeSearchBtn = new JToggleButton("实时模式", true);
+        realTimeSearchBtn = new JToggleButton(Language.get("moderBtn"), true);
         realTimeSearchBtn.setBounds(1095, 0, 100, 30);
         realTimeSearchBtn.setForeground(Color.WHITE);
         realTimeSearchBtn.setBackground(Color.decode("#2A3050"));
@@ -474,18 +487,19 @@ public class MainFrame extends JFrame {
         realTimeSearchBtn.setHorizontalAlignment(JLabel.CENTER);
         realTimeSearchBtn.addActionListener(e -> {
             if (!realTimeSearchBtn.isSelected()) {
-                realTimeSearchBtn.setText("双击模式");
-                ShowMessgae.showInformationMessage("单击回车搜索，双击回车搜索并解码，双击判断间隔为" + Constant.DOUBLE_ENTER_DELAY + "ms", "双击回车模式");
+                realTimeSearchBtn.setText(Language.get("moderBtn2"));
+                ShowMessgae.showInformationMessage(Language.get("moderBtn2TipMsg1") + Constant.DOUBLE_ENTER_DELAY
+                        + Language.get("moderBtn2TipMsg2"), Language.get("moderBtn2TipTit"));
             } else {
-                realTimeSearchBtn.setText("实时模式");
-                ShowMessgae.showInformationMessage("根据文本框值的增减、改变进行实时搜索", "实时搜索模式");
+                realTimeSearchBtn.setText(Language.get("moderBtn"));
+                ShowMessgae.showInformationMessage(Language.get("moderBtnTipMsg"), Language.get("moderBtnTipTit"));
             }
             FrameService.activeTimeFresh();
         });
         this.add(realTimeSearchBtn);
 
         //切换场景
-        JButton switchSceneBtn = new JButton("切换场景");
+        JButton switchSceneBtn = new JButton(Language.get("switchBtn"));
         switchSceneBtn.setBounds(990, 0, 100, 30);
         switchSceneBtn.setForeground(Color.WHITE);
         switchSceneBtn.setBackground(Color.BLACK);
@@ -499,14 +513,14 @@ public class MainFrame extends JFrame {
         this.add(switchSceneBtn);
 
         //免责声明
-        JLabel disclaimerLabel = new JLabel("安全性声明：此程序不保证绝对安全，若您不是开发者请斟酌使用，造成的任何损失开发者不会负责。");
+        disclaimerLabel = new JLabel(Language.get("disclaimer"));
         disclaimerLabel.setBounds(540, 725, 800, 30);
         disclaimerLabel.setForeground(Color.decode("#9A2734"));
         disclaimerLabel.setFont(new Font("微软雅黑", Font.BOLD, 13));
         this.add(disclaimerLabel);
 
         //关于
-        JButton aboutBtn = new JButton("关于");
+        aboutBtn = new JButton(Language.get("aboutBtn"));
         aboutBtn.setBounds(-8, 0, 60, 30);
         aboutBtn.setForeground(Color.WHITE);
         aboutBtn.setBackground(Color.decode("#58C3C3"));
@@ -520,7 +534,7 @@ public class MainFrame extends JFrame {
         this.add(aboutBtn);
 
         //导出数据按钮
-        JButton exportBtn = new JButton("导出");
+        exportBtn = new JButton(Language.get("exportBtn"));
         exportBtn.setBounds(1138, 32, 60, 30);
         exportBtn.setForeground(Color.WHITE);
         exportBtn.setBackground(Color.decode("#046D35"));
@@ -531,11 +545,10 @@ public class MainFrame extends JFrame {
             new ExportImportDataFrame(ExportImportCst.EXPORT).setVisible(true);
             FrameService.activeTimeFresh();
         });
-        exportBtn.setEnabled(!Constant.IS_LIGHT);
         this.add(exportBtn);
 
         //导入
-        JButton importBtn = new JButton("导入");
+        importBtn = new JButton(Language.get("importBtn"));
         importBtn.setBounds(1138, 64, 60, 30);
         importBtn.setForeground(Color.WHITE);
         importBtn.setBackground(Color.decode("#5898C2"));
@@ -546,7 +559,6 @@ public class MainFrame extends JFrame {
             new ExportImportDataFrame(ExportImportCst.IMPORT).setVisible(true);
             FrameService.activeTimeFresh();
         });
-        importBtn.setEnabled(!Constant.IS_LIGHT);
         this.add(importBtn);
 
         //到达活性时间后加密table
@@ -559,7 +571,7 @@ public class MainFrame extends JFrame {
         FrameService.activeTimeFresh();
 
         //活性时间锁
-        JToggleButton activistLockBtn = new JToggleButton("活性锁");
+        activistLockBtn = new JToggleButton(Language.get("activistBtn"));
         activistLockBtn.setBounds(220, 0, 60, 30);
         activistLockBtn.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
         activistLockBtn.setForeground(Color.WHITE);
@@ -568,10 +580,10 @@ public class MainFrame extends JFrame {
         activistLockBtn.setHorizontalAlignment(JLabel.CENTER);
         activistLockBtn.addActionListener(e -> {
             if (activistLockBtn.isSelected()) {
-                activistLockBtn.setText("已锁定");
+                activistLockBtn.setText(Language.get("activistBtn2"));
                 activistLockBtn.setForeground(Color.BLACK);
             } else {
-                activistLockBtn.setText("活性锁");
+                activistLockBtn.setText(Language.get("activistBtn"));
                 activistLockBtn.setForeground(Color.WHITE);
             }
             FrameService.activeTimeLock();
@@ -621,8 +633,8 @@ public class MainFrame extends JFrame {
      * @Date 2023-02-08 23:12:52
      */
     public void stickAndShowCopySuccessMsg(String value, String specialMsg) {
-        Tools.stick(value);
-        copyAlertLabel.setText(StrUtil.isEmpty(specialMsg) ? "复制成功：".concat(value) : specialMsg);
+        TextTools.stick(value);
+        copyAlertLabel.setText(StrUtil.isEmpty(specialMsg) ? Language.get("copySuccessive").concat(value) : specialMsg);
         copyAlertLabel.setVisible(true);
         new Timer().schedule(new TimerTask() {
             @Override

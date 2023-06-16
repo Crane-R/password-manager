@@ -69,4 +69,12 @@ public class Constant {
      */
     public static final long ACTIVE_TIME = 1000 * 60 * 2;
 
+    /**
+     * 是否英文
+     * @Author Crane Resigned
+     * @Date 2023-06-12 21:46:54
+     */
+    @Deprecated
+    public static boolean IS_ENG = true;
+
 }
