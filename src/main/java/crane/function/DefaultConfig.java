@@ -49,9 +49,6 @@ public final class DefaultConfig {
      * @Date 2023-06-13 19:03:05
      */
     public static void setDefaultProperty(String key, String value) {
-
-        //FIXME：设置中文会乱码
-
         defaultConfig.setProperty(key, new String(value.getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
         Path path = Paths.get("");
         String filePath = JdbcConnection.IS_TEST ?

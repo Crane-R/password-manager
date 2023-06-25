@@ -4,13 +4,12 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import crane.constant.Constant;
 import crane.constant.DefaultFont;
-import crane.constant.LockFrameCst;
 import crane.constant.MainFrameCst;
 import crane.function.DefaultConfig;
+import crane.function.Language;
 import crane.model.service.FrameService;
 import crane.model.service.SecurityService;
 import crane.model.service.ShowMessgae;
-import crane.function.Language;
 import crane.view.main.MainFrame;
 import crane.view.module.ComboBoxRender;
 import lombok.extern.slf4j.Slf4j;
@@ -171,7 +170,8 @@ public class LockFrame extends JFrame {
         this.add(loginTip);
 
         //是否是本地数据库
-        isLocal = new JToggleButton(Language.get("isLocal"), true);
+        boolean isLocalServer = Boolean.parseBoolean(DefaultConfig.getDefaultProperty("isLocalServer"));
+        isLocal = new JToggleButton(isLocalServer ? Language.get("isLocal") : Language.get("isLocal2"), isLocalServer);
         isLocal.setBounds(50, 200, 100, 30);
         isLocal.setForeground(Color.WHITE);
         isLocal.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
@@ -185,12 +185,15 @@ public class LockFrame extends JFrame {
         });
         isLocal.setBorder(null);
         isLocal.addActionListener(e -> {
-            if (!isLocal.isSelected()) {
+            boolean selected = isLocal.isSelected();
+            if (!selected) {
                 ShowMessgae.showWarningMessage(Language.get("isLocal2TipMsg"), Language.get("isLocal2TipTitle"));
                 isLocal.setText(Language.get("isLocal2"));
             } else {
                 isLocal.setText(Language.get("isLocal"));
             }
+            //设置默认数据库
+            DefaultConfig.setDefaultProperty("isLocalServer", String.valueOf(selected));
         });
         this.add(isLocal);
 
@@ -213,7 +216,8 @@ public class LockFrame extends JFrame {
         });
         this.add(isCreateScene);
 
-        isLightWeightVersion = new JToggleButton(Language.get("isLightWeightVersion"), true);
+        boolean isFileModel = Boolean.parseBoolean(DefaultConfig.getDefaultProperty("isFileModel"));
+        isLightWeightVersion = new JToggleButton(isFileModel ? Language.get("isLightWeightVersion") : Language.get("isLightWeightVersion2"), isFileModel);
         isLightWeightVersion.setBounds(320, 200, 100, 30);
         isLightWeightVersion.setForeground(Color.WHITE);
         isLightWeightVersion.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
@@ -226,12 +230,15 @@ public class LockFrame extends JFrame {
         isLightWeightVersion.setBorder(null);
         isLightWeightVersion.setBackground(Color.decode("#407E54"));
         isLightWeightVersion.addActionListener(e -> {
-            if (isLightWeightVersion.isSelected()) {
+            boolean selected = isLightWeightVersion.isSelected();
+            if (selected) {
                 isLightWeightVersion.setText(Language.get("isLightWeightVersion"));
             } else {
                 isLightWeightVersion.setText(Language.get("isLightWeightVersion2"));
                 ShowMessgae.showPlainMessage(Language.get("isLightWeightVersion2TipMsg"), Language.get("isLightWeightVersion2TipTitle"));
             }
+            //设置默认模式
+            DefaultConfig.setDefaultProperty("isFileModel", String.valueOf(selected));
         });
         this.add(isLightWeightVersion);
 
@@ -257,6 +264,7 @@ public class LockFrame extends JFrame {
                     Language.refresh(selectedItem);
                     close();
                     new LockFrame().setVisible(true);
+                    //设置默认语言
                     DefaultConfig.setDefaultProperty("language", selectedItem);
                 }
             }

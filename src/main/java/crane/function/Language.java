@@ -52,7 +52,7 @@ public final class Language {
             throw new RuntimeException(e);
         } catch (NullPointerException e) {
             e.printStackTrace();
-            ShowMessgae.showErrorMessage(String.valueOf(e.getCause()), e.getMessage());
+            ShowMessgae.showErrorMessage("语言表加载失败，请检查语言配置文件是否有误。\r\n\nFailed to load the language table. Please check the language configuration.", String.valueOf(e.getCause()));
         }
     }
 
