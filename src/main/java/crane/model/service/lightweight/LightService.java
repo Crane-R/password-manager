@@ -96,8 +96,8 @@ public class LightService {
         String keyword = MainFrame.getSearchText().getText();
         for (Account tempAccount : accounts) {
             tempAccount.setUserKey(SecurityService.decodeBase64Salt(tempAccount.getUserKey()));
+            tempAccount.setAccountName(SecurityService.decodeBase64Salt(tempAccount.getAccountName()));
             if (tempAccount.getAccountName().contains(keyword) && StrUtil.equals(tempAccount.getUserKey(), SecurityService.getUuidKey())) {
-                tempAccount.setAccountName(SecurityService.decodeBase64Salt(tempAccount.getAccountName()));
                 resultList.add(tempAccount);
             }
         }
