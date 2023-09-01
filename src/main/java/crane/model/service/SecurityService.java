@@ -194,6 +194,7 @@ public final class SecurityService {
      * @Date 2023-05-24 16:52:33
      */
     public static String generateRandomStrongPassword() {
+
 //        return new SnowflakeGenerator().next().toString();
         /**
          * 安全服务内部类
