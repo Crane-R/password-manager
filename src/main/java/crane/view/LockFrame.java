@@ -6,7 +6,9 @@ import crane.constant.Constant;
 import crane.constant.DefaultFont;
 import crane.constant.MainFrameCst;
 import crane.function.DefaultConfig;
+import crane.function.FileTool;
 import crane.function.Language;
+import crane.model.jdbc.JdbcConnection;
 import crane.model.service.FrameService;
 import crane.model.service.SecurityService;
 import crane.model.service.ShowMessgae;
@@ -22,6 +24,7 @@ import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.File;
 
 /**
  * Description: 锁页面
@@ -89,7 +92,8 @@ public class LockFrame extends JFrame {
         final boolean isHaveKey = SecurityService.checkKeyAmountIsNotZero();
 
         //窗体初始化
-        this.setTitle(isHaveKey ? MainFrameCst.MAIN_TITLE : Language.get("haveNotKeyTitle"));
+        this.setTitle(isHaveKey ? JdbcConnection.IS_TEST ? MainFrameCst.TEST_TITLE : MainFrameCst.MAIN_TITLE
+                : Language.get("haveNotKeyTitle"));
         this.setSize(500, 300);
         this.setLayout(null);
         this.setResizable(false);
@@ -274,6 +278,24 @@ public class LockFrame extends JFrame {
                 log.info("取消选择");
             }
         });
+
+        //查看功能按钮
+        JButton lookFunBtn = new JButton(Language.get("lookFunBtn"));
+        lookFunBtn.setBounds(380, 0, 100, 30);
+        lookFunBtn.setForeground(Color.BLACK);
+        lookFunBtn.setBackground(Color.WHITE);
+        lookFunBtn.setFont(new Font("微软雅黑", Font.BOLD, 13));
+        lookFunBtn.setHorizontalAlignment(JLabel.CENTER);
+        lookFunBtn.addActionListener(e -> {
+            File logFile = new File("function.html");
+            if (logFile.exists()) {
+                FileTool.openFile(logFile.getPath());
+            }else {
+                ShowMessgae.showErrorMessage(Language.get("notFunFile"),Language.get("notFunFileTit"));
+            }
+        });
+        this.add(lookFunBtn);
+
         this.add(isEng);
     }
 

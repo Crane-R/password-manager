@@ -16,7 +16,7 @@ public class MainFrameCst {
      * Author: Crane Resigned
      * Date: 2022-11-27 18:25:35
      */
-    public static String MAIN_TITLE = "Password Manager " + VersionCst.VERSION + " -- Comprehensive Edition";
+    public static String MAIN_TITLE = "Password Manager " + VersionCst.VERSION;
 
     /**
      * 版本简称

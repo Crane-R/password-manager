@@ -2,6 +2,7 @@ package crane.view.main;
 
 import cn.hutool.core.util.StrUtil;
 import crane.constant.*;
+import crane.function.FileTool;
 import crane.function.Language;
 import crane.function.TextTools;
 import crane.model.jdbc.JdbcConnection;
@@ -21,6 +22,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -334,7 +336,6 @@ public class MainFrame extends JFrame {
         searchButton.setForeground(Color.WHITE);
         searchButton.setBackground(Color.decode("#4FA485"));
         searchButton.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
-        searchButton.setBorder(null);
         searchButton.addActionListener(e -> {
             if (switchRecord) {
                 //解密
@@ -350,6 +351,7 @@ public class MainFrame extends JFrame {
             AccountService.toggleStatus(null);
             FrameService.activeTimeFresh();
         });
+        searchButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         //值改变事件
         searchText.getDocument().addDocumentListener(new DocumentListener() {
@@ -430,7 +432,6 @@ public class MainFrame extends JFrame {
         addButton.setForeground(Color.WHITE);
         addButton.setBackground(Color.decode("#4792B9"));
         addButton.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
-        addButton.setBorder(null);
         addButton.addActionListener(e -> {
             //添加按钮点击事件
             LinkedList<String> list = new LinkedList<>();
@@ -444,6 +445,7 @@ public class MainFrame extends JFrame {
             this.setVisible(false);
             FrameService.activeTimeFresh();
         });
+        addButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         this.add(addButton);
 
         //显示结果状态文本（有多少条数据）
@@ -467,7 +469,6 @@ public class MainFrame extends JFrame {
         clearBtn.setForeground(Color.WHITE);
         clearBtn.setBackground(Color.decode("#1A5599"));
         clearBtn.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
-        clearBtn.setBorder(null);
         clearBtn.addActionListener(e -> {
             searchText.setText(null);
             jTable.setModel(new DefaultTableModel(new Object[0][0], MainFrameCst.getTitles()));
@@ -475,11 +476,13 @@ public class MainFrame extends JFrame {
             AccountService.toggleStatus(false);
             FrameService.activeTimeFresh();
         });
+        clearBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         this.add(clearBtn);
 
         realTimeSearchBtn = new JToggleButton(Language.get("moderBtn"), true);
         realTimeSearchBtn.setBounds(1095, 0, 100, 30);
         realTimeSearchBtn.setForeground(Color.WHITE);
+        realTimeSearchBtn.setBorder(null);
         realTimeSearchBtn.setBackground(Color.decode("#2A3050"));
         realTimeSearchBtn.setUI(new MetalToggleButtonUI() {
             @Override
@@ -488,7 +491,6 @@ public class MainFrame extends JFrame {
             }
         });
         realTimeSearchBtn.setFont(new Font("微软雅黑", Font.BOLD, 13));
-        realTimeSearchBtn.setBorder(null);
         realTimeSearchBtn.setHorizontalAlignment(JLabel.CENTER);
         realTimeSearchBtn.addActionListener(e -> {
             if (!realTimeSearchBtn.isSelected()) {
@@ -509,13 +511,46 @@ public class MainFrame extends JFrame {
         switchSceneBtn.setForeground(Color.WHITE);
         switchSceneBtn.setBackground(Color.BLACK);
         switchSceneBtn.setFont(new Font("微软雅黑", Font.BOLD, 13));
-        switchSceneBtn.setBorder(null);
         switchSceneBtn.setHorizontalAlignment(JLabel.CENTER);
         switchSceneBtn.addActionListener(e -> {
             this.dispose();
             new LockFrame().setVisible(true);
         });
         this.add(switchSceneBtn);
+
+        //查看日志按钮
+        JButton lookLogBtn = new JButton(Language.get("lookLogBtn"));
+        lookLogBtn.setBounds(885, 0, 100, 30);
+        lookLogBtn.setForeground(Color.BLACK);
+        lookLogBtn.setBackground(Color.WHITE);
+        lookLogBtn.setFont(new Font("微软雅黑", Font.BOLD, 13));
+        lookLogBtn.setHorizontalAlignment(JLabel.CENTER);
+        lookLogBtn.addActionListener(e -> {
+            File logFile = new File("log.log");
+            if (logFile.exists()) {
+                FileTool.openFile(logFile.getPath());
+            }else {
+                ShowMessgae.showErrorMessage(Language.get("notLookFile"),Language.get("notLookFileTit"));
+            }
+        });
+        this.add(lookLogBtn);
+
+        //查看功能按钮
+        JButton lookFunBtn = new JButton(Language.get("lookFunBtn"));
+        lookFunBtn.setBounds(780, 0, 100, 30);
+        lookFunBtn.setForeground(Color.BLACK);
+        lookFunBtn.setBackground(Color.WHITE);
+        lookFunBtn.setFont(new Font("微软雅黑", Font.BOLD, 13));
+        lookFunBtn.setHorizontalAlignment(JLabel.CENTER);
+        lookFunBtn.addActionListener(e -> {
+            File logFile = new File("function.html");
+            if (logFile.exists()) {
+                FileTool.openFile(logFile.getPath());
+            }else {
+                ShowMessgae.showErrorMessage(Language.get("notFunFile"),Language.get("notFunFileTit"));
+            }
+        });
+        this.add(lookFunBtn);
 
         //免责声明
         disclaimerLabel = new JLabel(Language.get("disclaimer"));
@@ -530,7 +565,6 @@ public class MainFrame extends JFrame {
         aboutBtn.setForeground(Color.WHITE);
         aboutBtn.setBackground(Color.decode("#58C3C3"));
         aboutBtn.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
-        aboutBtn.setBorder(null);
         aboutBtn.setHorizontalAlignment(JLabel.CENTER);
         aboutBtn.addActionListener(e -> {
             new AboutFrame().setVisible(true);
@@ -544,7 +578,6 @@ public class MainFrame extends JFrame {
         exportBtn.setForeground(Color.WHITE);
         exportBtn.setBackground(Color.decode("#046D35"));
         exportBtn.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
-        exportBtn.setBorder(null);
         exportBtn.setHorizontalAlignment(JLabel.CENTER);
         exportBtn.addActionListener(e -> {
             new ExportImportDataFrame(ExportImportCst.EXPORT).setVisible(true);
@@ -558,7 +591,6 @@ public class MainFrame extends JFrame {
         importBtn.setForeground(Color.WHITE);
         importBtn.setBackground(Color.decode("#5898C2"));
         importBtn.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
-        importBtn.setBorder(null);
         importBtn.setHorizontalAlignment(JLabel.CENTER);
         importBtn.addActionListener(e -> {
             new ExportImportDataFrame(ExportImportCst.IMPORT).setVisible(true);
@@ -580,8 +612,8 @@ public class MainFrame extends JFrame {
         activistLockBtn.setBounds(220, 0, 60, 30);
         activistLockBtn.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
         activistLockBtn.setForeground(Color.WHITE);
-        activistLockBtn.setBackground(Color.decode("#EB89A6"));
         activistLockBtn.setBorder(null);
+        activistLockBtn.setBackground(Color.decode("#EB89A6"));
         activistLockBtn.setHorizontalAlignment(JLabel.CENTER);
         activistLockBtn.addActionListener(e -> {
             if (activistLockBtn.isSelected()) {
@@ -602,8 +634,8 @@ public class MainFrame extends JFrame {
         importBtn3.setForeground(Color.WHITE);
         importBtn3.setBackground(Color.decode("#002FA7"));
         importBtn3.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
-        importBtn3.setBorder(null);
         importBtn3.setHorizontalAlignment(JLabel.CENTER);
+        importBtn3.setBorder(null);
         importBtn3.addActionListener(e -> {
             ShowMessgae.showInformationMessage("该功能为v3.0准备，如导入非v3.0的数据，可能会导致数据错误等意外情况。", "导入v3.0的数据");
             new Import3DataFrame().setVisible(true);
@@ -627,6 +659,7 @@ public class MainFrame extends JFrame {
         });
         importBtn4.setEnabled(!Constant.IS_LIGHT);
         this.add(importBtn4);
+
 
         mainFrame = this;
     }
