@@ -134,15 +134,20 @@ public class MainFrame extends JFrame {
     protected JLabel disclaimerLabel;
 
     public MainFrame() {
-        this.setTitle(JdbcConnection.IS_TEST ? MainFrameCst.TEST_TITLE : MainFrameCst.MAIN_TITLE);
+        this.setTitle((JdbcConnection.IS_TEST ? MainFrameCst.TEST_TITLE : MainFrameCst.MAIN_TITLE) + " >> "
+                + (Constant.IS_LIGHT ? Language.get("isLightWeightVersion") : Language.get("isLightWeightVersion2")));
         this.setSize(1200, 800);
         this.setLayout(null);
-        this.setResizable(false);
+//        this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //设置标题栏的图标
         this.setIconImage(FrameService.getTitleImage());
         this.getContentPane().setBackground(Color.decode("#DAE4E6"));
+
+//        this.setUndecorated(true);
+//        this.setOpacity(0.5f);
+
 //        this.getContentPane().setBackground(Color.decode("#ffffff"));
 
         //数据显示表格

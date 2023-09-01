@@ -11,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.Objects;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -186,14 +187,62 @@ public final class SecurityService {
 
     /**
      * 生成强密码
-     * TODO:其实没有什么好办法
+     * TODO:其实没有什么好办法生成强密码
+     * 不使用static是因为这个方法在程序中不是必须的
      *
      * @Author Crane Resigned
      * @Date 2023-05-24 16:52:33
      */
     public static String generateRandomStrongPassword() {
-        return new SnowflakeGenerator().next().toString();
+//        return new SnowflakeGenerator().next().toString();
+        /**
+         * 安全服务内部类
+         * 生成强密码所需内容，后续可改进
+         *
+         * @Author Crane Resigned
+         * @Date 2023-09-01 13:08:14
+         */
+        class GeneratePass {
+            private final char[] alphabet = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
+                    'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+            private final char[] symbols = {'!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+','[',']'};
+
+            private final int[] digits = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+            /**
+             * 密码长度
+             *
+             * @Author Crane Resigned
+             * @Date 2023-09-01 13:14:03
+             */
+            private final int PASS_LENGTH = 8;
+
+            public String generateRandomStrongPassword() {
+                StringBuilder finallyPass = new StringBuilder();
+
+                for (int i = 0; i < PASS_LENGTH; i++) {
+                    //随机因子0和1,0取字母1取符号
+                    int rand = (int) (Math.random() * 3);
+                    switch (rand) {
+                        case 0:
+                            char currentChar = alphabet[(int) (Math.random() * alphabet.length)];
+                            finallyPass.append(Math.round(Math.random()) == 0 ? String.valueOf(currentChar).toUpperCase() : currentChar);
+                            break;
+                        case 1:
+                            finallyPass.append(symbols[(int) (Math.random() * symbols.length)]);
+                            break;
+                        case 2:
+                            finallyPass.append(digits[(int) (Math.random() * digits.length)]);
+                            break;
+                    }
+                }
+
+                return finallyPass.toString();
+            }
+        }
+        return new GeneratePass().generateRandomStrongPassword();
     }
+
 
     /**
      * 全局加密Account类
