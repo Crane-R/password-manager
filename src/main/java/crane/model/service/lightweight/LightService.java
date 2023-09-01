@@ -46,7 +46,7 @@ public class LightService {
      * @Date 2023-02-04 01:54:34
      */
     public int updateAccount(Account account) {
-        SecurityService.encodeAccount(account);
+        //在新增界面即将传入到这里时已经加密，故这里不需要再调用加密方法
         List<Account> accounts = new LightDao().readData();
         for (Account tempAccount : accounts) {
             Integer accountId = tempAccount.getAccountId();
