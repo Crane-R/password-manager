@@ -1,4 +1,4 @@
-package crane.view.module;
+package crane.view.module.stylehelper;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -15,7 +15,7 @@ public final class BlinkBorderHelper {
      * @Date 2023-09-02 13:03:25
      */
     public static void addBorder(JComponent component, Border borderIn, Border borderOut) {
-        component.setBorder(null);
+        component.setBorder(borderOut);
         component.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {

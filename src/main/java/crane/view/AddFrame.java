@@ -13,6 +13,7 @@ import crane.model.service.SecurityService;
 import crane.model.service.ShowMessgae;
 import crane.model.service.lightweight.LightService;
 import crane.view.main.MainFrame;
+import crane.view.module.stylehelper.BlinkBorderHelper;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -64,7 +65,7 @@ public class AddFrame extends JFrame {
         System.out.println("改变窗口传入的list：" + list);
 
         String purpose = list.get(list.size() - 1);
-        this.setTitle(StrUtil.equals(purpose, DELETE) ? Language.get("sureDelete") : MainFrameCst.SIMPLE_TITLE + " -> "
+        this.setTitle(StrUtil.equals(purpose, DELETE) ? Language.get("sureDelete") : MainFrameCst.SIMPLE_TITLE + " >> "
                 + purpose + Language.get("aAcount"));
         this.setLayout(null);
         this.setResizable(false);
@@ -74,7 +75,7 @@ public class AddFrame extends JFrame {
         } else {
             this.setLocationRelativeTo(null);
         }
-        this.getContentPane().setBackground(Color.decode("#DAE4E6"));
+        this.getContentPane().setBackground(Color.decode("#EBEBEB"));
 
         //设置标题栏的图标
         Image image = FrameService.getTitleImage();
@@ -109,26 +110,36 @@ public class AddFrame extends JFrame {
         JTextField jTextField = new JTextField(list.get(1));
         jTextField.setBounds(110, 30, 230, 30);
         jTextField.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
+        BlinkBorderHelper.addBorder(jTextField, BorderFactory.createLineBorder(Color.YELLOW, 1)
+                , BorderFactory.createLineBorder(Color.decode("#BACCDA"), 1));
         this.add(jTextField);
 
         JTextField jTextField1 = new JTextField(list.get(2));
         jTextField1.setBounds(110, 80, 230, 30);
         jTextField1.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
+        BlinkBorderHelper.addBorder(jTextField1, BorderFactory.createLineBorder(Color.YELLOW, 1)
+                , BorderFactory.createLineBorder(Color.decode("#BACCDA"), 1));
         this.add(jTextField1);
 
         JTextField jTextField2 = new JTextField(list.get(3));
         jTextField2.setBounds(110, 130, 230, 30);
         jTextField2.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
+        BlinkBorderHelper.addBorder(jTextField2, BorderFactory.createLineBorder(Color.YELLOW, 1)
+                , BorderFactory.createLineBorder(Color.decode("#BACCDA"), 1));
         this.add(jTextField2);
 
         JTextField surePassTextField = new JTextField(list.get(3));
         surePassTextField.setBounds(110, 180, 230, 30);
         surePassTextField.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
+        BlinkBorderHelper.addBorder(surePassTextField, BorderFactory.createLineBorder(Color.YELLOW, 1)
+                , BorderFactory.createLineBorder(Color.decode("#BACCDA"), 1));
         this.add(surePassTextField);
 
         JTextField jTextField3 = new JTextField(list.get(4));
         jTextField3.setBounds(110, 230, 230, 30);
         jTextField3.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
+        BlinkBorderHelper.addBorder(jTextField3, BorderFactory.createLineBorder(Color.YELLOW, 1)
+                , BorderFactory.createLineBorder(Color.decode("#BACCDA"), 1));
         this.add(jTextField3);
 
         //两个按钮
@@ -147,6 +158,7 @@ public class AddFrame extends JFrame {
             jTextField3.setText("");
             surePassTextField.setText("");
         });
+        BlinkBorderHelper.addBorder(resetButton,BorderFactory.createLineBorder(Color.WHITE,2),null);
         this.add(resetButton);
 
         //生成随机强密码按钮
@@ -162,6 +174,7 @@ public class AddFrame extends JFrame {
             jTextField2.setText(randomPassword);
             surePassTextField.setText(randomPassword);
         });
+        BlinkBorderHelper.addBorder(generatePassBtn,BorderFactory.createLineBorder(Color.WHITE,2),null);
         this.add(generatePassBtn);
 
         //动态按钮信息
@@ -172,6 +185,7 @@ public class AddFrame extends JFrame {
         submitButton.setBackground(Color.decode("#5697C4"));
         submitButton.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         submitButton.setBorder(null);
+        BlinkBorderHelper.addBorder(submitButton,BorderFactory.createLineBorder(Color.WHITE,2),null);
         submitButton.addActionListener(e -> {
             //检验确认密码是否和密码相同
             if (!StrUtil.equals(jTextField2.getText(), surePassTextField.getText())) {
@@ -255,7 +269,7 @@ public class AddFrame extends JFrame {
                 }
                 //The Dao add method : return false is true
                 if (Boolean.FALSE.equals(isTrue) || effect == 1) {
-                    ShowMessgae.showInformationMessage(purpose + "成功!", "Successful");
+//                    ShowMessgae.showInformationMessage(purpose + Language.get("successful"), Language.get("successfulTit"));
                     //更新账户数量
                     MainFrame.getResultNumbers().setText(AccountService.getLatestAccountNumberText());
                     log.info(purpose.concat("操作成功"));

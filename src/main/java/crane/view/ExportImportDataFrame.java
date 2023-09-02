@@ -63,6 +63,8 @@ public class ExportImportDataFrame extends LockFrame {
 
         this.remove(isEng);
 
+        this.remove(lookFunBtn);
+
         //文本框
         pathTextField = new JTextField();
         pathTextField.setBounds(50, 120, 380, 35);

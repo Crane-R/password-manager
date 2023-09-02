@@ -11,8 +11,9 @@ import crane.model.service.FrameService;
 import crane.model.service.ShowMessgae;
 import crane.model.service.lightweight.LightService;
 import crane.view.*;
-import crane.view.module.BlinkBorderHelper;
+import crane.view.module.stylehelper.BlinkBorderHelper;
 import crane.view.module.ScrollBarUi;
+import crane.view.module.stylehelper.MenuBlinkBackHelper;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -21,12 +22,13 @@ import javax.swing.event.DocumentListener;
 import javax.swing.plaf.metal.MetalToggleButtonUI;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellEditor;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-import java.util.LinkedList;
+import java.util.*;
+import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.*;
 
 /**
@@ -159,6 +161,10 @@ public class MainFrame extends JFrame {
         jTable.setBackground(Color.decode("#EEF5FF"));
         jTable.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         jTable.setForeground(Color.darkGray);
+        jTable.setSelectionBackground(Color.decode("#FDF7F6"));
+        jTable.setSelectionForeground(Color.decode("#382C78"));
+        jTable.setGridColor(Color.decode("#BACCDA"));
+
         JTableHeader tableHeader = jTable.getTableHeader();
         tableHeader.setBorder(null);
         tableHeader.setBackground(Color.WHITE);
@@ -231,10 +237,19 @@ public class MainFrame extends JFrame {
             FrameService.activeTimeFresh();
         });
 
+        //右键菜单统一设置样式
+        List<JMenuItem> styleList = Arrays.asList(copyFunctionItem, updateMenuItem, deleteMenuItem, quickCopyItem);
+        for (JMenuItem jMenuItem : styleList) {
+            jMenuItem.setPreferredSize(new Dimension(120,30));
+            MenuBlinkBackHelper.addBlinkBackground(jMenuItem,Color.decode("#F4CE69"),Color.decode("#F4F3EC"));
+            BlinkBorderHelper.addBorder(jMenuItem,BorderFactory.createLineBorder(Color.YELLOW),BorderFactory.createLineBorder(Color.WHITE));
+        }
+
         jPopupMenu.add(copyFunctionItem);
         jPopupMenu.add(updateMenuItem);
         jPopupMenu.add(deleteMenuItem);
         jPopupMenu.add(quickCopyItem);
+        BlinkBorderHelper.addBorder(jPopupMenu,BorderFactory.createLineBorder(Color.YELLOW),BorderFactory.createLineBorder(Color.white));
         jTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

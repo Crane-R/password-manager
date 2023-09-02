@@ -13,7 +13,7 @@ import crane.model.service.FrameService;
 import crane.model.service.SecurityService;
 import crane.model.service.ShowMessgae;
 import crane.view.main.MainFrame;
-import crane.view.module.BlinkBorderHelper;
+import crane.view.module.stylehelper.BlinkBorderHelper;
 import crane.view.module.ComboBoxRender;
 import lombok.extern.slf4j.Slf4j;
 
@@ -87,6 +87,8 @@ public class LockFrame extends JFrame {
     protected JLabel loginTip;
 
     protected JComboBox<String> isEng;
+
+    protected JButton lookFunBtn;
 
     public LockFrame() {
         //检测密钥文件是否存在
@@ -284,7 +286,7 @@ public class LockFrame extends JFrame {
         });
 
         //查看功能按钮
-        JButton lookFunBtn = new JButton(Language.get("lookFunBtn"));
+        lookFunBtn = new JButton(Language.get("lookFunBtn"));
         lookFunBtn.setBounds(380, 0, 100, 30);
         lookFunBtn.setForeground(Color.BLACK);
         lookFunBtn.setBackground(Color.WHITE);
