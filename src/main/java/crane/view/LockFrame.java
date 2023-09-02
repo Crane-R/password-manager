@@ -13,6 +13,7 @@ import crane.model.service.FrameService;
 import crane.model.service.SecurityService;
 import crane.model.service.ShowMessgae;
 import crane.view.main.MainFrame;
+import crane.view.module.BlinkBorderHelper;
 import crane.view.module.ComboBoxRender;
 import lombok.extern.slf4j.Slf4j;
 
@@ -199,6 +200,7 @@ public class LockFrame extends JFrame {
             //设置默认数据库
             DefaultConfig.setDefaultProperty("isLocalServer", String.valueOf(selected));
         });
+        BlinkBorderHelper.addBorder(isLocal, BorderFactory.createLineBorder(Color.WHITE, 2), null);
         this.add(isLocal);
 
         isCreateScene = new JToggleButton(Language.get("isCreateScene"));
@@ -218,6 +220,7 @@ public class LockFrame extends JFrame {
                 ShowMessgae.showInformationMessage(Language.get("isCreateSceneTipMsg"), Language.get("isCreateSceneTipTitle"));
             }
         });
+        BlinkBorderHelper.addBorder(isCreateScene, BorderFactory.createLineBorder(Color.WHITE, 2), null);
         this.add(isCreateScene);
 
         boolean isFileModel = Boolean.parseBoolean(DefaultConfig.getDefaultProperty("isFileModel"));
@@ -244,6 +247,7 @@ public class LockFrame extends JFrame {
             //设置默认模式
             DefaultConfig.setDefaultProperty("isFileModel", String.valueOf(selected));
         });
+        BlinkBorderHelper.addBorder(isLightWeightVersion, BorderFactory.createLineBorder(Color.WHITE, 2), null);
         this.add(isLightWeightVersion);
 
         isEng = new JComboBox<>(Language.getLanguages());

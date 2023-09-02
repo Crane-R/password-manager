@@ -11,6 +11,7 @@ import crane.model.service.FrameService;
 import crane.model.service.ShowMessgae;
 import crane.model.service.lightweight.LightService;
 import crane.view.*;
+import crane.view.module.BlinkBorderHelper;
 import crane.view.module.ScrollBarUi;
 import lombok.extern.slf4j.Slf4j;
 
@@ -351,7 +352,7 @@ public class MainFrame extends JFrame {
             AccountService.toggleStatus(null);
             FrameService.activeTimeFresh();
         });
-        searchButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        BlinkBorderHelper.addBorder(searchButton, BorderFactory.createLineBorder(Color.WHITE, 2), null);
 
         //值改变事件
         searchText.getDocument().addDocumentListener(new DocumentListener() {
@@ -445,7 +446,7 @@ public class MainFrame extends JFrame {
             this.setVisible(false);
             FrameService.activeTimeFresh();
         });
-        addButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        BlinkBorderHelper.addBorder(addButton, BorderFactory.createLineBorder(Color.WHITE, 2), null);
         this.add(addButton);
 
         //显示结果状态文本（有多少条数据）
@@ -476,7 +477,7 @@ public class MainFrame extends JFrame {
             AccountService.toggleStatus(false);
             FrameService.activeTimeFresh();
         });
-        clearBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        BlinkBorderHelper.addBorder(clearBtn, BorderFactory.createLineBorder(Color.WHITE, 2), null);
         this.add(clearBtn);
 
         realTimeSearchBtn = new JToggleButton(Language.get("moderBtn"), true);
@@ -529,8 +530,8 @@ public class MainFrame extends JFrame {
             File logFile = new File("log.log");
             if (logFile.exists()) {
                 FileTool.openFile(logFile.getPath());
-            }else {
-                ShowMessgae.showErrorMessage(Language.get("notLookFile"),Language.get("notLookFileTit"));
+            } else {
+                ShowMessgae.showErrorMessage(Language.get("notLookFile"), Language.get("notLookFileTit"));
             }
         });
         this.add(lookLogBtn);
@@ -546,8 +547,8 @@ public class MainFrame extends JFrame {
             File logFile = new File("function.html");
             if (logFile.exists()) {
                 FileTool.openFile(logFile.getPath());
-            }else {
-                ShowMessgae.showErrorMessage(Language.get("notFunFile"),Language.get("notFunFileTit"));
+            } else {
+                ShowMessgae.showErrorMessage(Language.get("notFunFile"), Language.get("notFunFileTit"));
             }
         });
         this.add(lookFunBtn);
@@ -570,6 +571,7 @@ public class MainFrame extends JFrame {
             new AboutFrame().setVisible(true);
             FrameService.activeTimeFresh();
         });
+        BlinkBorderHelper.addBorder(aboutBtn, BorderFactory.createLineBorder(Color.WHITE, 2), null);
         this.add(aboutBtn);
 
         //导出数据按钮
@@ -583,6 +585,7 @@ public class MainFrame extends JFrame {
             new ExportImportDataFrame(ExportImportCst.EXPORT).setVisible(true);
             FrameService.activeTimeFresh();
         });
+        BlinkBorderHelper.addBorder(exportBtn, BorderFactory.createLineBorder(Color.WHITE, 2), null);
         this.add(exportBtn);
 
         //导入
@@ -596,6 +599,7 @@ public class MainFrame extends JFrame {
             new ExportImportDataFrame(ExportImportCst.IMPORT).setVisible(true);
             FrameService.activeTimeFresh();
         });
+        BlinkBorderHelper.addBorder(importBtn, BorderFactory.createLineBorder(Color.WHITE, 2), null);
         this.add(importBtn);
 
         //到达活性时间后加密table
@@ -625,6 +629,7 @@ public class MainFrame extends JFrame {
             }
             FrameService.activeTimeLock();
         });
+        BlinkBorderHelper.addBorder(activistLockBtn, BorderFactory.createLineBorder(Color.WHITE, 2), null);
         this.add(activistLockBtn);
 
         //前期版本兼容性导入数据
@@ -659,7 +664,6 @@ public class MainFrame extends JFrame {
         });
         importBtn4.setEnabled(!Constant.IS_LIGHT);
         this.add(importBtn4);
-
 
         mainFrame = this;
     }
