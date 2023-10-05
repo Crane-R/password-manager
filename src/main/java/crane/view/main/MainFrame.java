@@ -1,7 +1,10 @@
 package crane.view.main;
 
 import cn.hutool.core.util.StrUtil;
-import crane.constant.*;
+import crane.constant.Constant;
+import crane.constant.DefaultFont;
+import crane.constant.ExportImportCst;
+import crane.constant.MainFrameCst;
 import crane.function.FileTool;
 import crane.function.Language;
 import crane.function.TextTools;
@@ -11,8 +14,8 @@ import crane.model.service.FrameService;
 import crane.model.service.ShowMessgae;
 import crane.model.service.lightweight.LightService;
 import crane.view.*;
-import crane.view.module.stylehelper.BlinkBorderHelper;
 import crane.view.module.ScrollBarUi;
+import crane.view.module.stylehelper.BlinkBorderHelper;
 import crane.view.module.stylehelper.MenuBlinkBackHelper;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,13 +25,12 @@ import javax.swing.event.DocumentListener;
 import javax.swing.plaf.metal.MetalToggleButtonUI;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-import javax.swing.table.TableCellEditor;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-import java.util.*;
 import java.util.List;
 import java.util.Timer;
+import java.util.*;
 import java.util.concurrent.*;
 
 /**
@@ -240,16 +242,16 @@ public class MainFrame extends JFrame {
         //右键菜单统一设置样式
         List<JMenuItem> styleList = Arrays.asList(copyFunctionItem, updateMenuItem, deleteMenuItem, quickCopyItem);
         for (JMenuItem jMenuItem : styleList) {
-            jMenuItem.setPreferredSize(new Dimension(120,30));
-            MenuBlinkBackHelper.addBlinkBackground(jMenuItem,Color.decode("#F4CE69"),Color.decode("#F4F3EC"));
-            BlinkBorderHelper.addBorder(jMenuItem,BorderFactory.createLineBorder(Color.YELLOW),BorderFactory.createLineBorder(Color.WHITE));
+            jMenuItem.setPreferredSize(new Dimension(120, 30));
+            MenuBlinkBackHelper.addBlinkBackground(jMenuItem, Color.decode("#F4CE69"), Color.decode("#F4F3EC"));
+            BlinkBorderHelper.addBorder(jMenuItem, BorderFactory.createLineBorder(Color.YELLOW), BorderFactory.createLineBorder(Color.WHITE));
         }
 
         jPopupMenu.add(copyFunctionItem);
         jPopupMenu.add(updateMenuItem);
         jPopupMenu.add(deleteMenuItem);
         jPopupMenu.add(quickCopyItem);
-        BlinkBorderHelper.addBorder(jPopupMenu,BorderFactory.createLineBorder(Color.YELLOW),BorderFactory.createLineBorder(Color.white));
+        BlinkBorderHelper.addBorder(jPopupMenu, BorderFactory.createLineBorder(Color.YELLOW), BorderFactory.createLineBorder(Color.white));
         jTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -280,7 +282,9 @@ public class MainFrame extends JFrame {
         searchText.setBounds(280, 50, 380, 30);
         searchText.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         searchText.setForeground(Color.decode("#1A5599"));
-        searchText.setBorder(BorderFactory.createLineBorder(Color.decode("#B8CE8E")));
+        //添加闪烁边框
+        BlinkBorderHelper.addBorder(searchText, BorderFactory.createLineBorder(Color.YELLOW),
+                BorderFactory.createLineBorder(Color.decode("#B8CE8E")));
         searchText.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -475,7 +479,8 @@ public class MainFrame extends JFrame {
         copyAlertLabel = new JLabel();
         copyAlertLabel.setBounds(200, 725, 300, 30);
         copyAlertLabel.setForeground(Color.decode("#E41A16"));
-        copyAlertLabel.setFont(new Font("微软雅黑", Font.BOLD, 13));
+//        copyAlertLabel.setFont(new Font("微软雅黑", Font.BOLD, 13));
+        copyAlertLabel.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         copyAlertLabel.setVisible(false);
         this.add(copyAlertLabel);
 
@@ -684,21 +689,58 @@ public class MainFrame extends JFrame {
     }
 
     /**
-     * 复制成功显示的方法
+     * 控制对象唯一,ShowStickMsg该类对象必须只有一个，否则多个对象同时操控copyAlertLabel会造成冲突
      *
      * @Author Crane Resigned
-     * @Date 2023-02-08 23:12:52
+     * @Date 2023-10-05 14:49:59
      */
+    private final ShowStickMsg showStickMsg = new ShowStickMsg();
+
     public void stickAndShowCopySuccessMsg(String value, String specialMsg) {
-        TextTools.stick(value);
-        copyAlertLabel.setText(StrUtil.isEmpty(specialMsg) ? Language.get("copySuccessive").concat(value) : specialMsg);
-        copyAlertLabel.setVisible(true);
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                copyAlertLabel.setVisible(false);
+        showStickMsg.stickAndShowCopySuccessMsg(value, specialMsg);
+    }
+
+    /**
+     * 显示复制成功的信息的内部类
+     *
+     * @Author Crane Resigned
+     * @Date 2023-10-05 14:44:18
+     */
+    private class ShowStickMsg {
+
+        /**
+         * 标记线程数量
+         *
+         * @Author Crane Resigned
+         * @Date 2023-10-05 14:53:57
+         */
+        private byte threadCount = 0;
+
+        /**
+         * 复制成功显示的方法
+         * 触发复制成功时将信息显示出来，应该在2s后消失，若中途再次有复制应该刷新显示时间为2s
+         * 所以最终该大次消失的时间点为最后一次点击+2s
+         *
+         * @Author Crane Resigned
+         * @Date 2023-02-08 23:12:52
+         */
+        public void stickAndShowCopySuccessMsg(String value, String specialMsg) {
+            threadCount++;
+            TextTools.stick(value);
+            copyAlertLabel.setText(StrUtil.isEmpty(specialMsg) ? Language.get("copySuccessive").concat(value) : specialMsg);
+            //只有首次设置以减少消耗
+            if (threadCount == 1) {
+                copyAlertLabel.setVisible(true);
             }
-        }, 1000);
+            //创建定时器在n秒后判断是否消失，定时器执行代表该次点击线程结束，线程数--，然后判断线程数是否为0，为0消失
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    threadCount--;
+                    copyAlertLabel.setVisible(threadCount != 0);
+                }
+            }, 2000);
+        }
     }
 
 }

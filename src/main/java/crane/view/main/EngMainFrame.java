@@ -1,7 +1,5 @@
 package crane.view.main;
 
-import crane.view.main.MainFrame;
-
 public class EngMainFrame extends MainFrame {
 
     public EngMainFrame() {
