@@ -97,7 +97,7 @@ public class LockFrame extends JFrame {
         //窗体初始化
         this.setTitle(isHaveKey ? JdbcConnection.IS_TEST ? MainFrameCst.TEST_TITLE : MainFrameCst.MAIN_TITLE
                 : Language.get("haveNotKeyTitle"));
-        this.setSize(500, 300);
+        this.setSize(490, 300);
         this.setLayout(null);
         this.setResizable(false);
         this.setLocationRelativeTo(null);
@@ -206,7 +206,7 @@ public class LockFrame extends JFrame {
         this.add(isLocal);
 
         isCreateScene = new JToggleButton(Language.get("isCreateScene"));
-        isCreateScene.setBounds(180, 200, 110, 30);
+        isCreateScene.setBounds(185, 200, 110, 30);
         isCreateScene.setForeground(Color.WHITE);
         isCreateScene.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         isCreateScene.setUI(new MetalToggleButtonUI() {
@@ -227,7 +227,7 @@ public class LockFrame extends JFrame {
 
         boolean isFileModel = Boolean.parseBoolean(DefaultConfig.getDefaultProperty("isFileModel"));
         isLightWeightVersion = new JToggleButton(isFileModel ? Language.get("isLightWeightVersion") : Language.get("isLightWeightVersion2"), isFileModel);
-        isLightWeightVersion.setBounds(320, 200, 100, 30);
+        isLightWeightVersion.setBounds(330, 200, 100, 30);
         isLightWeightVersion.setForeground(Color.WHITE);
         isLightWeightVersion.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         isLightWeightVersion.setUI(new MetalToggleButtonUI() {
