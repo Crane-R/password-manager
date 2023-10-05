@@ -11,6 +11,7 @@ import crane.function.TextTools;
 import crane.model.jdbc.JdbcConnection;
 import crane.model.service.AccountService;
 import crane.model.service.FrameService;
+import crane.model.service.SecurityService;
 import crane.model.service.ShowMessgae;
 import crane.model.service.lightweight.LightService;
 import crane.view.*;
@@ -32,6 +33,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Crane Resigned
@@ -239,19 +241,37 @@ public class MainFrame extends JFrame {
             FrameService.activeTimeFresh();
         });
 
-        //右键菜单统一设置样式
-        List<JMenuItem> styleList = Arrays.asList(copyFunctionItem, updateMenuItem, deleteMenuItem, quickCopyItem);
+        //单个账户解码
+        JMenuItem singleAcDecode = new JMenuItem(Language.get("singleAcDecode"));
+        singleAcDecode.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
+        //该右键选项单双控制符
+        AtomicInteger singleAcClick = new AtomicInteger();
+        singleAcDecode.addActionListener(e -> {
+            int columnCount = jTable.getColumnCount();
+            int selectedRow = jTable.getSelectedRow();
+            boolean isSingle = (singleAcClick.incrementAndGet() & 1) == 1;
+            //该次是单该次应该是加密显示，但该次应该执行解码操作
+            for (int i = 2; i < columnCount; i++) {
+                jTable.setValueAt(!isSingle ?
+                                SecurityService.encodeBase64Salt(String.valueOf(jTable.getValueAt(selectedRow, i))) :
+                                SecurityService.decodeBase64Salt(String.valueOf(jTable.getValueAt(selectedRow, i)))
+                        , selectedRow, i);
+            }
+            singleAcDecode.setText(isSingle ? Language.get("singleAcEncode") : Language.get("singleAcDecode"));
+        });
+
+        //右键菜单统一添加和设置样式
+        List<JMenuItem> styleList = Arrays.asList(copyFunctionItem, updateMenuItem, deleteMenuItem, quickCopyItem, singleAcDecode);
         for (JMenuItem jMenuItem : styleList) {
             jMenuItem.setPreferredSize(new Dimension(120, 30));
             MenuBlinkBackHelper.addBlinkBackground(jMenuItem, Color.decode("#F4CE69"), Color.decode("#F4F3EC"));
-            BlinkBorderHelper.addBorder(jMenuItem, BorderFactory.createLineBorder(Color.YELLOW), BorderFactory.createLineBorder(Color.WHITE));
+            BlinkBorderHelper.addBorder(jMenuItem, BorderFactory.createLineBorder(Color.YELLOW),
+                    BorderFactory.createLineBorder(Color.WHITE));
+            jPopupMenu.add(jMenuItem);
         }
 
-        jPopupMenu.add(copyFunctionItem);
-        jPopupMenu.add(updateMenuItem);
-        jPopupMenu.add(deleteMenuItem);
-        jPopupMenu.add(quickCopyItem);
-        BlinkBorderHelper.addBorder(jPopupMenu, BorderFactory.createLineBorder(Color.YELLOW), BorderFactory.createLineBorder(Color.white));
+        BlinkBorderHelper.addBorder(jPopupMenu, BorderFactory.createLineBorder(Color.YELLOW),
+                BorderFactory.createLineBorder(Color.white));
         jTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
