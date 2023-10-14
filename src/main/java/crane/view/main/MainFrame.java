@@ -11,7 +11,6 @@ import crane.function.TextTools;
 import crane.model.jdbc.JdbcConnection;
 import crane.model.service.AccountService;
 import crane.model.service.FrameService;
-import crane.model.service.SecurityService;
 import crane.model.service.ShowMessgae;
 import crane.model.service.lightweight.LightService;
 import crane.view.*;
@@ -33,7 +32,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Crane Resigned
@@ -242,23 +240,7 @@ public class MainFrame extends JFrame {
         });
 
         //单个账户解码
-        JMenuItem singleAcDecode = new JMenuItem(Language.get("singleAcDecode"));
-        singleAcDecode.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
-        //该右键选项单双控制符
-        AtomicInteger singleAcClick = new AtomicInteger();
-        singleAcDecode.addActionListener(e -> {
-            int columnCount = jTable.getColumnCount();
-            int selectedRow = jTable.getSelectedRow();
-            boolean isSingle = (singleAcClick.incrementAndGet() & 1) == 1;
-            //该次是单该次应该是加密显示，但该次应该执行解码操作
-            for (int i = 2; i < columnCount; i++) {
-                jTable.setValueAt(!isSingle ?
-                                SecurityService.encodeBase64Salt(String.valueOf(jTable.getValueAt(selectedRow, i))) :
-                                SecurityService.decodeBase64Salt(String.valueOf(jTable.getValueAt(selectedRow, i)))
-                        , selectedRow, i);
-            }
-            singleAcDecode.setText(isSingle ? Language.get("singleAcEncode") : Language.get("singleAcDecode"));
-        });
+        JMenuItem singleAcDecode = SingleDecodingModule.getInstance();
 
         //右键菜单统一添加和设置样式
         List<JMenuItem> styleList = Arrays.asList(copyFunctionItem, updateMenuItem, deleteMenuItem, quickCopyItem, singleAcDecode);
@@ -285,6 +267,8 @@ public class MainFrame extends JFrame {
                 //鼠标右键
                 if (e.getButton() == MouseEvent.BUTTON3 && jTable.getSelectedRow() != -1) {
                     log.info("监测到鼠标右键");
+                    //右键时检测搜索按钮状态传入以显示不同文本
+                    SingleDecodingModule.checkAndChange(switchRecord, jTable);
                     jPopupMenu.show(e.getComponent(), e.getX(), e.getY());
                 }
             }
@@ -389,6 +373,8 @@ public class MainFrame extends JFrame {
                 }
             }
             AccountService.toggleStatus(null);
+            //清空单控解码模块集合
+            SingleDecodingModule.clearList();
             FrameService.activeTimeFresh();
         });
         BlinkBorderHelper.addBorder(searchButton, BorderFactory.createLineBorder(Color.WHITE, 2), null);
