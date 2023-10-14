@@ -15,10 +15,11 @@ public interface VersionCst {
      * @Author Crane Resigned
      * @Date 2023-02-02 21:33:50
      */
-    String VERSION = "v6.3.1";
-    
+    String VERSION = DefaultConfig.getDefaultProperty("resourcesVersion");
+
     /**
      * 最近更新日期
+     *
      * @Author Crane Resigned
      * @Date 2023-02-03 23:13:04
      */

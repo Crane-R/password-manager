@@ -1,11 +1,12 @@
 package crane.function;
 
-import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import crane.constant.VersionCst;
 import crane.model.jdbc.JdbcConnection;
 import crane.model.service.ShowMessgae;
+
+import java.util.Date;
 
 /**
  * 版本检测工具，用于检测程序是否与资源版本一致
@@ -26,25 +27,21 @@ public final class VersionCheckTool {
      */
     public static void checkVersion() {
         //如果处于测试模式，将最新时间写入
-        if(JdbcConnection.IS_TEST){
-            DefaultConfig.setDefaultProperty("recentUpdateTime", DateUtil.now());
+        if (!JdbcConnection.IS_TEST) {
+            return;
         }
-
-        judgeVersion(StrUtil.equals(VersionCst.VERSION,
-                DefaultConfig.getDefaultProperty("resourcesVersion")));
+        DefaultConfig.setDefaultProperty("recentUpdateTime", DateUtil.now());
+        DefaultConfig.setDefaultProperty("resourcesVersion", generateVerNumber());
     }
 
     /**
-     * 版本审批
+     * 传入当前日期，算出版本号
      *
      * @author zhouxingxue
-     * @date 2023/10/14 18:13:47
+     * @date 2023/10/14 19:40:52
      */
-    private static void judgeVersion(boolean isSame) {
-        if (!isSame) {
-            ShowMessgae.showWarningMessage(Language.get("versionIsNotSameMsg"),
-                    Language.get("versionIsNotSameTit"));
-        }
+    private static String generateVerNumber() {
+        return "v" + DateUtil.format(new Date(), "yy.MMdd");
     }
 
 }
