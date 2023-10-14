@@ -1,5 +1,6 @@
 package crane.test;
 
+import crane.function.VersionCheckTool;
 import crane.model.service.FrontLoading;
 import crane.view.LockFrame;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,9 @@ import java.io.*;
 public class Test {
     public static void main(String[] args) throws IOException {
 //        new MainFrame().setVisible(true);
+
+        //版本检测
+        VersionCheckTool.checkVersion();
 
         FrontLoading.checkKeysDirectory();
         LockFrame.start();

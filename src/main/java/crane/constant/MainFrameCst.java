@@ -47,6 +47,6 @@ public class MainFrameCst {
      * @Author Crane Resigned
      * @Date 2023-02-14 19:09:15
      */
-    public final static String TEST_TITLE = MAIN_TITLE + " - 当前为测试环境";
+    public final static String TEST_TITLE = MAIN_TITLE + " - 测试环境";
 
 }

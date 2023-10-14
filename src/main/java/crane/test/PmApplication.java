@@ -1,5 +1,6 @@
 package crane.test;
 
+import crane.function.VersionCheckTool;
 import crane.model.service.FrontLoading;
 import crane.view.LockFrame;
 
@@ -8,6 +9,8 @@ import crane.view.LockFrame;
  */
 public class PmApplication {
     public static void main(String[] args) {
+        //版本检测
+        VersionCheckTool.checkVersion();
         //检测keys
         FrontLoading.checkKeysDirectory();
         //启动窗口
