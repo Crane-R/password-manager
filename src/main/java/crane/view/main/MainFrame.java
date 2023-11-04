@@ -469,7 +469,7 @@ public class MainFrame extends JFrame {
             list.add(Language.get("purposeAdd"));
             new AddFrame(list, this).setVisible(true);
             this.setVisible(false);
-            FrameService.activeTimeFresh();
+            FrameService.activeTimeLock();
         });
         BlinkBorderHelper.addBorder(addButton, BorderFactory.createLineBorder(Color.WHITE, 2), null);
         this.add(addButton);

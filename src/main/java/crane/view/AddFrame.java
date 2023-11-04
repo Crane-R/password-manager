@@ -69,7 +69,7 @@ public class AddFrame extends JFrame {
                 + purpose + Language.get("aAcount"));
         this.setLayout(null);
         this.setResizable(false);
-        this.setSize(400, 400);
+        this.setSize(420, 400);
         if (StrUtil.equals(purpose, ADD)) {
             this.setLocation(1100, 330);
         } else {
@@ -307,6 +307,8 @@ public class AddFrame extends JFrame {
             @Override
             public void windowClosing(WindowEvent e) {
                 log.info("窗口点击关闭");
+                //启动活性锁
+                FrameService.activeTimeLock();
                 mainFrame.setVisible(true);
             }
 
