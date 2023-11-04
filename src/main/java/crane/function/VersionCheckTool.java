@@ -1,12 +1,7 @@
 package crane.function;
 
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.StrUtil;
-import crane.constant.VersionCst;
 import crane.model.jdbc.JdbcConnection;
-import crane.model.service.ShowMessgae;
-
-import java.util.Date;
 
 /**
  * 版本检测工具，用于检测程序是否与资源版本一致
@@ -35,13 +30,14 @@ public final class VersionCheckTool {
     }
 
     /**
-     * 传入当前日期，算出版本号
+     * 生成版本号
      *
      * @author zhouxingxue
      * @date 2023/10/14 19:40:52
      */
     private static String generateVerNumber() {
-        return "v" + DateUtil.format(new Date(), "yy.MMdd");
+//        return "v" + DateUtil.format(new Date(), "yy.MMdd");
+        return "v6.4.0";
     }
 
 }

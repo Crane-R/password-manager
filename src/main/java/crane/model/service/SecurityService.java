@@ -34,6 +34,7 @@ public final class SecurityService {
      */
     public static boolean checkKeyAmountIsNotZero() {
         File file = new File(Paths.get(Constant.DIRECTORY_KEYS).toAbsolutePath().toString());
+        //tip:发生在v23.1014，使用innosetup打包的软件，安装时创建桌面快捷方式的时候获取地址不同，故报错空指针
         return Objects.requireNonNull(file.listFiles()).length != 0;
     }
 
