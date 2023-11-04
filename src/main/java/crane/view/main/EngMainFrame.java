@@ -8,6 +8,7 @@ public class EngMainFrame extends MainFrame {
         exportBtn.setBounds(1130, 32, 60, 30);
         importBtn.setBounds(1130, 64, 60, 30);
         disclaimerLabel.setBounds(480, 725, 800, 30);
+
     }
 
 
