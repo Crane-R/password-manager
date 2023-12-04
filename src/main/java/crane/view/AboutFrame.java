@@ -37,19 +37,22 @@ public class AboutFrame extends JFrame {
         this.add(developerLabel);
 
         //当前版本
-        JLabel versionLabel = new JLabel("<html><b style='color:#4D5BC6;'>" + Language.get("currentVersion") + "</b>" + VersionCst.VERSION + "</html>");
+        JLabel versionLabel = new JLabel("<html><b style='color:#4D5BC6;'>" + Language.get("currentVersion") + "</b>"
+                + VersionCst.VERSION + "</html>");
         versionLabel.setBounds(30, 45, 400, 30);
         versionLabel.setFont(currentFrameFont);
         this.add(versionLabel);
 
         //最近更新日期
-        JLabel recentlyDate = new JLabel("<html><b style='color:#024DA1;'>" + Language.get("lastUpdatedDate") + "</b>" + VersionCst.RECENTLY_UPDATE_DATE + "</html>");
+        JLabel recentlyDate = new JLabel("<html><b style='color:#024DA1;'>" + Language.get("lastUpdatedDate") + "</b>"
+                + VersionCst.RECENTLY_UPDATE_DATE + "</html>");
         recentlyDate.setBounds(30, 75, 400, 30);
         recentlyDate.setFont(currentFrameFont);
         this.add(recentlyDate);
 
         //声明
-        JLabel statement = new JLabel("<html><b style='color:#9A2734;'>" + Language.get("copyrightNotice") + "</b><br/>" + Language.get("copyrightContent") + "</html>");
+        JLabel statement = new JLabel("<html><b style='color:#9A2734;'>" + Language.get("copyrightNotice") + "</b><br/>"
+                + Language.get("copyrightContent") + "</html>");
         statement.setBounds(30, 105, 400, 60);
         statement.setFont(currentFrameFont);
         this.add(statement);
