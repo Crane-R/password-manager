@@ -25,8 +25,9 @@ public final class VersionCheckTool {
         if (!JdbcConnection.IS_TEST) {
             return;
         }
-        DefaultConfig.setDefaultProperty("recentUpdateTime", DateUtil.now());
-        DefaultConfig.setDefaultProperty("resourcesVersion", generateVerNumber());
+        Config config = new Config(null);
+        config.set("recentUpdateTime", DateUtil.now());
+        config.set("resourcesVersion", generateVerNumber());
     }
 
     /**

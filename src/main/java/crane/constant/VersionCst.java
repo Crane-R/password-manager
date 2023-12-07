@@ -1,6 +1,6 @@
 package crane.constant;
 
-import crane.function.DefaultConfig;
+import crane.function.Config;
 
 /**
  * @Description 版本常量
@@ -15,7 +15,7 @@ public interface VersionCst {
      * @Author Crane Resigned
      * @Date 2023-02-02 21:33:50
      */
-    String VERSION = DefaultConfig.getDefaultProperty("resourcesVersion");
+    String VERSION = new Config(null).get("resourcesVersion");
 
     /**
      * 最近更新日期
@@ -23,5 +23,5 @@ public interface VersionCst {
      * @Author Crane Resigned
      * @Date 2023-02-03 23:13:04
      */
-    String RECENTLY_UPDATE_DATE = DefaultConfig.getDefaultProperty("recentUpdateTime");
+    String RECENTLY_UPDATE_DATE = new Config(null).get("recentUpdateTime");
 }

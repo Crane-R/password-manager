@@ -1,6 +1,5 @@
 package crane.view;
 
-import crane.constant.DefaultFont;
 import crane.constant.MainFrameCst;
 import crane.constant.VersionCst;
 import crane.function.Language;

@@ -5,7 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import crane.constant.Constant;
 import crane.constant.DefaultFont;
 import crane.constant.MainFrameCst;
-import crane.function.DefaultConfig;
+import crane.function.Config;
 import crane.function.FileTool;
 import crane.function.Language;
 import crane.model.jdbc.JdbcConnection;
@@ -26,6 +26,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.util.Properties;
 
 /**
  * Description: 锁页面
@@ -90,6 +91,14 @@ public class LockFrame extends JFrame {
 
     protected JButton lookFunBtn;
 
+    /**
+     * 颜色配置对象
+     *
+     * @author AXing
+     * @date 2023/12/7 14:35:01
+     */
+    private Config colorConfig = new Config("config/colours.properties");
+
     public LockFrame() {
         //检测密钥文件是否存在
         final boolean isHaveKey = SecurityService.checkKeyAmountIsNotZero();
@@ -103,19 +112,19 @@ public class LockFrame extends JFrame {
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setIconImage(FrameService.getTitleImage());
-        this.getContentPane().setBackground(Color.decode("#DAE4E6"));
+        this.getContentPane().setBackground(Color.decode(colorConfig.get("lockBg")));
 
         tipLabel = new JLabel(isHaveKey ? Language.get("haveKey") : Language.get("haveNotKey"));
         tipLabel.setBounds(50, 50, 400, 40);
-        tipLabel.setForeground(Color.decode("#407E54"));
+        tipLabel.setForeground(Color.decode(colorConfig.get("lockTipLabel")));
         tipLabel.setFont(new Font("微软雅黑", Font.BOLD, 25));
         this.add(tipLabel);
 
         secretText = new JPasswordField();
         secretText.setBounds(50, 120, 380, 35);
         secretText.setFont(new Font("微软雅黑", Font.PLAIN, 18));
-        secretText.setForeground(Color.decode("#046D35"));
-        secretText.setBorder(BorderFactory.createLineBorder(Color.decode("#B8CE8E")));
+        secretText.setForeground(Color.decode(colorConfig.get("lockSecretText")));
+        secretText.setBorder(BorderFactory.createLineBorder(Color.decode(colorConfig.get("lockSecretTextBorder"))));
         secretText.setHorizontalAlignment(JPasswordField.CENTER);
         enterEvent = new KeyAdapter() {
             @Override
@@ -172,22 +181,22 @@ public class LockFrame extends JFrame {
         //回车登录提示
         loginTip = new JLabel("√Enter");
         loginTip.setBounds(385, 155, 100, 30);
-        loginTip.setForeground(Color.decode("#7D2720"));
+        loginTip.setForeground(Color.decode(colorConfig.get("loginTip")));
         loginTip.setFont(new Font("微软雅黑", Font.BOLD, 13));
         this.add(loginTip);
 
         //是否是本地数据库
-        boolean isLocalServer = Boolean.parseBoolean(DefaultConfig.getDefaultProperty("isLocalServer"));
+        boolean isLocalServer = Boolean.parseBoolean(new Config(null).get("isLocalServer"));
         isLocal = new JToggleButton(isLocalServer ? Language.get("isLocal") : Language.get("isLocal2"), isLocalServer);
         isLocal.setBounds(50, 200, 100, 30);
         isLocal.setForeground(Color.WHITE);
         isLocal.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
-        isLocal.setBackground(Color.decode("#68A694"));
+        isLocal.setBackground(Color.decode(colorConfig.get("isLocalBg")));
         //设置选中的颜色
         isLocal.setUI(new MetalToggleButtonUI() {
             @Override
             protected Color getSelectColor() {
-                return Color.decode("#046D35");
+                return Color.decode(colorConfig.get("isLocalSelectBg"));
             }
         });
         isLocal.setBorder(null);
@@ -200,23 +209,23 @@ public class LockFrame extends JFrame {
                 isLocal.setText(Language.get("isLocal"));
             }
             //设置默认数据库
-            DefaultConfig.setDefaultProperty("isLocalServer", String.valueOf(selected));
+            new Config(null).set("isLocalServer", String.valueOf(selected));
         });
         BlinkBorderHelper.addBorder(isLocal, BorderFactory.createLineBorder(Color.WHITE, 2), null);
         this.add(isLocal);
 
         isCreateScene = new JToggleButton(Language.get("isCreateScene"));
         isCreateScene.setBounds(185, 200, 110, 30);
-        isCreateScene.setForeground(Color.WHITE);
+        isCreateScene.setForeground(Color.decode(colorConfig.get("isCreateScene")));
         isCreateScene.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         isCreateScene.setUI(new MetalToggleButtonUI() {
             @Override
             protected Color getSelectColor() {
-                return Color.decode("#2A3050");
+                return Color.decode(colorConfig.get("isCreateSelectBg"));
             }
         });
         isCreateScene.setBorder(null);
-        isCreateScene.setBackground(Color.decode("#65BAD1"));
+        isCreateScene.setBackground(Color.decode(colorConfig.get("isCreateBg")));
         isCreateScene.addActionListener(e -> {
             if (isCreateScene.isSelected()) {
                 ShowMessgae.showInformationMessage(Language.get("isCreateSceneTipMsg"), Language.get("isCreateSceneTipTitle"));
@@ -225,19 +234,19 @@ public class LockFrame extends JFrame {
         BlinkBorderHelper.addBorder(isCreateScene, BorderFactory.createLineBorder(Color.WHITE, 2), null);
         this.add(isCreateScene);
 
-        boolean isFileModel = Boolean.parseBoolean(DefaultConfig.getDefaultProperty("isFileModel"));
+        boolean isFileModel = Boolean.parseBoolean(new Config(null).get("isFileModel"));
         isLightWeightVersion = new JToggleButton(isFileModel ? Language.get("isLightWeightVersion") : Language.get("isLightWeightVersion2"), isFileModel);
         isLightWeightVersion.setBounds(330, 200, 100, 30);
-        isLightWeightVersion.setForeground(Color.WHITE);
+        isLightWeightVersion.setForeground(Color.decode(colorConfig.get("isLightWeightVersion")));
         isLightWeightVersion.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         isLightWeightVersion.setUI(new MetalToggleButtonUI() {
             @Override
             protected Color getSelectColor() {
-                return Color.decode("#9AB3CD");
+                return Color.decode(colorConfig.get("isLightSelectBg"));
             }
         });
         isLightWeightVersion.setBorder(null);
-        isLightWeightVersion.setBackground(Color.decode("#407E54"));
+        isLightWeightVersion.setBackground(Color.decode(colorConfig.get("isLightBg")));
         isLightWeightVersion.addActionListener(e -> {
             boolean selected = isLightWeightVersion.isSelected();
             if (selected) {
@@ -247,17 +256,17 @@ public class LockFrame extends JFrame {
                 ShowMessgae.showPlainMessage(Language.get("isLightWeightVersion2TipMsg"), Language.get("isLightWeightVersion2TipTitle"));
             }
             //设置默认模式
-            DefaultConfig.setDefaultProperty("isFileModel", String.valueOf(selected));
+            new Config(null).set("isFileModel", String.valueOf(selected));
         });
-        BlinkBorderHelper.addBorder(isLightWeightVersion, BorderFactory.createLineBorder(Color.WHITE, 2), null);
+        BlinkBorderHelper.addBorder(isLightWeightVersion, BorderFactory.createLineBorder(Color.decode(colorConfig.get("isLightBorder")), 2), null);
         this.add(isLightWeightVersion);
 
         isEng = new JComboBox<>(Language.getLanguages());
         isEng.setSelectedItem(Language.get("language"));
         isEng.setBounds(0, 0, 80, 25);
-        isEng.setForeground(Color.WHITE);
+        isEng.setForeground(Color.decode(colorConfig.get("isEng")));
         isEng.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
-        isEng.setBackground(Color.decode("#407E54"));
+        isEng.setBackground(Color.decode(colorConfig.get("isEngBg")));
         isEng.setRenderer(new ComboBoxRender(isEng.getRenderer()));
         isEng.addPopupMenuListener(new PopupMenuListener() {
             @Override
@@ -275,7 +284,7 @@ public class LockFrame extends JFrame {
                     close();
                     new LockFrame().setVisible(true);
                     //设置默认语言
-                    DefaultConfig.setDefaultProperty("language", selectedItem);
+                    new Config(null).set("language", selectedItem);
                 }
             }
 

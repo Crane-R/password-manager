@@ -32,7 +32,7 @@ public final class Language {
     }
 
     static {
-        refresh(DefaultConfig.getDefaultProperty("language"));
+        refresh(new Config(null).get("language"));
     }
 
     /**

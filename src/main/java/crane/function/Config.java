@@ -1,5 +1,6 @@
 package crane.function;
 
+import cn.hutool.core.util.StrUtil;
 import crane.model.jdbc.JdbcConnection;
 
 import java.io.*;
@@ -7,18 +8,19 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.Properties;
 
-public final class DefaultConfig {
+public class Config {
 
-    private static final Properties defaultConfig;
+    private final Properties defaultConfig;
 
-    private static final String defaultPath = "config/defaultConfig.properties";
+    private String defaultPath = "config/defaultConfig.properties";
 
-    private DefaultConfig() {
-    }
-
-    static {
+    public Config(String configPath) {
+        if (Objects.nonNull(configPath) && !StrUtil.isEmpty(configPath)) {
+            defaultPath = configPath;
+        }
         defaultConfig = new Properties();
         try {
             InputStream inputStream = JdbcConnection.IS_TEST ?
@@ -38,7 +40,7 @@ public final class DefaultConfig {
      * @Author Crane Resigned
      * @Date 2023-06-13 19:02:24
      */
-    public static String getDefaultProperty(String key) {
+    public String get(String key) {
         return defaultConfig.getProperty(key);
     }
 
@@ -48,7 +50,7 @@ public final class DefaultConfig {
      * @Author Crane Resigned
      * @Date 2023-06-13 19:03:05
      */
-    public static void setDefaultProperty(String key, String value) {
+    public void set(String key, String value) {
         defaultConfig.setProperty(key, new String(value.getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
         Path path = Paths.get("");
         String filePath = JdbcConnection.IS_TEST ?
