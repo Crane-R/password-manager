@@ -38,7 +38,7 @@ public final class VersionCheckTool {
      */
     private static String generateVerNumber() {
 //        return "v" + DateUtil.format(new Date(), "yy.MMdd");
-        return "v6.4.1";
+        return "v7.0.0";
     }
 
 }

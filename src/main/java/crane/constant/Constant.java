@@ -1,5 +1,7 @@
 package crane.constant;
 
+import crane.function.Config;
+
 /**
  * Description: 常量
  * Author: ZhouXingxue
@@ -77,4 +79,10 @@ public class Constant {
     @Deprecated
     public static boolean IS_ENG = true;
 
+    /**
+     * 当前主题
+     * @author AXing
+     * @date 2023/12/7 15:40:32
+     */
+    public static final Config colorConfig = new Config("config/coloursOrange.properties");
 }
