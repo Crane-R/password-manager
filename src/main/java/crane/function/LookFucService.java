@@ -2,7 +2,7 @@ package crane.function;
 
 import crane.constant.Constant;
 import crane.constant.MainFrameCst;
-import crane.constant.VersionCst;
+import crane.function.configservice.Language;
 import crane.model.jdbc.JdbcConnection;
 
 import java.io.File;

@@ -1,4 +1,4 @@
-package crane.model.service;
+package crane.function;
 
 import lombok.extern.slf4j.Slf4j;
 

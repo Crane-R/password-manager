@@ -2,8 +2,8 @@ package crane.view;
 
 import crane.constant.MainFrameCst;
 import crane.constant.VersionCst;
-import crane.function.Language;
-import crane.model.service.FrameService;
+import crane.function.configservice.Language;
+import crane.function.FrameService;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,6 +1,6 @@
 package crane.constant;
 
-import crane.function.Config;
+import crane.function.configservice.Config;
 
 /**
  * @Description 版本常量

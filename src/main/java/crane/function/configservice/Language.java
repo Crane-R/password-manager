@@ -1,7 +1,8 @@
-package crane.function;
+package crane.function.configservice;
 
+import crane.function.ShowMessgae;
+import crane.function.configservice.Config;
 import crane.model.jdbc.JdbcConnection;
-import crane.model.service.ShowMessgae;
 
 import java.io.File;
 import java.io.IOException;

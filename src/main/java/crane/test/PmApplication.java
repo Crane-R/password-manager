@@ -1,7 +1,7 @@
 package crane.test;
 
 import crane.function.VersionCheckTool;
-import crane.model.service.FrontLoading;
+import crane.function.FrontLoading;
 import crane.view.LockFrame;
 
 /**
