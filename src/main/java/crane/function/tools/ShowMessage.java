@@ -1,4 +1,4 @@
-package crane.function;
+package crane.function.tools;
 
 import crane.constant.DefaultFont;
 
@@ -12,9 +12,9 @@ import javax.swing.plaf.FontUIResource;
  *
  * @author Crane Resigned
  */
-public class ShowMessgae {
+public class ShowMessage {
 
-    private ShowMessgae() {
+    private ShowMessage() {
     }
 
     /**

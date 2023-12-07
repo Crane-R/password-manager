@@ -1,7 +1,6 @@
-package crane.function.configservice;
+package crane.function.config;
 
-import crane.function.ShowMessgae;
-import crane.function.configservice.Config;
+import crane.function.tools.ShowMessage;
 import crane.model.jdbc.JdbcConnection;
 
 import java.io.File;
@@ -53,7 +52,7 @@ public final class Language {
             throw new RuntimeException(e);
         } catch (NullPointerException e) {
             e.printStackTrace();
-            ShowMessgae.showErrorMessage("语言表加载失败，请检查语言配置文件是否有误。\r\n\nFailed to load the language table. Please check the language configuration.", String.valueOf(e.getCause()));
+            ShowMessage.showErrorMessage("语言表加载失败，请检查语言配置文件是否有误。\r\n\nFailed to load the language table. Please check the language configuration.", String.valueOf(e.getCause()));
         }
     }
 

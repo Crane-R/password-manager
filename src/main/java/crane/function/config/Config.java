@@ -1,4 +1,4 @@
-package crane.function.configservice;
+package crane.function.config;
 
 import cn.hutool.core.util.StrUtil;
 import crane.model.jdbc.JdbcConnection;

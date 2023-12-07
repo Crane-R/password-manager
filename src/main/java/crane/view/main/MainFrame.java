@@ -5,13 +5,13 @@ import crane.constant.Constant;
 import crane.constant.DefaultFont;
 import crane.constant.ExportImportCst;
 import crane.constant.MainFrameCst;
-import crane.function.FileTool;
-import crane.function.configservice.Language;
-import crane.function.TextTools;
+import crane.function.tools.FileTool;
+import crane.function.config.Language;
+import crane.function.tools.TextTools;
 import crane.model.jdbc.JdbcConnection;
 import crane.model.service.AccountService;
-import crane.function.FrameService;
-import crane.function.ShowMessgae;
+import crane.function.service.FrameService;
+import crane.function.tools.ShowMessage;
 import crane.model.service.lightweight.LightService;
 import crane.view.*;
 import crane.view.module.ScrollBarUi;
@@ -522,11 +522,11 @@ public class MainFrame extends JFrame {
         realTimeSearchBtn.addActionListener(e -> {
             if (!realTimeSearchBtn.isSelected()) {
                 realTimeSearchBtn.setText(Language.get("moderBtn2"));
-                ShowMessgae.showInformationMessage(Language.get("moderBtn2TipMsg1") + Constant.DOUBLE_ENTER_DELAY
+                ShowMessage.showInformationMessage(Language.get("moderBtn2TipMsg1") + Constant.DOUBLE_ENTER_DELAY
                         + Language.get("moderBtn2TipMsg2"), Language.get("moderBtn2TipTit"));
             } else {
                 realTimeSearchBtn.setText(Language.get("moderBtn"));
-                ShowMessgae.showInformationMessage(Language.get("moderBtnTipMsg"), Language.get("moderBtnTipTit"));
+                ShowMessage.showInformationMessage(Language.get("moderBtnTipMsg"), Language.get("moderBtnTipTit"));
             }
             FrameService.activeTimeFresh();
         });
@@ -557,7 +557,7 @@ public class MainFrame extends JFrame {
             if (logFile.exists()) {
                 FileTool.openFile(logFile.getPath());
             } else {
-                ShowMessgae.showErrorMessage(Language.get("notLookFile"), Language.get("notLookFileTit"));
+                ShowMessage.showErrorMessage(Language.get("notLookFile"), Language.get("notLookFileTit"));
             }
         });
         this.add(lookLogBtn);
@@ -574,7 +574,7 @@ public class MainFrame extends JFrame {
             if (logFile.exists()) {
                 FileTool.openFile(logFile.getPath());
             } else {
-                ShowMessgae.showErrorMessage(Language.get("notFunFile"), Language.get("notFunFileTit"));
+                ShowMessage.showErrorMessage(Language.get("notFunFile"), Language.get("notFunFileTit"));
             }
         });
         this.add(lookFunBtn);
@@ -668,7 +668,7 @@ public class MainFrame extends JFrame {
         importBtn3.setHorizontalAlignment(JLabel.CENTER);
         importBtn3.setBorder(null);
         importBtn3.addActionListener(e -> {
-            ShowMessgae.showInformationMessage("该功能为v3.0准备，如导入非v3.0的数据，可能会导致数据错误等意外情况。", "导入v3.0的数据");
+            ShowMessage.showInformationMessage("该功能为v3.0准备，如导入非v3.0的数据，可能会导致数据错误等意外情况。", "导入v3.0的数据");
             new Import3DataFrame().setVisible(true);
             FrameService.activeTimeFresh();
         });
@@ -684,7 +684,7 @@ public class MainFrame extends JFrame {
         importBtn4.setBorder(null);
         importBtn4.setHorizontalAlignment(JLabel.CENTER);
         importBtn4.addActionListener(e -> {
-            ShowMessgae.showInformationMessage("该功能为v4.2准备，如导入非v4.2的数据，可能会导致数据错误等意外情况。", "导入v4.2的数据");
+            ShowMessage.showInformationMessage("该功能为v4.2准备，如导入非v4.2的数据，可能会导致数据错误等意外情况。", "导入v4.2的数据");
             new Import4DataFrame().setVisible(true);
             FrameService.activeTimeFresh();
         });

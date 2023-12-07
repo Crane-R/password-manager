@@ -1,4 +1,4 @@
-package crane.function;
+package crane.function.tools;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;

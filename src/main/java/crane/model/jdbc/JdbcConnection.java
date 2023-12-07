@@ -1,7 +1,7 @@
 package crane.model.jdbc;
 
 import crane.model.service.AccountService;
-import crane.function.ShowMessgae;
+import crane.function.tools.ShowMessage;
 import crane.view.LockFrame;
 import lombok.extern.slf4j.Slf4j;
 
@@ -60,7 +60,7 @@ public class JdbcConnection {
         } catch (SQLSyntaxErrorException e) {
             log.error(e.getMessage());
             //数据库连接失败
-            ShowMessgae.showErrorMessage(e.getMessage(),"数据库连接失败，请检查数据库配置");
+            ShowMessage.showErrorMessage(e.getMessage(),"数据库连接失败，请检查数据库配置");
             //将按钮状态切换回来
             AccountService.toggleStatus(false);
         }

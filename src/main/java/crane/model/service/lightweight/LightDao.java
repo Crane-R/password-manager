@@ -5,7 +5,7 @@ import crane.model.bean.Account;
 import crane.model.jdbc.JdbcConnection;
 import crane.model.service.ExcelService;
 import crane.model.service.SecurityService;
-import crane.function.ShowMessgae;
+import crane.function.tools.ShowMessage;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -44,7 +44,7 @@ public class LightDao {
             try {
                 EasyExcel.write(PATH, Account.class).sheet("账户数据").doWrite(dataList);
             } catch (Exception e) {
-                ShowMessgae.showErrorMessage(String.valueOf(e.getCause()), e.getMessage());
+                ShowMessage.showErrorMessage(String.valueOf(e.getCause()), e.getMessage());
                 return false;
             }
         }

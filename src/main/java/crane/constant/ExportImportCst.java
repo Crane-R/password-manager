@@ -1,6 +1,6 @@
 package crane.constant;
 
-import crane.function.configservice.Language;
+import crane.function.config.Language;
 
 /**
  * Description: 构建窗口枚举

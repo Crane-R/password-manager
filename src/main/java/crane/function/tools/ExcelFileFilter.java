@@ -1,4 +1,4 @@
-package crane.function;
+package crane.function.tools;
 
 import javax.swing.filechooser.FileFilter;
 import java.io.File;

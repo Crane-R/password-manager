@@ -4,13 +4,13 @@ import cn.hutool.core.util.StrUtil;
 import crane.constant.Constant;
 import crane.constant.DefaultFont;
 import crane.constant.MainFrameCst;
-import crane.function.configservice.Language;
+import crane.function.config.Language;
 import crane.model.bean.Account;
 import crane.model.dao.AccountDao;
 import crane.model.service.AccountService;
-import crane.function.FrameService;
+import crane.function.service.FrameService;
 import crane.model.service.SecurityService;
-import crane.function.ShowMessgae;
+import crane.function.tools.ShowMessage;
 import crane.model.service.lightweight.LightService;
 import crane.view.main.MainFrame;
 import crane.view.module.stylehelper.BlinkBorderHelper;
@@ -189,7 +189,7 @@ public class AddFrame extends JFrame {
         submitButton.addActionListener(e -> {
             //检验确认密码是否和密码相同
             if (!StrUtil.equals(jTextField2.getText(), surePassTextField.getText())) {
-                ShowMessgae.showWarningMessage(Language.get("errPassTipMsg"), Language.get("errPassTipTit"));
+                ShowMessage.showWarningMessage(Language.get("errPassTipMsg"), Language.get("errPassTipTit"));
                 return;
             }
 
@@ -199,7 +199,7 @@ public class AddFrame extends JFrame {
             int len = 4;
             for (int i = 0; i < len; i++) {
                 if (curLength[i] > MAX_LENGTH[i]) {
-                    ShowMessgae.showErrorMessage(Language.get("maxLengthTipMsg") + MAX_LENGTH[i]
+                    ShowMessage.showErrorMessage(Language.get("maxLengthTipMsg") + MAX_LENGTH[i]
                             + Language.get("maxLengthTipMsg2"), Language.get("maxLengthTipTit"));
                     switch (i) {
                         case 0:
@@ -223,15 +223,15 @@ public class AddFrame extends JFrame {
             //账户为空
             if ("".equals(jTextField.getText())) {
                 log.info(OUT_PUT_TEXTS[0]);
-                ShowMessgae.showWarningMessage(OUT_PUT_TEXTS[0], "Warning");
+                ShowMessage.showWarningMessage(OUT_PUT_TEXTS[0], "Warning");
                 //用户名为空
             } else if ("".equals(jTextField1.getText())) {
                 log.info(OUT_PUT_TEXTS[1]);
-                ShowMessgae.showWarningMessage(OUT_PUT_TEXTS[1], "Warning");
+                ShowMessage.showWarningMessage(OUT_PUT_TEXTS[1], "Warning");
                 //密码为空
             } else if ("".equals(jTextField2.getText())) {
                 log.info(OUT_PUT_TEXTS[2]);
-                ShowMessgae.showWarningMessage(OUT_PUT_TEXTS[2], "Warning");
+                ShowMessage.showWarningMessage(OUT_PUT_TEXTS[2], "Warning");
             } else {
                 Boolean isTrue = null;
                 int effect = Integer.MIN_VALUE;
@@ -242,7 +242,7 @@ public class AddFrame extends JFrame {
                 String userKey = SecurityService.getUuidKey();
                 LightService lightService = new LightService();
                 if (StrUtil.isBlank(purpose)) {
-                    ShowMessgae.showErrorMessage(Language.get("purposeNullTipMsg"), Language.get("purposeNullTipTit"));
+                    ShowMessage.showErrorMessage(Language.get("purposeNullTipMsg"), Language.get("purposeNullTipTit"));
                     return;
                 }
                 if (StrUtil.equals(purpose, ADD)) {

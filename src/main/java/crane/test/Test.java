@@ -1,7 +1,7 @@
 package crane.test;
 
-import crane.function.VersionCheckTool;
-import crane.function.FrontLoading;
+import crane.function.tools.VersionCheckTool;
+import crane.function.service.FrontLoading;
 import crane.view.LockFrame;
 import lombok.extern.slf4j.Slf4j;
 

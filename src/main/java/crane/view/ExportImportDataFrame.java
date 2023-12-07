@@ -5,9 +5,9 @@ import com.alibaba.excel.EasyExcel;
 import crane.constant.Constant;
 import crane.constant.ExportImportCst;
 import crane.constant.DefaultFont;
-import crane.function.ExcelFileFilter;
-import crane.function.configservice.Language;
-import crane.function.ShowMessgae;
+import crane.function.tools.ExcelFileFilter;
+import crane.function.config.Language;
+import crane.function.tools.ShowMessage;
 import crane.model.bean.Account;
 import crane.model.dao.AccountDao;
 import crane.model.jdbc.JdbcConnection;
@@ -158,7 +158,7 @@ public class ExportImportDataFrame extends LockFrame {
         });
         //执行导出
         boolean b = ExcelService.exportDataToExcel(accounts, path);
-        ShowMessgae.showInformationMessage(b ? Language.get("exportSuccessiveTipMsg1") + accounts.size()
+        ShowMessage.showInformationMessage(b ? Language.get("exportSuccessiveTipMsg1") + accounts.size()
                 + Language.get("exportSuccessiveTipMsg2") : Language.get("exportSuccessiveTipMsg3"), Language.get("exportSuccessiveTipTit"));
         this.dispose();
     }
@@ -192,7 +192,7 @@ public class ExportImportDataFrame extends LockFrame {
                     }
                     records[2]++;
                 }
-                ShowMessgae.showInformationMessage(Language.get("importLightSuccessiveTipMsg1")
+                ShowMessage.showInformationMessage(Language.get("importLightSuccessiveTipMsg1")
                         + records[0] + Language.get("importLightSuccessiveTipMsg2")
                         + records[1] + Language.get("importLightSuccessiveTipMsg3")
                         + records[2], Language.get("importLightSuccessiveTipTit"));
@@ -208,7 +208,7 @@ public class ExportImportDataFrame extends LockFrame {
                 });
                 accounts.addAll(deriveAccounts);
                 lightDao.writeData(accounts);
-                ShowMessgae.showInformationMessage(
+                ShowMessage.showInformationMessage(
                         Language.get("importSuccessiveTipMsg1") + newSize
                                 + Language.get("importSuccessiveTipMsg2") + deriveAccounts.size()
                                 + Language.get("importSuccessiveTipMsg3") + (newSize + deriveAccounts.size()),
@@ -247,7 +247,7 @@ public class ExportImportDataFrame extends LockFrame {
         String path = pathTextField.getText();
         //TODO:需要单独封装一个检验路径的方法
         if (StrUtil.isEmpty(path)) {
-            ShowMessgae.showWarningMessage(Language.get("errPathTipMsg"),Language.get("errPathTipTit"));
+            ShowMessage.showWarningMessage(Language.get("errPathTipMsg"),Language.get("errPathTipTit"));
             return null;
         }
         return path;

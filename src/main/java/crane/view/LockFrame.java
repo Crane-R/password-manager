@@ -5,13 +5,13 @@ import cn.hutool.core.util.StrUtil;
 import crane.constant.Constant;
 import crane.constant.DefaultFont;
 import crane.constant.MainFrameCst;
-import crane.function.configservice.Config;
-import crane.function.configservice.Language;
-import crane.function.LookFucService;
+import crane.function.config.Config;
+import crane.function.config.Language;
+import crane.function.service.LookFucService;
 import crane.model.jdbc.JdbcConnection;
-import crane.function.FrameService;
+import crane.function.service.FrameService;
 import crane.model.service.SecurityService;
-import crane.function.ShowMessgae;
+import crane.function.tools.ShowMessage;
 import crane.view.main.MainFrame;
 import crane.view.module.ComboBoxRender;
 import crane.view.module.stylehelper.BlinkBorderHelper;
@@ -135,7 +135,7 @@ public class LockFrame extends JFrame {
                         if (!SecurityService.checkKeyFileIsExist(passTxt)) {
                             SecurityService.createKey(passTxt);
                         } else {
-                            ShowMessgae.showWarningMessage(Language.get("keyDuplicateTipMsg"), Language.get("keyDuplicateTipTitle"));
+                            ShowMessage.showWarningMessage(Language.get("keyDuplicateTipMsg"), Language.get("keyDuplicateTipTitle"));
                         }
                     } else {
                         //是否有密匙
@@ -144,7 +144,7 @@ public class LockFrame extends JFrame {
                             //检测该密钥是否存在
                             if (!SecurityService.checkKeyFileIsExist(passTxt)) {
                                 log.info("匹配失败，密钥文件不存在");
-                                ShowMessgae.showWarningMessage(Language.get("keyErrTipMsg"), Language.get("keyErrTipTitle"));
+                                ShowMessage.showWarningMessage(Language.get("keyErrTipMsg"), Language.get("keyErrTipTitle"));
                                 secretText.setText(null);
                                 return;
                             }
@@ -168,7 +168,7 @@ public class LockFrame extends JFrame {
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        ShowMessgae.showErrorMessage(Language.get("startMainFrameErrMsg"), Language.get("startMainFrameErrTitle"));
+                        ShowMessage.showErrorMessage(Language.get("startMainFrameErrMsg"), Language.get("startMainFrameErrTitle"));
                     }
                 }
             }
@@ -201,7 +201,7 @@ public class LockFrame extends JFrame {
         isLocal.addActionListener(e -> {
             boolean selected = isLocal.isSelected();
             if (!selected) {
-                ShowMessgae.showWarningMessage(Language.get("isLocal2TipMsg"), Language.get("isLocal2TipTitle"));
+                ShowMessage.showWarningMessage(Language.get("isLocal2TipMsg"), Language.get("isLocal2TipTitle"));
                 isLocal.setText(Language.get("isLocal2"));
             } else {
                 isLocal.setText(Language.get("isLocal"));
@@ -227,7 +227,7 @@ public class LockFrame extends JFrame {
         isCreateScene.addActionListener(e -> {
             if (isCreateScene.isSelected()) {
                 isCreateScene.setText(Language.get("sureCreate"));
-                ShowMessgae.showInformationMessage(Language.get("isCreateSceneTipMsg"), Language.get("isCreateSceneTipTitle"));
+                ShowMessage.showInformationMessage(Language.get("isCreateSceneTipMsg"), Language.get("isCreateSceneTipTitle"));
             } else {
                 isCreateScene.setText(Language.get("isCreateScene"));
             }
@@ -259,7 +259,7 @@ public class LockFrame extends JFrame {
             } else {
                 isLightWeightVersion.setText(Language.get("isLightWeightVersion2"));
                 isLocal.setVisible(true);
-                ShowMessgae.showPlainMessage(Language.get("isLightWeightVersion2TipMsg"), Language.get("isLightWeightVersion2TipTitle"));
+                ShowMessage.showPlainMessage(Language.get("isLightWeightVersion2TipMsg"), Language.get("isLightWeightVersion2TipTitle"));
             }
             //设置默认模式
             new Config(null).set("isFileModel", String.valueOf(selected));

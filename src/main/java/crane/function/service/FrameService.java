@@ -1,8 +1,8 @@
-package crane.function;
+package crane.function.service;
 
 import cn.hutool.core.date.DateUtil;
 import crane.constant.Constant;
-import crane.function.configservice.Language;
+import crane.function.config.Language;
 import crane.view.LockFrame;
 import crane.view.main.MainFrame;
 import lombok.extern.slf4j.Slf4j;
