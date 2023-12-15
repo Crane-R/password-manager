@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import crane.constant.Constant;
 import crane.constant.DefaultFont;
 import crane.constant.MainFrameCst;
+import crane.function.config.Config;
 import crane.function.config.Language;
 import crane.model.bean.Account;
 import crane.model.dao.AccountDao;
@@ -56,6 +57,7 @@ public class AddFrame extends JFrame {
     private final String UPDATE = Language.get("purposeUpdate");
     private final String DELETE = Language.get("purposeDelete");
 
+    private final Config colorConfig = Constant.colorConfig;
 
     public AddFrame(LinkedList<String> list, MainFrame mainFrame) {
 
@@ -75,7 +77,7 @@ public class AddFrame extends JFrame {
         } else {
             this.setLocationRelativeTo(null);
         }
-        this.getContentPane().setBackground(Color.decode("#EBEBEB"));
+        this.getContentPane().setBackground(Color.decode(colorConfig.get("addContentPaneBg")));
 
         //设置标题栏的图标
         Image image = FrameService.getTitleImage();
@@ -110,44 +112,44 @@ public class AddFrame extends JFrame {
         JTextField jTextField = new JTextField(list.get(1));
         jTextField.setBounds(110, 30, 230, 30);
         jTextField.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
-        BlinkBorderHelper.addBorder(jTextField, BorderFactory.createLineBorder(Color.YELLOW, 1)
-                , BorderFactory.createLineBorder(Color.decode("#BACCDA"), 1));
+        BlinkBorderHelper.addBorder(jTextField, BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorIn1")), 1)
+                , BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorOut1")), 1));
         this.add(jTextField);
 
         JTextField jTextField1 = new JTextField(list.get(2));
         jTextField1.setBounds(110, 80, 230, 30);
         jTextField1.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
-        BlinkBorderHelper.addBorder(jTextField1, BorderFactory.createLineBorder(Color.YELLOW, 1)
-                , BorderFactory.createLineBorder(Color.decode("#BACCDA"), 1));
+        BlinkBorderHelper.addBorder(jTextField1, BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorIn2")), 1)
+                , BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorOut2")), 1));
         this.add(jTextField1);
 
         JTextField jTextField2 = new JTextField(list.get(3));
         jTextField2.setBounds(110, 130, 230, 30);
         jTextField2.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
-        BlinkBorderHelper.addBorder(jTextField2, BorderFactory.createLineBorder(Color.YELLOW, 1)
-                , BorderFactory.createLineBorder(Color.decode("#BACCDA"), 1));
+        BlinkBorderHelper.addBorder(jTextField2, BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorIn3")), 1)
+                , BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorOut3")), 1));
         this.add(jTextField2);
 
         JTextField surePassTextField = new JTextField(list.get(3));
         surePassTextField.setBounds(110, 180, 230, 30);
         surePassTextField.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
-        BlinkBorderHelper.addBorder(surePassTextField, BorderFactory.createLineBorder(Color.YELLOW, 1)
-                , BorderFactory.createLineBorder(Color.decode("#BACCDA"), 1));
+        BlinkBorderHelper.addBorder(surePassTextField, BorderFactory.createLineBorder(Color.decode(colorConfig.get("surePassBlinkBorIn")), 1)
+                , BorderFactory.createLineBorder(Color.decode(colorConfig.get("surePassBlinkBorOut")), 1));
         this.add(surePassTextField);
 
         JTextField jTextField3 = new JTextField(list.get(4));
         jTextField3.setBounds(110, 230, 230, 30);
         jTextField3.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
-        BlinkBorderHelper.addBorder(jTextField3, BorderFactory.createLineBorder(Color.YELLOW, 1)
-                , BorderFactory.createLineBorder(Color.decode("#BACCDA"), 1));
+        BlinkBorderHelper.addBorder(jTextField3, BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorIn4")), 1)
+                , BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorOut4")), 1));
         this.add(jTextField3);
 
         //两个按钮
         JButton resetButton = new JButton(Language.get("resetBtn"));
         resetButton.setBounds(40, 290, 80, 30);
         resetButton.setFocusPainted(false);
-        resetButton.setForeground(Color.WHITE);
-        resetButton.setBackground(Color.decode("#F27635"));
+        resetButton.setForeground(Color.decode(colorConfig.get("resetBtnFore")));
+        resetButton.setBackground(Color.decode(colorConfig.get("resetBtnBg")));
         resetButton.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         resetButton.setBorder(null);
         resetButton.addActionListener(e -> {
@@ -158,15 +160,15 @@ public class AddFrame extends JFrame {
             jTextField3.setText("");
             surePassTextField.setText("");
         });
-        BlinkBorderHelper.addBorder(resetButton,BorderFactory.createLineBorder(Color.WHITE,2),null);
+        BlinkBorderHelper.addBorder(resetButton, BorderFactory.createLineBorder(Color.decode(colorConfig.get("resetBtnBlinkBorIn")), 2), null);
         this.add(resetButton);
 
         //生成随机强密码按钮
         JButton generatePassBtn = new JButton(Language.get("generateBtn"));
         generatePassBtn.setBounds(140, 290, 100, 30);
         generatePassBtn.setFocusPainted(false);
-        generatePassBtn.setForeground(Color.WHITE);
-        generatePassBtn.setBackground(Color.decode("#EB89A6"));
+        generatePassBtn.setForeground(Color.decode(colorConfig.get("generateBtnFore")));
+        generatePassBtn.setBackground(Color.decode(colorConfig.get("generateBtnBg")));
         generatePassBtn.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         generatePassBtn.setBorder(null);
         generatePassBtn.addActionListener(e -> {
@@ -174,18 +176,18 @@ public class AddFrame extends JFrame {
             jTextField2.setText(randomPassword);
             surePassTextField.setText(randomPassword);
         });
-        BlinkBorderHelper.addBorder(generatePassBtn,BorderFactory.createLineBorder(Color.WHITE,2),null);
+        BlinkBorderHelper.addBorder(generatePassBtn, BorderFactory.createLineBorder(Color.decode(colorConfig.get("generateBtnBlinkBorIn")), 2), null);
         this.add(generatePassBtn);
 
         //动态按钮信息
         JButton submitButton = new JButton(purpose);
         submitButton.setBounds(260, 290, 80, 30);
         submitButton.setFocusPainted(false);
-        submitButton.setForeground(Color.WHITE);
-        submitButton.setBackground(Color.decode("#5697C4"));
+        submitButton.setForeground(Color.decode(colorConfig.get("submitBtnFore")));
+        submitButton.setBackground(Color.decode(colorConfig.get("submitBtnBg")));
         submitButton.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         submitButton.setBorder(null);
-        BlinkBorderHelper.addBorder(submitButton,BorderFactory.createLineBorder(Color.WHITE,2),null);
+        BlinkBorderHelper.addBorder(submitButton, BorderFactory.createLineBorder(Color.decode(colorConfig.get("submitBtnBlinkBorIn")), 2), null);
         submitButton.addActionListener(e -> {
             //检验确认密码是否和密码相同
             if (!StrUtil.equals(jTextField2.getText(), surePassTextField.getText())) {

@@ -84,5 +84,5 @@ public class Constant {
      * @author AXing
      * @date 2023/12/7 15:40:32
      */
-    public static final Config colorConfig = new Config("config/coloursOrange.properties");
+    public static final Config colorConfig = new Config("config/colours.properties");
 }

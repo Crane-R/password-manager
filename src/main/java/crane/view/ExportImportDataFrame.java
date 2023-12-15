@@ -5,6 +5,7 @@ import com.alibaba.excel.EasyExcel;
 import crane.constant.Constant;
 import crane.constant.ExportImportCst;
 import crane.constant.DefaultFont;
+import crane.function.config.Config;
 import crane.function.tools.ExcelFileFilter;
 import crane.function.config.Language;
 import crane.function.tools.ShowMessage;
@@ -39,6 +40,8 @@ public class ExportImportDataFrame extends LockFrame {
 
     protected JTextField pathTextField;
 
+    private Config color = Constant.colorConfig;
+
     public ExportImportDataFrame(ExportImportCst exportImportCst) {
         super();
         this.setTitle(exportImportCst.TITLE);
@@ -71,8 +74,8 @@ public class ExportImportDataFrame extends LockFrame {
         pathTextField = new JTextField();
         pathTextField.setBounds(50, 120, 380, 35);
         pathTextField.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
-        pathTextField.setForeground(Color.decode("#1A5599"));
-        pathTextField.setBorder(BorderFactory.createLineBorder(Color.decode("#B8CE8E")));
+        pathTextField.setForeground(Color.decode(color.get("pathTextFore")));
+        pathTextField.setBorder(BorderFactory.createLineBorder(Color.decode(color.get("pathTextLineBor"))));
         pathTextField.setHorizontalAlignment(JPasswordField.CENTER);
         pathTextField.addKeyListener(new KeyAdapter() {
             @Override
@@ -88,11 +91,11 @@ public class ExportImportDataFrame extends LockFrame {
         //文件选择器
         JButton chooseFile = new JButton(Language.get("chooseFileBtn"));
         chooseFile.setBounds(50, 200, 100, 30);
-        chooseFile.setForeground(Color.decode("#FFFFFF"));
+        chooseFile.setForeground(Color.decode(color.get("chooseFileBtnFore")));
         chooseFile.setFont(DefaultFont.WEI_RUAN_BOLD_12.getFont());
         chooseFile.setBorder(null);
         chooseFile.setFocusPainted(false);
-        chooseFile.setBackground(Color.decode("#BBCBDC"));
+        chooseFile.setBackground(Color.decode(color.get("chooseFileBtnBg")));
         chooseFile.addActionListener(e -> {
             JFileChooser chooser = new JFileChooser(getRecentlyPath());
             chooser.setSize(1000, 600);
@@ -114,11 +117,11 @@ public class ExportImportDataFrame extends LockFrame {
         //确认按钮
         JButton sureBtn = new JButton(exportImportCst.IS_EXPORT ? Language.get("exportSureBtn") : Language.get("importSureBtn"));
         sureBtn.setBounds(330, 200, 100, 30);
-        sureBtn.setForeground(Color.decode("#FFFFFF"));
+        sureBtn.setForeground(Color.decode(color.get("sureBtnFore")));
         sureBtn.setFont(DefaultFont.WEI_RUAN_BOLD_12.getFont());
         sureBtn.setBorder(null);
         sureBtn.setFocusPainted(false);
-        sureBtn.setBackground(Color.decode("#046D35"));
+        sureBtn.setBackground(Color.decode(color.get("sureBtnBg")));
         sureBtn.addActionListener(e -> {
             if (exportImportCst.IS_EXPORT) {
                 exportFile();
@@ -247,7 +250,7 @@ public class ExportImportDataFrame extends LockFrame {
         String path = pathTextField.getText();
         //TODO:需要单独封装一个检验路径的方法
         if (StrUtil.isEmpty(path)) {
-            ShowMessage.showWarningMessage(Language.get("errPathTipMsg"),Language.get("errPathTipTit"));
+            ShowMessage.showWarningMessage(Language.get("errPathTipMsg"), Language.get("errPathTipTit"));
             return null;
         }
         return path;

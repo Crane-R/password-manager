@@ -188,7 +188,6 @@ public final class SecurityService {
 
     /**
      * 生成强密码
-     * TODO:其实没有什么好办法生成强密码
      * 不使用static是因为这个方法在程序中不是必须的
      *
      * @Author Crane Resigned

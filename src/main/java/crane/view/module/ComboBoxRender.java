@@ -30,7 +30,7 @@ public class ComboBoxRender extends DefaultListCellRenderer {
             c.setBackground(Color.decode(colorCfg.get("isEngContextBg")));
             c.setForeground(Color.decode(colorCfg.get("isEngContext")));
         }
-        list.setSelectionBackground(Color.decode("#407E54"));
+        list.setSelectionBackground(Color.decode(Constant.colorConfig.get("isEngSelectBg")));
         list.setCursor(new Cursor(Cursor.HAND_CURSOR));
         return c;
 
