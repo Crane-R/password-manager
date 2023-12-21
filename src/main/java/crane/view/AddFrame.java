@@ -67,11 +67,11 @@ public class AddFrame extends JFrame {
         System.out.println("改变窗口传入的list：" + list);
 
         String purpose = list.get(list.size() - 1);
-        this.setTitle(StrUtil.equals(purpose, DELETE) ? Language.get("sureDelete") : MainFrameCst.SIMPLE_TITLE + " >> "
+        this.setTitle(StrUtil.equals(purpose, DELETE) ? Language.get("sureDelete") : MainFrameCst.SIMPLE_TITLE+ " >> "
                 + purpose + Language.get("aAcount"));
         this.setLayout(null);
         this.setResizable(false);
-        this.setSize(420, 400);
+        this.setSize(410, 390);
         if (StrUtil.equals(purpose, ADD)) {
             this.setLocation(1100, 330);
         } else {
@@ -85,72 +85,72 @@ public class AddFrame extends JFrame {
 
         //四个标签和四个输入框
         JLabel jLabel = new JLabel(Language.get("accountName"));
-        jLabel.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
+        jLabel.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
         jLabel.setBounds(30, 25, 100, 40);
         this.add(jLabel);
 
         JLabel jLabel1 = new JLabel(Language.get("addUsername"));
         jLabel1.setBounds(30, 75, 100, 40);
-        jLabel1.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
+        jLabel1.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
         this.add(jLabel1);
 
         JLabel jLabel2 = new JLabel(Language.get("addPassword"));
         jLabel2.setBounds(30, 125, 100, 40);
-        jLabel2.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
+        jLabel2.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
         this.add(jLabel2);
 
         JLabel surePassLabel = new JLabel(Language.get("surePassword"));
         surePassLabel.setBounds(30, 175, 100, 40);
-        surePassLabel.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
+        surePassLabel.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
         this.add(surePassLabel);
 
         JLabel jLabel3 = new JLabel(Language.get("others"));
         jLabel3.setBounds(30, 225, 100, 40);
-        jLabel3.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
+        jLabel3.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
         this.add(jLabel3);
 
         JTextField jTextField = new JTextField(list.get(1));
-        jTextField.setBounds(110, 30, 230, 30);
-        jTextField.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
-        BlinkBorderHelper.addBorder(jTextField, BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorIn1")), 1)
+        jTextField.setBounds(110, 30, 260, 30);
+        jTextField.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
+        BlinkBorderHelper.addBorder(jTextField, BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorIn1")), 2)
                 , BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorOut1")), 1));
         this.add(jTextField);
 
         JTextField jTextField1 = new JTextField(list.get(2));
-        jTextField1.setBounds(110, 80, 230, 30);
-        jTextField1.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
-        BlinkBorderHelper.addBorder(jTextField1, BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorIn2")), 1)
+        jTextField1.setBounds(110, 80, 260, 30);
+        jTextField1.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
+        BlinkBorderHelper.addBorder(jTextField1, BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorIn2")), 2)
                 , BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorOut2")), 1));
         this.add(jTextField1);
 
         JTextField jTextField2 = new JTextField(list.get(3));
-        jTextField2.setBounds(110, 130, 230, 30);
-        jTextField2.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
-        BlinkBorderHelper.addBorder(jTextField2, BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorIn3")), 1)
+        jTextField2.setBounds(110, 130, 260, 30);
+        jTextField2.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
+        BlinkBorderHelper.addBorder(jTextField2, BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorIn3")), 2)
                 , BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorOut3")), 1));
         this.add(jTextField2);
 
         JTextField surePassTextField = new JTextField(list.get(3));
-        surePassTextField.setBounds(110, 180, 230, 30);
-        surePassTextField.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
-        BlinkBorderHelper.addBorder(surePassTextField, BorderFactory.createLineBorder(Color.decode(colorConfig.get("surePassBlinkBorIn")), 1)
+        surePassTextField.setBounds(110, 180, 260, 30);
+        surePassTextField.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
+        BlinkBorderHelper.addBorder(surePassTextField, BorderFactory.createLineBorder(Color.decode(colorConfig.get("surePassBlinkBorIn")), 2)
                 , BorderFactory.createLineBorder(Color.decode(colorConfig.get("surePassBlinkBorOut")), 1));
         this.add(surePassTextField);
 
         JTextField jTextField3 = new JTextField(list.get(4));
-        jTextField3.setBounds(110, 230, 230, 30);
-        jTextField3.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
-        BlinkBorderHelper.addBorder(jTextField3, BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorIn4")), 1)
+        jTextField3.setBounds(110, 230, 260, 30);
+        jTextField3.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
+        BlinkBorderHelper.addBorder(jTextField3, BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorIn4")), 2)
                 , BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorOut4")), 1));
         this.add(jTextField3);
 
         //两个按钮
         JButton resetButton = new JButton(Language.get("resetBtn"));
-        resetButton.setBounds(40, 290, 80, 30);
+        resetButton.setBounds(30, 290, 80, 30);
         resetButton.setFocusPainted(false);
         resetButton.setForeground(Color.decode(colorConfig.get("resetBtnFore")));
         resetButton.setBackground(Color.decode(colorConfig.get("resetBtnBg")));
-        resetButton.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
+        resetButton.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
         resetButton.setBorder(null);
         resetButton.addActionListener(e -> {
             //清空所有文本框
@@ -169,7 +169,7 @@ public class AddFrame extends JFrame {
         generatePassBtn.setFocusPainted(false);
         generatePassBtn.setForeground(Color.decode(colorConfig.get("generateBtnFore")));
         generatePassBtn.setBackground(Color.decode(colorConfig.get("generateBtnBg")));
-        generatePassBtn.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
+        generatePassBtn.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
         generatePassBtn.setBorder(null);
         generatePassBtn.addActionListener(e -> {
             String randomPassword = SecurityService.generateRandomStrongPassword();
@@ -181,11 +181,11 @@ public class AddFrame extends JFrame {
 
         //动态按钮信息
         JButton submitButton = new JButton(purpose);
-        submitButton.setBounds(260, 290, 80, 30);
+        submitButton.setBounds(270, 290, 100, 30);
         submitButton.setFocusPainted(false);
         submitButton.setForeground(Color.decode(colorConfig.get("submitBtnFore")));
         submitButton.setBackground(Color.decode(colorConfig.get("submitBtnBg")));
-        submitButton.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
+        submitButton.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
         submitButton.setBorder(null);
         BlinkBorderHelper.addBorder(submitButton, BorderFactory.createLineBorder(Color.decode(colorConfig.get("submitBtnBlinkBorIn")), 2), null);
         submitButton.addActionListener(e -> {

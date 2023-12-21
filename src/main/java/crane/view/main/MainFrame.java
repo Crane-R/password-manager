@@ -512,7 +512,8 @@ public class MainFrame extends JFrame {
             AccountService.toggleStatus(false);
             FrameService.activeTimeFresh();
         });
-        BlinkBorderHelper.addBorder(clearBtn, BorderFactory.createLineBorder(Color.WHITE, 2), null);
+        BlinkBorderHelper.addBorder(clearBtn, BorderFactory.createLineBorder(
+                Color.decode(colorConfig.get("clearBtnBorderIn")), 2), null);
         this.add(clearBtn);
 
         realTimeSearchBtn = new JToggleButton(Language.get("moderBtn"), true);
@@ -612,6 +613,7 @@ public class MainFrame extends JFrame {
         aboutBtn.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
         aboutBtn.setHorizontalAlignment(JLabel.CENTER);
         aboutBtn.addActionListener(e -> {
+            TextTools.stick(Language.get("repositoryAddress"));
             new AboutFrame().setVisible(true);
             FrameService.activeTimeFresh();
         });
@@ -668,6 +670,12 @@ public class MainFrame extends JFrame {
         activistLockBtn.setBorder(null);
         activistLockBtn.setBackground(Color.decode(colorConfig.get("activeBtnBg")));
         activistLockBtn.setHorizontalAlignment(JLabel.CENTER);
+        activistLockBtn.setUI(new MetalToggleButtonUI() {
+            @Override
+            protected Color getSelectColor() {
+                return Color.decode(colorConfig.get("activeBtnBgSelect"));
+            }
+        });
         activistLockBtn.addActionListener(e -> {
             if (activistLockBtn.isSelected()) {
                 activistLockBtn.setText(Language.get("activistBtn2"));
@@ -685,7 +693,7 @@ public class MainFrame extends JFrame {
         //前期版本兼容性导入数据
         //3.0
         JButton importBtn3 = new JButton("PM3.0");
-        importBtn3.setBounds(-8, 32, 60, 30);
+        importBtn3.setBounds(-52, 32, 60, 30);
         importBtn3.setForeground(Color.decode(colorConfig.get("importBtn3Fore")));
         importBtn3.setBackground(Color.decode(colorConfig.get("importBtn3Bg")));
         importBtn3.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
@@ -696,12 +704,16 @@ public class MainFrame extends JFrame {
             new Import3DataFrame().setVisible(true);
             FrameService.activeTimeFresh();
         });
+        importBtn3.setFocusPainted(false);
+        new AccessAnimationService(importBtn3).bind(52,1, AccessAnimationService.Direction.right);
         importBtn3.setEnabled(!Constant.IS_LIGHT);
         this.add(importBtn3);
 
         //4.0
         JButton importBtn4 = new JButton("PM4.2");
-        importBtn4.setBounds(-8, 64, 60, 30);
+        importBtn4.setBounds(-52, 64, 60, 30);
+        importBtn4.setFocusPainted(false);
+        new AccessAnimationService(importBtn4).bind(52,1, AccessAnimationService.Direction.right);
         importBtn4.setForeground(Color.decode(colorConfig.get("importBtn4Fore")));
         importBtn4.setBackground(Color.decode(colorConfig.get("importBtn4Bg")));
         importBtn4.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());

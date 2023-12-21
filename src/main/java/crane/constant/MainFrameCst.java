@@ -23,7 +23,7 @@ public class MainFrameCst {
      * Author: Crane Resigned
      * Date: 2023-01-22 20:54:59
      */
-    public final static String SIMPLE_TITLE = "PManager " + VersionCst.VERSION;
+    public final static String SIMPLE_TITLE = "PManager";
 
     /**
      * 定义视图表标题

@@ -2,6 +2,7 @@ package crane.test;
 
 import crane.function.tools.VersionCheckTool;
 import crane.function.service.FrontLoading;
+import crane.view.AboutFrame;
 import crane.view.LockFrame;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,6 +21,10 @@ public class Test {
 
         FrontLoading.checkKeysDirectory();
         LockFrame.start();
+
+
+//        new AboutFrame().setVisible(true);
+
 
 //        new AddFrame(null,null).setVisible(true);
 
