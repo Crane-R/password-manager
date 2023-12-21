@@ -120,7 +120,7 @@ public class LockFrame extends JFrame {
 
         secretText = new JPasswordField();
         secretText.setBounds(50, 120, 380, 35);
-        secretText.setFont(new Font("微软雅黑", Font.PLAIN, 18));
+        secretText.setFont(new Font("微软雅黑", Font.BOLD, 20));
         secretText.setForeground(Color.decode(colorConfig.get("lockSecretText")));
         secretText.setBorder(BorderFactory.createLineBorder(Color.decode(colorConfig.get("lockSecretTextBorder"))));
         secretText.setHorizontalAlignment(JPasswordField.CENTER);
@@ -178,9 +178,9 @@ public class LockFrame extends JFrame {
 
         //回车登录提示
         loginTip = new JLabel("√Enter");
-        loginTip.setBounds(385, 155, 100, 30);
+        loginTip.setBounds(375, 155, 100, 30);
         loginTip.setForeground(Color.decode(colorConfig.get("loginTip")));
-        loginTip.setFont(new Font("微软雅黑", Font.BOLD, 13));
+        loginTip.setFont(new Font("微软雅黑", Font.BOLD, 14));
         this.add(loginTip);
 
         //是否是本地数据库

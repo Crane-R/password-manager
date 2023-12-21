@@ -17,6 +17,7 @@ public enum DefaultFont {
      * Date: 2022-12-30 22:14:27
      */
     WEI_RUAN_PLAIN_13("微软雅黑", Font.PLAIN, 13),
+    WEI_RUAN_PLAIN_15("微软雅黑",Font.PLAIN,15),
     WEI_RUAN_BOLD_13("微软雅黑", Font.BOLD, 13),
     WEI_RUAN_BOLD_12("微软雅黑", Font.BOLD, 12);
 

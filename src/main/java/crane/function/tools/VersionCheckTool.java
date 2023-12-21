@@ -39,7 +39,7 @@ public final class VersionCheckTool {
      */
     private static String generateVerNumber() {
 //        return "v" + DateUtil.format(new Date(), "yy.MMdd");
-        return "v7.0.0";
+        return "v7.0.0-rc-Chocolate.Ver";
     }
 
 }
