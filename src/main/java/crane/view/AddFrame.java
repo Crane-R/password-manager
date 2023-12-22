@@ -6,6 +6,7 @@ import crane.constant.DefaultFont;
 import crane.constant.MainFrameCst;
 import crane.function.config.Config;
 import crane.function.config.Language;
+import crane.function.service.MessageService;
 import crane.model.bean.Account;
 import crane.model.dao.AccountDao;
 import crane.model.service.AccountService;
@@ -57,8 +58,6 @@ public class AddFrame extends JFrame {
     private final String UPDATE = Language.get("purposeUpdate");
     private final String DELETE = Language.get("purposeDelete");
 
-    private final Config colorConfig = Constant.colorConfig;
-
     public AddFrame(LinkedList<String> list, MainFrame mainFrame) {
 
         //当前处理账户的id
@@ -67,7 +66,7 @@ public class AddFrame extends JFrame {
         System.out.println("改变窗口传入的list：" + list);
 
         String purpose = list.get(list.size() - 1);
-        this.setTitle(StrUtil.equals(purpose, DELETE) ? Language.get("sureDelete") : MainFrameCst.SIMPLE_TITLE+ " >> "
+        this.setTitle(StrUtil.equals(purpose, DELETE) ? Language.get("sureDelete") : MainFrameCst.SIMPLE_TITLE + " >> "
                 + purpose + Language.get("aAcount"));
         this.setLayout(null);
         this.setResizable(false);
@@ -77,6 +76,7 @@ public class AddFrame extends JFrame {
         } else {
             this.setLocationRelativeTo(null);
         }
+        Config colorConfig = Constant.colorConfig;
         this.getContentPane().setBackground(Color.decode(colorConfig.get("addContentPaneBg")));
 
         //设置标题栏的图标
@@ -269,16 +269,18 @@ public class AddFrame extends JFrame {
                 } else {
                     log.error("未知错误");
                 }
+
                 //The Dao add method : return false is true
                 if (Boolean.FALSE.equals(isTrue) || effect == 1) {
-//                    ShowMessgae.showInformationMessage(purpose + Language.get("successful"), Language.get("successfulTit"));
                     //更新账户数量
                     MainFrame.getResultNumbers().setText(AccountService.getLatestAccountNumberText());
                     log.info(purpose.concat("操作成功"));
+                    MessageService.outputMessage(purpose.concat("操作成功"));
                 } else {
                     String errorText = Language.get("unKnowErr");
-                    JOptionPane.showMessageDialog(null, errorText, "Error", JOptionPane.ERROR_MESSAGE);
+                    ShowMessage.showErrorMessage(errorText, "Error");
                     log.error(errorText);
+                    MessageService.outputMessage(errorText);
                 }
                 //关闭前刷新主界面
                 //如果是更新或新增

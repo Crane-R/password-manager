@@ -6,24 +6,25 @@ import crane.constant.DefaultFont;
 import crane.constant.ExportImportCst;
 import crane.constant.MainFrameCst;
 import crane.function.config.Config;
+import crane.function.config.Language;
 import crane.function.service.AccessAnimationService;
+import crane.function.service.FrameService;
 import crane.function.service.LookFucService;
 import crane.function.tools.FileTool;
-import crane.function.config.Language;
+import crane.function.tools.ShowMessage;
 import crane.function.tools.TextTools;
 import crane.model.jdbc.JdbcConnection;
 import crane.model.service.AccountService;
-import crane.function.service.FrameService;
-import crane.function.tools.ShowMessage;
 import crane.model.service.lightweight.LightService;
 import crane.view.*;
+import crane.view.module.QueueTextArea;
 import crane.view.module.ScrollBarUi;
 import crane.view.module.stylehelper.BlinkBorderHelper;
 import crane.view.module.stylehelper.MenuBlinkBackHelper;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.plaf.metal.MetalToggleButtonUI;
@@ -49,11 +50,8 @@ public class MainFrame extends JFrame {
      * @Author Crane Resigned
      * @Date 2022-06-11 23:49:42
      */
+    @Getter
     protected static JTextField searchText;
-
-    public static JTextField getSearchText() {
-        return searchText;
-    }
 
     /**
      * 数据表条数
@@ -61,11 +59,8 @@ public class MainFrame extends JFrame {
      * @Author Crane Resigned
      * @Date 2022-06-11 23:49:12
      */
+    @Getter
     protected static JLabel resultNumbers;
-
-    public static JLabel getResultNumbers() {
-        return resultNumbers;
-    }
 
     /**
      * 数据表格
@@ -122,6 +117,7 @@ public class MainFrame extends JFrame {
      * @Author Crane Resigned
      * @Date 2023-02-08 23:03:35
      */
+    @Deprecated
     protected final JLabel copyAlertLabel;
 
     /**
@@ -145,6 +141,9 @@ public class MainFrame extends JFrame {
     protected JLabel disclaimerLabel;
 
     private final Config colorConfig = Constant.colorConfig;
+
+    @Getter
+    private static QueueTextArea outputArea;
 
     public MainFrame() {
         this.setTitle((JdbcConnection.IS_TEST ? MainFrameCst.TEST_TITLE : MainFrameCst.MAIN_TITLE) + " >> "
@@ -178,7 +177,7 @@ public class MainFrame extends JFrame {
         tableHeader.setBackground(Color.WHITE);
         tableHeader.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         JScrollPane jScrollPane = new JScrollPane(jTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        jScrollPane.setBounds(42, 125, 1100, 600);
+        jScrollPane.setBounds(42, 125, 1100, 556);
         jScrollPane.getVerticalScrollBar().setUI(new ScrollBarUi());
         jScrollPane.getViewport().setBackground(Color.decode(colorConfig.get("scrollPaneBg")));
         this.add(jScrollPane);
@@ -210,8 +209,7 @@ public class MainFrame extends JFrame {
         deleteMenuItem.addActionListener(e -> {
             LinkedList<String> list = new AccountService().getRowValues(jTable);
             if (!String.valueOf(list.get(0)).matches(Constant.IS_NUMBER)) {
-                JOptionPane.showMessageDialog(null, Language.get("decodeThenSearchTipMsg"),
-                        Language.get("decodeThenSearchTipTit"), JOptionPane.WARNING_MESSAGE);
+                ShowMessage.showWarningMessage(Language.get("decodeThenSearchTipMsg"), Language.get("decodeThenSearchTipTit"));
             } else {
                 if (switchRecord) {
                     //先解密
@@ -378,6 +376,7 @@ public class MainFrame extends JFrame {
                 } else {
                     AccountService.setTableMessages();
                 }
+                outputArea.outputMessage(Language.get("searchSuccessful"));
             }
             AccountService.toggleStatus(null);
             //清空单控解码模块集合
@@ -510,6 +509,7 @@ public class MainFrame extends JFrame {
             jTable.setModel(new DefaultTableModel(new Object[0][0], MainFrameCst.getTitles()));
             resultNumbers.setText(AccountService.getLatestAccountNumberText());
             AccountService.toggleStatus(false);
+            outputArea.clearMessage();
             FrameService.activeTimeFresh();
         });
         BlinkBorderHelper.addBorder(clearBtn, BorderFactory.createLineBorder(
@@ -518,7 +518,7 @@ public class MainFrame extends JFrame {
 
         realTimeSearchBtn = new JToggleButton(Language.get("moderBtn"), true);
         realTimeSearchBtn.setBounds(1095, -30, 100, 45);
-        new AccessAnimationService(realTimeSearchBtn).bind(30,1, AccessAnimationService.Direction.MinusDown);
+        new AccessAnimationService(realTimeSearchBtn).bind(30, 1, AccessAnimationService.Direction.MinusDown);
         realTimeSearchBtn.setFocusPainted(false);
         BlinkBorderHelper.addBorder(realTimeSearchBtn, BorderFactory.createLineBorder(Color.decode(
                 colorConfig.get("realTimeBtnBorderIn")), 2), null);
@@ -549,7 +549,7 @@ public class MainFrame extends JFrame {
         //切换场景
         JButton switchSceneBtn = new JButton(Language.get("switchBtn"));
         switchSceneBtn.setBounds(990, -30, 100, 45);
-        new AccessAnimationService(switchSceneBtn).bind(30,1, AccessAnimationService.Direction.MinusDown);
+        new AccessAnimationService(switchSceneBtn).bind(30, 1, AccessAnimationService.Direction.MinusDown);
         switchSceneBtn.setFocusPainted(false);
         BlinkBorderHelper.addBorder(switchSceneBtn, BorderFactory.createLineBorder(Color.decode(
                 colorConfig.get("switchBtnBorderIn")), 2), null);
@@ -566,7 +566,7 @@ public class MainFrame extends JFrame {
         //查看日志按钮
         JButton lookLogBtn = new JButton(Language.get("lookLogBtn"));
         lookLogBtn.setBounds(885, -30, 100, 45);
-        new AccessAnimationService(lookLogBtn).bind(30,1, AccessAnimationService.Direction.MinusDown);
+        new AccessAnimationService(lookLogBtn).bind(30, 1, AccessAnimationService.Direction.MinusDown);
         lookLogBtn.setFocusPainted(false);
         BlinkBorderHelper.addBorder(lookLogBtn, BorderFactory.createLineBorder(Color.decode(
                 colorConfig.get("logBtnBorderIn")), 2), null);
@@ -587,7 +587,7 @@ public class MainFrame extends JFrame {
         //查看功能按钮
         JButton lookFunBtn = new JButton(Language.get("mainLookFunBtn"));
         lookFunBtn.setBounds(780, -30, 100, 45);
-        new AccessAnimationService(lookFunBtn).bind(30,1, AccessAnimationService.Direction.MinusDown);
+        new AccessAnimationService(lookFunBtn).bind(30, 1, AccessAnimationService.Direction.MinusDown);
         lookFunBtn.setFocusPainted(false);
         BlinkBorderHelper.addBorder(lookFunBtn, BorderFactory.createLineBorder(Color.decode(
                 colorConfig.get("funcBtnBorderIn")), 2), null);
@@ -628,7 +628,7 @@ public class MainFrame extends JFrame {
         exportBtn.setBackground(Color.decode(colorConfig.get("exportBtnBg")));
         exportBtn.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
         exportBtn.setHorizontalAlignment(JLabel.CENTER);
-        new AccessAnimationService(exportBtn).bind( 50, 1, AccessAnimationService.Direction.Left);
+        new AccessAnimationService(exportBtn).bind(50, 1, AccessAnimationService.Direction.Left);
         exportBtn.addActionListener(e -> {
             new ExportImportDataFrame(ExportImportCst.EXPORT).setVisible(true);
             FrameService.activeTimeFresh();
@@ -644,7 +644,7 @@ public class MainFrame extends JFrame {
         importBtn.setBackground(Color.decode(colorConfig.get("importBtnBg")));
         importBtn.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
         importBtn.setHorizontalAlignment(JLabel.CENTER);
-        new AccessAnimationService(importBtn).bind( 50, 1, AccessAnimationService.Direction.Left);
+        new AccessAnimationService(importBtn).bind(50, 1, AccessAnimationService.Direction.Left);
         importBtn.addActionListener(e -> {
             new ExportImportDataFrame(ExportImportCst.IMPORT).setVisible(true);
             FrameService.activeTimeFresh();
@@ -705,7 +705,7 @@ public class MainFrame extends JFrame {
             FrameService.activeTimeFresh();
         });
         importBtn3.setFocusPainted(false);
-        new AccessAnimationService(importBtn3).bind(52,1, AccessAnimationService.Direction.right);
+        new AccessAnimationService(importBtn3).bind(52, 1, AccessAnimationService.Direction.right);
         importBtn3.setEnabled(!Constant.IS_LIGHT);
         this.add(importBtn3);
 
@@ -713,7 +713,7 @@ public class MainFrame extends JFrame {
         JButton importBtn4 = new JButton("PM4.2");
         importBtn4.setBounds(-52, 64, 60, 30);
         importBtn4.setFocusPainted(false);
-        new AccessAnimationService(importBtn4).bind(52,1, AccessAnimationService.Direction.right);
+        new AccessAnimationService(importBtn4).bind(52, 1, AccessAnimationService.Direction.right);
         importBtn4.setForeground(Color.decode(colorConfig.get("importBtn4Fore")));
         importBtn4.setBackground(Color.decode(colorConfig.get("importBtn4Bg")));
         importBtn4.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
@@ -727,6 +727,16 @@ public class MainFrame extends JFrame {
         importBtn4.setEnabled(!Constant.IS_LIGHT);
         this.add(importBtn4);
 
+        //输出框
+        outputArea = new QueueTextArea();
+        outputArea.setBounds(42, 681, 1099, 44);
+        outputArea.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
+        outputArea.setEditable(false);
+        outputArea.setBackground(Color.decode(colorConfig.get("outputAreaBg")));
+        outputArea.setForeground(Color.decode(colorConfig.get("outputAreaFore2")));
+        outputArea.setBorder(BorderFactory.createLineBorder(Color.decode(colorConfig.get("outputAreaBor"))));
+        this.add(outputArea);
+
         mainFrame = this;
     }
 
@@ -736,10 +746,11 @@ public class MainFrame extends JFrame {
      * @Author Crane Resigned
      * @Date 2023-10-05 14:49:59
      */
+    @Deprecated
     private final ShowStickMsg showStickMsg = new ShowStickMsg();
 
     public void stickAndShowCopySuccessMsg(String value, String specialMsg) {
-        showStickMsg.stickAndShowCopySuccessMsg(value, specialMsg);
+        outputArea.outputMessage(StrUtil.isEmpty(specialMsg) ? Language.get("copySuccessive").concat(value) : specialMsg);
     }
 
     /**
@@ -748,6 +759,7 @@ public class MainFrame extends JFrame {
      * @Author Crane Resigned
      * @Date 2023-10-05 14:44:18
      */
+    @Deprecated
     private class ShowStickMsg {
 
         /**
@@ -769,7 +781,7 @@ public class MainFrame extends JFrame {
         public void stickAndShowCopySuccessMsg(String value, String specialMsg) {
             threadCount++;
             TextTools.stick(value);
-            copyAlertLabel.setText(StrUtil.isEmpty(specialMsg) ? Language.get("copySuccessive").concat(value) : specialMsg);
+
             //只有首次设置以减少消耗
             if (threadCount == 1) {
                 copyAlertLabel.setVisible(true);
