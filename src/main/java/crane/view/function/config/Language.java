@@ -1,6 +1,6 @@
-package crane.function.config;
+package crane.view.function.config;
 
-import crane.function.tools.ShowMessage;
+import crane.view.function.tools.ShowMessage;
 import crane.model.jdbc.JdbcConnection;
 
 import java.io.File;

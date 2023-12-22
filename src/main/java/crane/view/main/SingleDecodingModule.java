@@ -1,7 +1,7 @@
 package crane.view.main;
 
 import crane.constant.DefaultFont;
-import crane.function.config.Language;
+import crane.view.function.config.Language;
 import crane.model.service.SecurityService;
 
 import javax.swing.*;

@@ -1,7 +1,7 @@
-package crane.function.tools;
+package crane.view.function.tools;
 
 import cn.hutool.core.date.DateUtil;
-import crane.function.config.Config;
+import crane.view.function.config.Config;
 import crane.model.jdbc.JdbcConnection;
 
 /**

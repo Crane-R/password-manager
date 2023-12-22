@@ -5,13 +5,13 @@ import cn.hutool.core.util.StrUtil;
 import crane.constant.Constant;
 import crane.constant.DefaultFont;
 import crane.constant.MainFrameCst;
-import crane.function.config.Config;
-import crane.function.config.Language;
-import crane.function.service.LookFucService;
+import crane.view.function.config.Config;
+import crane.view.function.config.Language;
+import crane.view.function.service.LookFucService;
 import crane.model.jdbc.JdbcConnection;
-import crane.function.service.FrameService;
+import crane.view.function.service.FrameService;
 import crane.model.service.SecurityService;
-import crane.function.tools.ShowMessage;
+import crane.view.function.tools.ShowMessage;
 import crane.view.main.MainFrame;
 import crane.view.module.ComboBoxRender;
 import crane.view.module.stylehelper.BlinkBorderHelper;
@@ -133,6 +133,11 @@ public class LockFrame extends JFrame {
                     //是否为创建新密钥登录
                     if (isCreateScene.isSelected()) {
                         if (!SecurityService.checkKeyFileIsExist(passTxt)) {
+                            if (passTxt.length() < Constant.LEAST_PASS_LEN) {
+                                ShowMessage.showWarningMessage(Language.get("leastPassLengthMsg")
+                                        +Constant.LEAST_PASS_LEN, Language.get("leastPassLengthTit"));
+                                return;
+                            }
                             SecurityService.createKey(passTxt);
                         } else {
                             ShowMessage.showWarningMessage(Language.get("keyDuplicateTipMsg"), Language.get("keyDuplicateTipTitle"));
@@ -150,6 +155,11 @@ public class LockFrame extends JFrame {
                             }
                         } else {
                             log.info("一个密匙都没有，创建密匙");
+                            if (passTxt.length() < Constant.LEAST_PASS_LEN) {
+                                ShowMessage.showWarningMessage(Language.get("leastPassLengthMsg")
+                                        +Constant.LEAST_PASS_LEN, Language.get("leastPassLengthTit"));
+                                return;
+                            }
                             SecurityService.createKey(passTxt);
                         }
                     }

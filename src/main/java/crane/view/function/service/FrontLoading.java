@@ -1,5 +1,7 @@
-package crane.function.service;
+package crane.view.function.service;
 
+import crane.constant.Constant;
+import crane.constant.MainFrameCst;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -17,11 +19,13 @@ import java.nio.file.Paths;
 public final class FrontLoading {
 
     private FrontLoading() {
-        
+
     }
 
     /**
      * 检测keys文件夹是否存在的前置
+     * 如果是在C盘会存在权限问题，但是在C盘根目录不会存在权限问题，
+     * 所以如果是C盘就会在C盘根目录创建
      * Author: Crane Resigned
      * Date: 2023-01-07 23:52:16
      */
@@ -29,7 +33,14 @@ public final class FrontLoading {
         String path = Paths.get("keys").toAbsolutePath().toString();
         File keyFolder = new File(path);
         if (!keyFolder.exists()) {
-            boolean isCreatedTrue = keyFolder.mkdirs();
+            boolean isCreatedTrue;
+            try {
+                isCreatedTrue = keyFolder.mkdirs();
+            } catch (Exception e) {
+                String newKeyDir = "C://" + MainFrameCst.MAIN_TITLE + "//keys";
+                isCreatedTrue = new File(newKeyDir).mkdirs();
+                Constant.DIRECTORY_KEYS = newKeyDir;
+            }
             log.info("创建key文件夹" + isCreatedTrue);
             if (isCreatedTrue) {
                 try {

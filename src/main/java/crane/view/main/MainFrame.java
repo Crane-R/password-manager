@@ -5,14 +5,14 @@ import crane.constant.Constant;
 import crane.constant.DefaultFont;
 import crane.constant.ExportImportCst;
 import crane.constant.MainFrameCst;
-import crane.function.config.Config;
-import crane.function.config.Language;
-import crane.function.service.AccessAnimationService;
-import crane.function.service.FrameService;
-import crane.function.service.LookFucService;
-import crane.function.tools.FileTool;
-import crane.function.tools.ShowMessage;
-import crane.function.tools.TextTools;
+import crane.view.function.config.Config;
+import crane.view.function.config.Language;
+import crane.view.function.service.AccessAnimationService;
+import crane.view.function.service.FrameService;
+import crane.view.function.service.LogService;
+import crane.view.function.service.LookFucService;
+import crane.view.function.tools.ShowMessage;
+import crane.view.function.tools.TextTools;
 import crane.model.jdbc.JdbcConnection;
 import crane.model.service.AccountService;
 import crane.model.service.lightweight.LightService;
@@ -32,7 +32,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
 import java.util.List;
 import java.util.Timer;
 import java.util.*;
@@ -574,14 +573,7 @@ public class MainFrame extends JFrame {
         lookLogBtn.setBackground(Color.decode(colorConfig.get("logBtnBg")));
         lookLogBtn.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
         lookLogBtn.setHorizontalAlignment(JLabel.CENTER);
-        lookLogBtn.addActionListener(e -> {
-            File logFile = new File("log.log");
-            if (logFile.exists()) {
-                FileTool.openFile(logFile.getPath());
-            } else {
-                ShowMessage.showErrorMessage(Language.get("notLookFile"), Language.get("notLookFileTit"));
-            }
-        });
+        lookLogBtn.addActionListener(e -> new LogService().showLog());
         this.add(lookLogBtn);
 
         //查看功能按钮

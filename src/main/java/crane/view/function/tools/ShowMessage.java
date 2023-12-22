@@ -1,4 +1,4 @@
-package crane.function.tools;
+package crane.view.function.tools;
 
 import crane.constant.DefaultFont;
 

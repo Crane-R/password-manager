@@ -1,7 +1,7 @@
 package crane.view.module;
 
 import crane.constant.Constant;
-import crane.function.config.Config;
+import crane.view.function.config.Config;
 
 import javax.swing.*;
 import java.awt.*;

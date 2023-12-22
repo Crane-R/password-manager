@@ -2,7 +2,7 @@ package crane.model.service;
 
 import crane.constant.Constant;
 import crane.constant.MainFrameCst;
-import crane.function.config.Language;
+import crane.view.function.config.Language;
 import crane.model.bean.Account;
 import crane.model.dao.AccountDao;
 import crane.view.main.MainFrame;

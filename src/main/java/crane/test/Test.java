@@ -1,12 +1,13 @@
 package crane.test;
 
-import crane.function.tools.VersionCheckTool;
-import crane.function.service.FrontLoading;
-import crane.view.AboutFrame;
+import cn.hutool.core.lang.generator.SnowflakeGenerator;
+import crane.view.function.service.FrontLoading;
+import crane.view.function.service.LogService;
+import crane.view.function.tools.VersionCheckTool;
 import crane.view.LockFrame;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.*;
+import java.io.IOException;
 
 /**
  * @author Crane Resigned
@@ -15,12 +16,17 @@ import java.io.*;
 public class Test {
     public static void main(String[] args) throws IOException {
 //        new MainFrame().setVisible(true);
+        try {
+            //版本检测
+            VersionCheckTool.checkVersion();
 
-        //版本检测
-        VersionCheckTool.checkVersion();
+            FrontLoading.checkKeysDirectory();
+            LockFrame.start();
+        } catch (Exception e) {
+            log.error(e.toString());
+            new LogService().showLog();
+        }
 
-        FrontLoading.checkKeysDirectory();
-        LockFrame.start();
 
 
 //        new AboutFrame().setVisible(true);

@@ -1,5 +1,6 @@
 package crane.model.service;
 
+import cn.hutool.core.codec.Rot;
 import cn.hutool.core.lang.generator.SnowflakeGenerator;
 import cn.hutool.core.util.StrUtil;
 import crane.constant.Constant;
@@ -11,7 +12,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.Objects;
-import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -33,7 +33,7 @@ public final class SecurityService {
      * Date: 2023-01-07 23:04:49
      */
     public static boolean checkKeyAmountIsNotZero() {
-        File file = new File(Paths.get(Constant.DIRECTORY_KEYS).toAbsolutePath().toString());
+        File file = new File(Constant.DIRECTORY_KEYS);
         //tip:发生在v23.1014，使用innosetup打包的软件，安装时创建桌面快捷方式的时候获取地址不同，故报错空指针
         return Objects.requireNonNull(file.listFiles()).length != 0;
     }
@@ -44,7 +44,7 @@ public final class SecurityService {
      * Date: 2022-11-27 11:54:47
      */
     public static boolean checkKeyFileIsExist(String inputKey) {
-        File file = new File(Paths.get(Constant.DIRECTORY_KEYS + "/" + inputKey).toAbsolutePath().toString());
+        File file = new File(Constant.DIRECTORY_KEYS + new Md5Service().convertMd5(inputKey));
         boolean b = file.exists() && Objects.isNull(file.listFiles());
         if (b) {
             Constant.CURRENT_KEY = inputKey;
@@ -59,9 +59,9 @@ public final class SecurityService {
      */
     public static void createKey(String keyPre) {
         String checkoutKey = keyPre.replaceAll("\"", "'");
-        String finalKey = checkoutKey.concat(UUID.randomUUID().toString());
+        String finalKey = RealKeyEncodeService.realKeyEncode(checkoutKey).concat(new SnowflakeGenerator().next().toString());
         //以密钥作为文件名创建密匙
-        File targetKeyFile = new File(Paths.get(Constant.DIRECTORY_KEYS + "/" + keyPre).toAbsolutePath().toString());
+        File targetKeyFile = new File(Constant.DIRECTORY_KEYS + new Md5Service().convertMd5(keyPre));
         //设为只读命令
         String command1 = "attrib \"" + targetKeyFile.getAbsolutePath() + "\" +R";
         //隐藏命令
@@ -88,8 +88,7 @@ public final class SecurityService {
         BufferedReader bufferedReader;
         String result = null;
         try {
-            bufferedReader = new BufferedReader(new FileReader(Paths.get(Constant.DIRECTORY_KEYS + "/" + targetKey)
-                    .toAbsolutePath().toString()));
+            bufferedReader = new BufferedReader(new FileReader(Constant.DIRECTORY_KEYS + targetKey));
             result = bufferedReader.readLine();
             bufferedReader.close();
         } catch (IOException e) {
@@ -108,7 +107,7 @@ public final class SecurityService {
         if (uuidKey.length() < Constant.MINIMUM_KEY_LENGTH) {
             return "密匙长度不对";
         }
-        return new StringBuilder(new StringBuilder(uuidKey).reverse().substring(0, 36)).reverse().toString();
+        return new StringBuilder(new StringBuilder(uuidKey).reverse().substring(0, 19)).reverse().toString();
     }
 
     /**
@@ -121,7 +120,53 @@ public final class SecurityService {
         if (uuidKey.length() < Constant.MINIMUM_KEY_LENGTH) {
             return "密匙长度不对";
         }
-        return new StringBuilder(new StringBuilder(uuidKey).reverse().substring(36, uuidKey.length())).reverse().toString();
+        return RealKeyEncodeService.realKeyDecode(
+                new StringBuilder(new StringBuilder(uuidKey).reverse().substring(19, uuidKey.length())).reverse().toString()
+        );
+    }
+
+    /**
+     * 真实密钥加密内部服务
+     *
+     * @Author AXing
+     * @Date 2023/12/22 22:02:26
+     */
+    private static class RealKeyEncodeService {
+
+        private RealKeyEncodeService() {
+        }
+
+        public static String realKeyEncode(String originRealKey) {
+            StringBuilder result = new StringBuilder();
+            int len = originRealKey.length();
+            StringBuilder mark = new StringBuilder();
+            for (int i = 0; i < len; i++) {
+                int c = originRealKey.charAt(i);
+                result.append(c);
+                int temp = 0;
+                while (c != 0) {
+                    c /= 10;
+                    temp++;
+                }
+                mark.append(temp);
+            }
+            return result.append(".").append(mark).toString();
+        }
+
+        public static String realKeyDecode(String encodeRealKey) {
+            String[] split = encodeRealKey.split("\\.");
+            StringBuilder result = new StringBuilder();
+            int len = split[1].length();
+            //标识当前检测索引的指针
+            int point = 0;
+            for (int i = 0; i < len; i++) {
+                int c = split[1].charAt(i);
+                result.append(split[0], point, c);
+                point = c;
+            }
+            return result.toString();
+        }
+
     }
 
     /**
@@ -173,7 +218,7 @@ public final class SecurityService {
     private static String secondStageEncode(String firstEncodePassword) {
         String realKey = getRealKey();
         int re = firstEncodePassword.charAt(0) + realKey.charAt(0);
-        return String.valueOf((char) re).concat(firstEncodePassword.substring(1));
+        return Rot.encode13(String.valueOf((char) re).concat(firstEncodePassword.substring(1)));
     }
 
     /**
@@ -182,6 +227,7 @@ public final class SecurityService {
      * Date: 2022-12-01 19:44:23
      */
     private static String secondStageDecode(String secondEncodePassword) {
+        secondEncodePassword = Rot.decode13(secondEncodePassword);
         return String.valueOf((char) ((int) secondEncodePassword.charAt(0) - (int) getRealKey().charAt(0)))
                 .concat(secondEncodePassword.substring(1));
     }
@@ -205,7 +251,7 @@ public final class SecurityService {
         class GeneratePass {
             private final char[] alphabet = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
                     'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
-            private final char[] symbols = {'!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+','[',']'};
+            private final char[] symbols = {'!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '[', ']'};
 
             private final int[] digits = {1, 2, 3, 4, 5, 6, 7, 8, 9};
 

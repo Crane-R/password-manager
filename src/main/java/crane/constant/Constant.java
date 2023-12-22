@@ -1,6 +1,8 @@
 package crane.constant;
 
-import crane.function.config.Config;
+import crane.view.function.config.Config;
+
+import java.nio.file.Paths;
 
 /**
  * Description: 常量
@@ -47,7 +49,7 @@ public class Constant {
      * Author: Crane Resigned
      * Date: 2023-01-07 23:46:51
      */
-    public static final String DIRECTORY_KEYS = "keys";
+    public static String DIRECTORY_KEYS = Paths.get("keys").toAbsolutePath() + "\\";
 
     /**
      * 一条账户数据最小的（正常的）list长度
@@ -73,6 +75,7 @@ public class Constant {
 
     /**
      * 是否英文
+     *
      * @Author Crane Resigned
      * @Date 2023-06-12 21:46:54
      */
@@ -81,8 +84,11 @@ public class Constant {
 
     /**
      * 当前主题
+     *
      * @Author AXing
      * @date 2023/12/7 15:40:32
      */
     public static final Config colorConfig = new Config("config/coloursOrange.properties");
+
+    public static final Integer LEAST_PASS_LEN = 4;
 }
