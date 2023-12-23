@@ -29,7 +29,7 @@ public class ExcelService {
      */
     public static boolean exportDataToExcel(List<Account> dataList, String absolutePath) {
         if (!checkPathIsContainXlsx(absolutePath)) {
-            absolutePath = absolutePath + "/" + MainFrameCst.SIMPLE_TITLE + "_" + DateUtil.format(new Date(), "yyMMddHHmmss") + ".xlsx";
+            absolutePath = absolutePath + "/" + MainFrameCst.MAIN_TITLE + "_" + DateUtil.format(new Date(), "yyMMddHHmmss") + ".xlsx";
         }
         boolean newFileIsCreated = fileIsExistElseCreate(absolutePath);
         if (newFileIsCreated) {

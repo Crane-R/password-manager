@@ -743,6 +743,7 @@ public class MainFrame extends JFrame {
 
     public void stickAndShowCopySuccessMsg(String value, String specialMsg) {
         outputArea.outputMessage(StrUtil.isEmpty(specialMsg) ? Language.get("copySuccessive").concat(value) : specialMsg);
+        TextTools.stick(value);
     }
 
     /**

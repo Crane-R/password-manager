@@ -5,6 +5,7 @@ import crane.constant.MainFrameCst;
 import crane.view.function.config.Language;
 import crane.view.function.tools.FileTool;
 import crane.model.jdbc.JdbcConnection;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -21,6 +22,7 @@ import java.util.List;
  * @author AXing
  * @date 2023/12/7 16:33:02
  */
+@Slf4j
 public class LookFucService {
 
     /**
@@ -34,7 +36,7 @@ public class LookFucService {
     private List<Object[]> resultList;
 
     private final File fucFile = new File(JdbcConnection.IS_TEST ? "src/main/resources/function.html" :
-            Paths.get("").toAbsolutePath() + "resources/function.html");
+            Paths.get("").toAbsolutePath() + "/resources/function.html");
 
     private void createFile() {
         try {
@@ -49,6 +51,7 @@ public class LookFucService {
             printWriter.flush();
             printWriter.close();
         } catch (IOException e) {
+            log.error(e.toString());
             throw new RuntimeException(e);
         }
     }
