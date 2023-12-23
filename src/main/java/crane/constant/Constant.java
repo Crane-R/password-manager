@@ -23,10 +23,11 @@ public class Constant {
     /**
      * 最小key长度，key为uuid 36位，因此密匙最低1位
      * 如果小于37说明密钥长度不合理
+     * 雪花ID19位+最小密钥长度4位
      * Author: Crane Resigned
      * Date: 2023-01-07 22:42:16
      */
-    public static final int MINIMUM_KEY_LENGTH = 37;
+    public static final int MINIMUM_KEY_LENGTH = 19 + 4;
 
     /**
      * 记录当前场景的密钥

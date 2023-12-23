@@ -161,7 +161,7 @@ public final class SecurityService {
             //标识当前检测索引的指针
             int point = 0;
             for (int i = 0; i < len; i++) {
-                int c = split[1].charAt(i);
+                int c = Integer.parseInt(String.valueOf(split[1].charAt(i)));
                 result.append(split[0], point, c);
                 point = c;
             }
