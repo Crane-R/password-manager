@@ -158,12 +158,14 @@ public final class SecurityService {
             String[] split = encodeRealKey.split("\\.");
             StringBuilder result = new StringBuilder();
             int len = split[1].length();
-            //标识当前检测索引的指针
-            int point = 0;
+            //标识当前检测索引的左右指针
+            int left = 0;
+            int right = 0;
             for (int i = 0; i < len; i++) {
-                int c = Integer.parseInt(String.valueOf(split[1].charAt(i)));
-                result.append(split[0], point, c);
-                point = c;
+                int step = Integer.parseInt(String.valueOf(split[1].charAt(i)));
+                right += step;
+                result.append((char) Integer.parseInt(split[0].substring(left,right)));
+                left = right;
             }
             return result.toString();
         }

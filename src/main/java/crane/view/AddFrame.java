@@ -313,13 +313,18 @@ public class AddFrame extends JFrame {
             public void windowClosing(WindowEvent e) {
                 log.info("窗口点击关闭");
                 //启动活性锁
-                ActiveTimeService.activeTimeLock();
+                if (!MainFrame.getActivistLockBtn().isSelected()) {
+                    ActiveTimeService.activeTimeLock();
+                }
                 mainFrame.setVisible(true);
             }
 
             @Override
             public void windowClosed(WindowEvent e) {
                 log.info("窗口关闭后（调用this.dispose）");
+                if (!MainFrame.getActivistLockBtn().isSelected()) {
+                    ActiveTimeService.activeTimeLock();
+                }
                 mainFrame.setVisible(true);
             }
 

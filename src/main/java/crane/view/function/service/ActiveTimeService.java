@@ -2,6 +2,7 @@ package crane.view.function.service;
 
 import cn.hutool.core.date.DateUtil;
 import crane.constant.Constant;
+import crane.view.function.config.Config;
 import crane.view.function.config.Language;
 import crane.view.LockFrame;
 import crane.view.main.MainFrame;
@@ -103,19 +104,20 @@ public class ActiveTimeService {
     }
 
     /**
-     * 停止活性时间计时
+     * 停止/启动活性时间计时
      *
      * @Author Crane Resigned
      * @Date 2023-05-24 17:30:32
      */
     public static void activeTimeLock() {
-        if (Objects.nonNull(ACTIVIST_TIMER)) {
-            isStart = false;
-            ACTIVIST_TIMER.shutdown();
-            isActiveLock = !isActiveLock;
-            if (!isActiveLock) {
-                activeTimeFresh();
-            }
+        if(Objects.isNull(ACTIVIST_TIMER)){
+            return;
+        }
+        isStart = false;
+        ACTIVIST_TIMER.shutdown();
+        isActiveLock = !isActiveLock;
+        if (!isActiveLock) {
+            activeTimeFresh();
         }
     }
 

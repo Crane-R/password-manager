@@ -126,7 +126,8 @@ public class MainFrame extends JFrame {
 
     protected JButton aboutBtn;
 
-    protected JToggleButton activistLockBtn;
+    @Getter
+    protected static JToggleButton activistLockBtn;
 
     protected JLabel searchTip;
 
@@ -472,7 +473,9 @@ public class MainFrame extends JFrame {
             list.add(Language.get("purposeAdd"));
             new AddFrame(list, this).setVisible(true);
             this.setVisible(false);
-            ActiveTimeService.activeTimeLock();
+            if (!activistLockBtn.isSelected()) {
+                ActiveTimeService.activeTimeLock();
+            }
         });
         BlinkBorderHelper.addBorder(addButton, BorderFactory.createLineBorder(Color.decode(
                 colorConfig.get("addBtnBlinkBorIn")), 2), null);
