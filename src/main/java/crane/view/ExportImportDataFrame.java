@@ -98,7 +98,7 @@ public class ExportImportDataFrame extends LockFrame {
         chooseFile.setBackground(Color.decode(color.get("chooseFileBtnBg")));
         chooseFile.addActionListener(e -> {
             JFileChooser chooser = new JFileChooser(getRecentlyPath());
-            chooser.setSize(1000, 600);
+            chooser.setSize(1500, 900);
             //导出为只选择目录模式，导入为只选择文件模式
             chooser.setFileSelectionMode(exportImportCst.IS_EXPORT ? JFileChooser.DIRECTORIES_ONLY : JFileChooser.FILES_ONLY);
             chooser.setDialogTitle(exportImportCst.IS_EXPORT ? Language.get("chooserDialogExportTitle") : Language.get("chooserDialogImportTitle"));
@@ -148,7 +148,6 @@ public class ExportImportDataFrame extends LockFrame {
             accounts = new AccountDao().select(null);
         } else {
             accounts = new LightDao().readData();
-            accounts.forEach(SecurityService::decodeAccount);
         }
         //清除key
         accounts.forEach(account -> {

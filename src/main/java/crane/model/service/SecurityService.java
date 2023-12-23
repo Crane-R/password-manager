@@ -164,7 +164,7 @@ public final class SecurityService {
             for (int i = 0; i < len; i++) {
                 int step = Integer.parseInt(String.valueOf(split[1].charAt(i)));
                 right += step;
-                result.append((char) Integer.parseInt(split[0].substring(left,right)));
+                result.append((char) Integer.parseInt(split[0].substring(left, right)));
                 left = right;
             }
             return result.toString();
@@ -194,7 +194,7 @@ public final class SecurityService {
         int decodeLastIndex = decode.length() - 1;
         for (int i = 0; i < keyLastIndex + 1; i++) {
             if (decode.charAt(decodeLastIndex--) != key.charAt(keyLastIndex--)) {
-                return "假密匙";
+                return "密钥校验失败";
             }
         }
         return new StringBuilder(decode).substring(0, decodeLastIndex - keyLastIndex - 1);
