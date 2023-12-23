@@ -2,6 +2,7 @@ package crane.view.function.service;
 
 import crane.constant.Constant;
 import crane.constant.MainFrameCst;
+import crane.view.function.tools.ShowMessage;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -33,7 +34,7 @@ public final class FrontLoading {
         String path = Paths.get("keys").toAbsolutePath().toString();
         File keyFolder = new File(path);
         if (!keyFolder.exists()) {
-            boolean isCreatedTrue;
+            boolean isCreatedTrue = false;
             try {
                 isCreatedTrue = keyFolder.mkdirs();
             } catch (Exception e) {
