@@ -5,7 +5,7 @@ import crane.constant.MainFrameCst;
 import crane.constant.VersionCst;
 import crane.view.function.config.Config;
 import crane.view.function.config.Language;
-import crane.view.function.service.FrameService;
+import crane.view.function.service.ImageService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,7 +25,7 @@ public class AboutFrame extends JFrame {
         this.setLayout(null);
         this.setResizable(false);
         this.setLocationRelativeTo(null);
-        this.setIconImage(FrameService.getTitleImage());
+        this.setIconImage(ImageService.getTitleImage());
 
         Config colorConfig = Constant.colorConfig;
         this.getContentPane().setBackground(Color.decode(colorConfig.get("aboutContentPaneBg")));
@@ -76,7 +76,7 @@ public class AboutFrame extends JFrame {
         //图标
         JLabel iconLabel = new JLabel();
         iconLabel.setBounds(370, 30, 120, 120);
-        ImageIcon icon = new ImageIcon(Objects.requireNonNull(FrameService.getTitleImage()).getScaledInstance(120, 120, Image.SCALE_DEFAULT));
+        ImageIcon icon = new ImageIcon(Objects.requireNonNull(ImageService.getTitleImage()).getScaledInstance(120, 120, Image.SCALE_DEFAULT));
         iconLabel.setIcon(icon);
         this.add(iconLabel);
     }

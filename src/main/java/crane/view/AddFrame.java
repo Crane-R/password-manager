@@ -6,11 +6,12 @@ import crane.constant.DefaultFont;
 import crane.constant.MainFrameCst;
 import crane.view.function.config.Config;
 import crane.view.function.config.Language;
+import crane.view.function.service.ImageService;
 import crane.view.function.service.MessageService;
 import crane.model.bean.Account;
 import crane.model.dao.AccountDao;
 import crane.model.service.AccountService;
-import crane.view.function.service.FrameService;
+import crane.view.function.service.ActiveTimeService;
 import crane.model.service.SecurityService;
 import crane.view.function.tools.ShowMessage;
 import crane.model.service.lightweight.LightService;
@@ -80,7 +81,7 @@ public class AddFrame extends JFrame {
         this.getContentPane().setBackground(Color.decode(colorConfig.get("addContentPaneBg")));
 
         //设置标题栏的图标
-        Image image = FrameService.getTitleImage();
+        Image image = ImageService.getTitleImage();
         this.setIconImage(image);
 
         //四个标签和四个输入框
@@ -312,7 +313,7 @@ public class AddFrame extends JFrame {
             public void windowClosing(WindowEvent e) {
                 log.info("窗口点击关闭");
                 //启动活性锁
-                FrameService.activeTimeLock();
+                ActiveTimeService.activeTimeLock();
                 mainFrame.setVisible(true);
             }
 

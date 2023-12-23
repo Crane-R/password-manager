@@ -88,7 +88,8 @@ public final class SecurityService {
         BufferedReader bufferedReader;
         String result = null;
         try {
-            bufferedReader = new BufferedReader(new FileReader(Constant.DIRECTORY_KEYS + targetKey));
+            bufferedReader = new BufferedReader(new FileReader(
+                    Constant.DIRECTORY_KEYS + new Md5Service().convertMd5(targetKey)));
             result = bufferedReader.readLine();
             bufferedReader.close();
         } catch (IOException e) {

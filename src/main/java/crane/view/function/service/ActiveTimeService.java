@@ -7,10 +7,8 @@ import crane.view.LockFrame;
 import crane.view.main.MainFrame;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 import java.util.Date;
 import java.util.Objects;
 import java.util.concurrent.Executors;
@@ -21,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  * @author Crane Resigned
  */
 @Slf4j
-public class FrameService {
+public class ActiveTimeService {
 
     /**
      * 开闭原则
@@ -54,22 +52,18 @@ public class FrameService {
      */
     private static final long RED_TIME = (long) (Constant.ACTIVE_TIME * 0.1);
 
+    private static ScheduledExecutorService ACTIVIST_TIMER;
+
     /**
-     * 获取标题栏的图片
+     * 创建主界面时校正标识以确保活性时间功能正常
      *
      * @Author Crane Resigned
-     * @Date 2022-04-29 18:47:48
+     * @Date 2023/12/23 13:15:23
      */
-    public static Image getTitleImage() {
-        try {
-            return ImageIO.read(Objects.requireNonNull(FrameService.class.getResource("/img/pmv6.4.2.png")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static void activeTimeStart() {
+        isActiveLock = false;
+        activeTimeFresh();
     }
-
-    private static ScheduledExecutorService ACTIVIST_TIMER;
 
     /**
      * 更新活性时间
@@ -93,7 +87,7 @@ public class FrameService {
                 }
                 if (TIME[0] <= 0) {
                     //表格失活
-                    log.info("表格失活" + DateUtil.now());
+                    log.info("主界面失活" + DateUtil.now());
                     MainFrame.mainFrame.dispose();
                     LockFrame lockFrame = new LockFrame();
                     //窗体最小化

@@ -7,9 +7,9 @@ import crane.constant.DefaultFont;
 import crane.constant.MainFrameCst;
 import crane.view.function.config.Config;
 import crane.view.function.config.Language;
+import crane.view.function.service.ImageService;
 import crane.view.function.service.LookFucService;
 import crane.model.jdbc.JdbcConnection;
-import crane.view.function.service.FrameService;
 import crane.model.service.SecurityService;
 import crane.view.function.tools.ShowMessage;
 import crane.view.main.MainFrame;
@@ -109,7 +109,7 @@ public class LockFrame extends JFrame {
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setIconImage(FrameService.getTitleImage());
+        this.setIconImage(ImageService.getTitleImage());
         this.getContentPane().setBackground(Color.decode(colorConfig.get("lockBg")));
 
         tipLabel = new JLabel(isHaveKey ? Language.get("haveKey") : Language.get("haveNotKey"));

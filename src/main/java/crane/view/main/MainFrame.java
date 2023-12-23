@@ -7,10 +7,7 @@ import crane.constant.ExportImportCst;
 import crane.constant.MainFrameCst;
 import crane.view.function.config.Config;
 import crane.view.function.config.Language;
-import crane.view.function.service.AccessAnimationService;
-import crane.view.function.service.FrameService;
-import crane.view.function.service.LogService;
-import crane.view.function.service.LookFucService;
+import crane.view.function.service.*;
 import crane.view.function.tools.ShowMessage;
 import crane.view.function.tools.TextTools;
 import crane.model.jdbc.JdbcConnection;
@@ -153,7 +150,7 @@ public class MainFrame extends JFrame {
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //设置标题栏的图标
-        this.setIconImage(FrameService.getTitleImage());
+        this.setIconImage(ImageService.getTitleImage());
         this.getContentPane().setBackground(Color.decode(colorConfig.get("contentPaneBg")));
 
 //        this.setUndecorated(true);
@@ -199,7 +196,7 @@ public class MainFrame extends JFrame {
                 list.add(Language.get("purposeUpdate"));
                 new AddFrame(list, this).setVisible(true);
             }
-            FrameService.activeTimeFresh();
+            ActiveTimeService.activeTimeFresh();
         });
 
         JMenuItem deleteMenuItem = new JMenuItem(Language.get("deleteBtn"));
@@ -217,7 +214,7 @@ public class MainFrame extends JFrame {
                 list.add(Language.get("purposeDelete"));
                 new AddFrame(list, this).setVisible(true);
             }
-            FrameService.activeTimeFresh();
+            ActiveTimeService.activeTimeFresh();
         });
 
         //右键点击复制快捷账户密码信息
@@ -231,7 +228,7 @@ public class MainFrame extends JFrame {
             }
             String generateStr = AccountService.generateAccountMsg(rowValues);
             stickAndShowCopySuccessMsg(generateStr, Language.get("copyAccountSuccessive"));
-            FrameService.activeTimeFresh();
+            ActiveTimeService.activeTimeFresh();
         });
 
         //复制功能
@@ -239,7 +236,7 @@ public class MainFrame extends JFrame {
         copyFunctionItem.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         copyFunctionItem.addActionListener(e -> {
             stickAndShowCopySuccessMsg(String.valueOf(jTable.getValueAt(jTable.getSelectedRow(), jTable.getSelectedColumn())), null);
-            FrameService.activeTimeFresh();
+            ActiveTimeService.activeTimeFresh();
         });
 
         //单个账户解码
@@ -321,7 +318,7 @@ public class MainFrame extends JFrame {
                             }
                         }, Constant.DOUBLE_ENTER_DELAY);
                     }
-                    FrameService.activeTimeFresh();
+                    ActiveTimeService.activeTimeFresh();
                 }
             }
         });
@@ -380,7 +377,7 @@ public class MainFrame extends JFrame {
             AccountService.toggleStatus(null);
             //清空单控解码模块集合
             SingleDecodingModule.clearList();
-            FrameService.activeTimeFresh();
+            ActiveTimeService.activeTimeFresh();
         });
         BlinkBorderHelper.addBorder(searchButton, BorderFactory.createLineBorder(Color.decode(
                 colorConfig.get("searchBtnBlinkBorIn")), 2), null);
@@ -406,7 +403,7 @@ public class MainFrame extends JFrame {
                         }
                     }
                 });
-                FrameService.activeTimeFresh();
+                ActiveTimeService.activeTimeFresh();
                 AccountService.toggleStatus(true);
             }
 
@@ -429,7 +426,7 @@ public class MainFrame extends JFrame {
                         }
                     }
                 });
-                FrameService.activeTimeFresh();
+                ActiveTimeService.activeTimeFresh();
                 AccountService.toggleStatus(true);
             }
 
@@ -452,7 +449,7 @@ public class MainFrame extends JFrame {
                         }
                     }
                 });
-                FrameService.activeTimeFresh();
+                ActiveTimeService.activeTimeFresh();
                 AccountService.toggleStatus(true);
             }
         });
@@ -475,7 +472,7 @@ public class MainFrame extends JFrame {
             list.add(Language.get("purposeAdd"));
             new AddFrame(list, this).setVisible(true);
             this.setVisible(false);
-            FrameService.activeTimeLock();
+            ActiveTimeService.activeTimeLock();
         });
         BlinkBorderHelper.addBorder(addButton, BorderFactory.createLineBorder(Color.decode(
                 colorConfig.get("addBtnBlinkBorIn")), 2), null);
@@ -509,7 +506,7 @@ public class MainFrame extends JFrame {
             resultNumbers.setText(AccountService.getLatestAccountNumberText());
             AccountService.toggleStatus(false);
             outputArea.clearMessage();
-            FrameService.activeTimeFresh();
+            ActiveTimeService.activeTimeFresh();
         });
         BlinkBorderHelper.addBorder(clearBtn, BorderFactory.createLineBorder(
                 Color.decode(colorConfig.get("clearBtnBorderIn")), 2), null);
@@ -541,7 +538,7 @@ public class MainFrame extends JFrame {
                 realTimeSearchBtn.setText(Language.get("moderBtn"));
                 ShowMessage.showInformationMessage(Language.get("moderBtnTipMsg"), Language.get("moderBtnTipTit"));
             }
-            FrameService.activeTimeFresh();
+            ActiveTimeService.activeTimeFresh();
         });
         this.add(realTimeSearchBtn);
 
@@ -607,7 +604,7 @@ public class MainFrame extends JFrame {
         aboutBtn.addActionListener(e -> {
             TextTools.stick(Language.get("repositoryAddress"));
             new AboutFrame().setVisible(true);
-            FrameService.activeTimeFresh();
+            ActiveTimeService.activeTimeFresh();
         });
         BlinkBorderHelper.addBorder(aboutBtn, BorderFactory.createLineBorder(Color.decode(
                 colorConfig.get("aboutBtnBlinkBorIn")), 2), null);
@@ -623,7 +620,7 @@ public class MainFrame extends JFrame {
         new AccessAnimationService(exportBtn).bind(50, 1, AccessAnimationService.Direction.Left);
         exportBtn.addActionListener(e -> {
             new ExportImportDataFrame(ExportImportCst.EXPORT).setVisible(true);
-            FrameService.activeTimeFresh();
+            ActiveTimeService.activeTimeFresh();
         });
         BlinkBorderHelper.addBorder(exportBtn, BorderFactory.createLineBorder(Color.decode(
                 colorConfig.get("exportBtnBlinkBorIn")), 2), null);
@@ -639,7 +636,7 @@ public class MainFrame extends JFrame {
         new AccessAnimationService(importBtn).bind(50, 1, AccessAnimationService.Direction.Left);
         importBtn.addActionListener(e -> {
             new ExportImportDataFrame(ExportImportCst.IMPORT).setVisible(true);
-            FrameService.activeTimeFresh();
+            ActiveTimeService.activeTimeFresh();
         });
         BlinkBorderHelper.addBorder(importBtn, BorderFactory.createLineBorder(Color.decode(
                 colorConfig.get("importBtnBlinkBorIn")), 2), null);
@@ -652,7 +649,7 @@ public class MainFrame extends JFrame {
         this.add(activistTimeLabel);
 
         //激活活性时间定时器
-        FrameService.activeTimeFresh();
+        ActiveTimeService.activeTimeStart();
 
         //活性时间锁
         activistLockBtn = new JToggleButton(Language.get("activistBtn"));
@@ -676,7 +673,7 @@ public class MainFrame extends JFrame {
                 activistLockBtn.setText(Language.get("activistBtn"));
                 activistLockBtn.setForeground(Color.decode(colorConfig.get("activeBtnFore")));
             }
-            FrameService.activeTimeLock();
+            ActiveTimeService.activeTimeLock();
         });
         BlinkBorderHelper.addBorder(activistLockBtn, BorderFactory.createLineBorder(Color.decode(
                 colorConfig.get("activeBtnBlinkBorIn")), 2), null);
@@ -694,7 +691,7 @@ public class MainFrame extends JFrame {
         importBtn3.addActionListener(e -> {
             ShowMessage.showInformationMessage("该功能为v3.0准备，如导入非v3.0的数据，可能会导致数据错误等意外情况。", "导入v3.0的数据");
             new Import3DataFrame().setVisible(true);
-            FrameService.activeTimeFresh();
+            ActiveTimeService.activeTimeFresh();
         });
         importBtn3.setFocusPainted(false);
         new AccessAnimationService(importBtn3).bind(52, 1, AccessAnimationService.Direction.right);
@@ -714,7 +711,7 @@ public class MainFrame extends JFrame {
         importBtn4.addActionListener(e -> {
             ShowMessage.showInformationMessage("该功能为v4.2准备，如导入非v4.2的数据，可能会导致数据错误等意外情况。", "导入v4.2的数据");
             new Import4DataFrame().setVisible(true);
-            FrameService.activeTimeFresh();
+            ActiveTimeService.activeTimeFresh();
         });
         importBtn4.setEnabled(!Constant.IS_LIGHT);
         this.add(importBtn4);
