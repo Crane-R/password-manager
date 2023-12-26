@@ -154,6 +154,7 @@ public class ExportImportDataFrame extends LockFrame {
             account.setUserKey(null);
             account.setAccountId(null);
             //解密
+            account.setAccountName(SecurityService.decodeBase64Salt(account.getAccountName()));
             account.setUsername(SecurityService.decodeBase64Salt(account.getUsername()));
             account.setPassword(SecurityService.decodeBase64Salt(account.getPassword()));
             account.setOther(SecurityService.decodeBase64Salt(account.getOther()));
