@@ -42,6 +42,7 @@ public class JdbcConnection {
         }
     }
 
+
     public static Connection getConnection() throws SQLException {
         Properties config = new Properties();
         try {
