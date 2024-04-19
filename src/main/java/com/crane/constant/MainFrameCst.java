@@ -12,6 +12,14 @@ import com.crane.view.function.config.Language;
 public class MainFrameCst {
 
     /**
+     * 全称标题
+     *
+     * @Author Crane Resigned
+     * @Date 2024/4/19 22:46:53
+     */
+    public static String FULL_TITLE = "Password Manager " + VersionCst.VERSION;
+
+    /**
      * 主要标题
      * Author: Crane Resigned
      * Date: 2022-11-27 18:25:35

@@ -34,16 +34,20 @@ public class LookFucService {
 
     private List<Object[]> resultList;
 
-    private final File fucFile = new File(JdbcConnection.IS_TEST ? "src/main/resources/function.html" :
-            Paths.get("").toAbsolutePath() + "/resources/function.html");
+    private final File fucFile = new File(JdbcConnection.IS_TEST ? "src/main/resources/function_web/function.html" :
+            Paths.get("").toAbsolutePath() + "/resources/function_web/function.html");
 
     private void createFile() {
         try {
+            if (fucFile.exists()) {
+                fucFile.delete();
+            }
             boolean newFile = fucFile.createNewFile();
             if (!newFile) {
                 return;
             }
             String html = new HtmlBuilderService(MainFrameCst.MAIN_TITLE + Language.get("lookFunBtn"))
+                    .buildBadgeTitle()
                     .createTable(getData()).end();
             PrintWriter printWriter = new PrintWriter(new FileWriter(fucFile));
             printWriter.println(html);
@@ -73,16 +77,12 @@ public class LookFucService {
 //        resultList.add(new Object[]{false, dataCnt++, Language.get("moderBtn2TipTit"),
 //                Language.get("moderBtn2TipMsg1") + Constant.DOUBLE_ENTER_DELAY + Language.get("moderBtn2TipMsg1")});
 
-        addHead("前言", "关于功能", "描述/解释");
-        addDataNotLanguage("有关数据备份问题", "实际上我无法提供备份方案，因为软件不涉及服务器，所有内容都是存储在用户电脑本地，就连我自身也是使用其他程序和百度网盘来达到备份效果的");
+        addHead("序号", "关于功能", "描述/解释");
+        addDataNotLanguage("数据备份问题", "事实上作者无法提供可行的备份方案，因为软件不涉及服务器，所有内容都是存储在用户电脑本地的");
         addDataNotLanguage("活性时间", "活性时间到期后会回退到登录界面，在时间即将到期（10%）时会变为红色");
-        addDataNotLanguage("数据库模式","在古老版本（3.0+）的时候其实是有服务器可用的，<br/>" +
-                "但因为服务器到期，<br/>" +
-                "而且考虑到这个软件数据在服务器感觉不是很安全，我自己也没百分百保证安全的，可以看到主界面有声明，尽管加密算法我已经增强过很多次了<br/>" +
-                "而且数据库模式适合使用数据量大的时候，这个软件的体量根本无需使用数据库，所以还是使用文件模式吧，<br/>" +
-                "而且在该版本的需求中也没有完善数据库模式<br/>" +
-                "再而且，该软件使用的技术（Swing）已经很老了，我不应该在这里停滞不前，更新到此版本本应是万万不该的");
-        addDataNotLanguage("So,", "其实吧功能不多多用用就会了的");
+        addDataNotLanguage("数据库模式", "基于该软件的数据量、安全性、便捷性等方面的综合考虑，数据库模式在4.x后的版本已经不再维护</br>" +
+                "但依旧可以经过配置文件的修改使用，具体的部署方案（如数据库表的字段是固定的）可能需要询问开发者");
+
 
         return resultList;
     }
@@ -100,7 +100,7 @@ public class LookFucService {
     }
 
     public void openFile() {
-        if (!fucFile.exists()) {
+        if (JdbcConnection.IS_TEST || !fucFile.exists()) {
             createFile();
         }
         FileTool.openFile(fucFile.getPath());

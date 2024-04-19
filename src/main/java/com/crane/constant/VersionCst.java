@@ -1,7 +1,6 @@
 package com.crane.constant;
 
 import cn.hutool.core.codec.Rot;
-import com.crane.model.service.SecurityService;
 import com.crane.view.function.config.Config;
 
 /**
