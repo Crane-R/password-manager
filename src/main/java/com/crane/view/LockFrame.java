@@ -170,7 +170,7 @@ public class LockFrame extends JFrame {
                     Constant.IS_LIGHT = isLightWeightVersion.isSelected();
                     try {
                         String className = Language.get("className");
-                        if (!className.startsWith("com/crane")) {
+                        if (!className.startsWith("com.crane")) {
                             throw new Exception();
                         } else {
                             MainFrame mainFrame = (MainFrame) Class.forName(className).getConstructor().newInstance();

@@ -11,14 +11,16 @@ public interface VersionCst {
 
     /**
      * 版本号
+     * 版本号不应该写在配置文件
      *
      * @Author Crane Resigned
      * @Date 2023-02-02 21:33:50
      */
-    String VERSION = new Config(null).get("resourcesVersion");
+    String VERSION = "v7.0.4-rc";
 
     /**
      * 最近更新日期
+     * 该时间也不应该写在
      *
      * @Author Crane Resigned
      * @Date 2023-02-03 23:13:04

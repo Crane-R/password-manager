@@ -28,18 +28,6 @@ public final class VersionCheckTool {
         }
         Config config = new Config(null);
         config.set("recentUpdateTime", DateUtil.now());
-        config.set("resourcesVersion", generateVerNumber());
-    }
-
-    /**
-     * 生成版本号
-     *
-     * @author zhouxingxue
-     * @date 2023/10/14 19:40:52
-     */
-    private static String generateVerNumber() {
-//        return "v" + DateUtil.format(new Date(), "yy.MMdd");
-        return "v7.0.3-beta-Chocolate.Ed";
     }
 
 }
