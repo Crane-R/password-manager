@@ -1,5 +1,7 @@
 package com.crane.constant;
 
+import cn.hutool.core.codec.Rot;
+import com.crane.model.service.SecurityService;
 import com.crane.view.function.config.Config;
 
 /**
@@ -25,5 +27,5 @@ public interface VersionCst {
      * @Author Crane Resigned
      * @Date 2023-02-03 23:13:04
      */
-    String RECENTLY_UPDATE_DATE = new Config(null).get("recentUpdateTime");
+    String RECENTLY_UPDATE_DATE = Rot.decode13(new Config(null).get("recentUpdateTime"));
 }

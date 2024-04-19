@@ -1,5 +1,6 @@
 package com.crane.test;
 
+import cn.hutool.core.codec.Rot;
 import com.crane.view.LockFrame;
 import com.crane.view.function.service.LogService;
 import com.crane.view.function.tools.VersionCheckTool;
@@ -13,6 +14,16 @@ import java.io.IOException;
  */
 @Slf4j
 public class Test {
+
+    @org.junit.Test
+    public void test(){
+        String a = "abc123";
+        a=Rot.encode13(a);
+        System.out.println(a);
+        a=Rot.decode13(a);
+        System.out.println(a);
+    }
+
     public static void main(String[] args) throws IOException {
 //        new MainFrame().setVisible(true);
         try {
@@ -22,7 +33,7 @@ public class Test {
             FrontLoading.checkKeysDirectory();
             LockFrame.start();
         } catch (Exception e) {
-            log.error(e.toString());
+            log.error(e.getMessage());
             new LogService().showLog();
         }
 

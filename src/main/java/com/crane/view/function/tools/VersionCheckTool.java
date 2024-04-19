@@ -1,8 +1,13 @@
 package com.crane.view.function.tools;
 
+import cn.hutool.core.codec.Rot;
 import cn.hutool.core.date.DateUtil;
 import com.crane.model.jdbc.JdbcConnection;
+import com.crane.model.service.SecurityService;
 import com.crane.view.function.config.Config;
+
+import java.util.Base64;
+import java.util.Objects;
 
 /**
  * 版本检测工具，用于检测程序是否与资源版本一致
@@ -27,7 +32,7 @@ public final class VersionCheckTool {
             return;
         }
         Config config = new Config(null);
-        config.set("recentUpdateTime", DateUtil.now());
+        config.set("recentUpdateTime", Rot.encode13(DateUtil.now()));
     }
 
 }

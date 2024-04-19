@@ -20,7 +20,7 @@ public class PmApplication {
             //启动窗口
             LockFrame.start();
         } catch (Exception e) {
-            log.error(e.toString());
+            log.error(e.getMessage());
             new LogService().showLog();
         }
     }

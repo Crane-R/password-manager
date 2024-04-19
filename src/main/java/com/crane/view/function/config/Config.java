@@ -51,6 +51,9 @@ public class Config {
      * @Date 2023-06-13 19:03:05
      */
     public void set(String key, String value) {
+        if (value == null) {
+            value = "";
+        }
         defaultConfig.setProperty(key, new String(value.getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
         Path path = Paths.get("");
         String filePath = JdbcConnection.IS_TEST ?

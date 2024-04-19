@@ -89,7 +89,8 @@ public class Constant {
      * @Author AXing
      * @date 2023/12/7 15:40:32
      */
-    public static final Config colorConfig = new Config("config/coloursOrange.properties");
+    public static final Config colorConfig = new Config("config/themes/"
+            + new Config(null).get("theme") + ".properties");
 
     public static final Integer LEAST_PASS_LEN = 4;
 }
