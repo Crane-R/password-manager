@@ -38,7 +38,7 @@ public class JdbcConnection {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
 
@@ -53,7 +53,7 @@ public class JdbcConnection {
                     ClassLoader.getSystemResourceAsStream(sureConfig)
                     : Files.newInputStream(new File(Paths.get("").toAbsolutePath() + "/resources/" + sureConfig).toPath()));
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
         Connection connection = null;
         try {
@@ -73,21 +73,21 @@ public class JdbcConnection {
             try {
                 preparedStatement.close();
             } catch (SQLException throwAbles) {
-                throwAbles.printStackTrace();
+                log.error(throwAbles.getMessage());
             }
         }
         if (connection != null) {
             try {
                 connection.close();
             } catch (SQLException throwAbles) {
-                throwAbles.printStackTrace();
+                log.error(throwAbles.getMessage());
             }
         }
         if (resultSet != null) {
             try {
                 resultSet.close();
             } catch (SQLException throwAbles) {
-                throwAbles.printStackTrace();
+                log.error(throwAbles.getMessage());
             }
         }
     }
