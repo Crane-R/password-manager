@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 查看功能
@@ -24,31 +23,36 @@ import java.util.List;
 @Slf4j
 public class LookFucService {
 
-    /**
-     * 数据序号
-     *
-     * @author AXing
-     * @date 2023/12/7 17:31:21
-     */
-    private int dataCnt = 1;
-
-    private List<Object[]> resultList;
-
     private final File fucFile = new File(JdbcConnection.IS_TEST ? "src/main/resources/function_web/function.html" :
             Paths.get("").toAbsolutePath() + "/resources/function_web/function.html");
 
     private void createFile() {
         try {
             if (fucFile.exists()) {
-                fucFile.delete();
+                boolean delete = fucFile.delete();
+                if (delete) {
+                    log.info("功能介绍文件被删除");
+                }
             }
             boolean newFile = fucFile.createNewFile();
             if (!newFile) {
                 return;
             }
+
+            //构建数据
+            FucContentList functionList = new FucContentList();
+            functionList.addHead("function.head0", "function.head0Des");
+            functionList.addData("function.head0.function1", "function.head0.des1");
+            functionList.addData("function.head0.function2", "function.head0.des2");
+            functionList.addHead("function.head1", "function.head1Des");
+            functionList.addData("function.head1.function1", "function.head1.des1");
+            functionList.addData("function.head1.function2", "function.head1.des2");
+            functionList.addData("function.head1.function3", "function.head1.des3");
+
             String html = new HtmlBuilderService(MainFrameCst.MAIN_TITLE + Language.get("lookFunBtn"))
                     .buildBadgeTitle()
-                    .createTable(getData()).end();
+                    .createTable(functionList)
+                    .end();
             PrintWriter printWriter = new PrintWriter(new FileWriter(fucFile));
             printWriter.println(html);
             printWriter.flush();
@@ -59,51 +63,31 @@ public class LookFucService {
         }
     }
 
-    /**
-     * 获取数据
-     *
-     * @author AXing
-     * @date 2023/12/7 17:18:46
-     */
-    private List<Object[]> getData() {
-        resultList = new ArrayList<>();
-//        addHead("登录界面", "功能", "描述");
-//        addData("keyDuplicateTipTitle", "keyDuplicateTipMsg");
-//        addData("isLocal2TipTitle", "isLocal2TipMsg");
-//        addData("sureCreate", "isCreateSceneTipMsg");
-//        addData("isLightWeightVersion2", "isLightWeightVersion2TipMsg");
-//        addHead("主界面", "功能", "描述");
-//        addData("moderBtnTipTit", "moderBtnTipMsg");
-//        resultList.add(new Object[]{false, dataCnt++, Language.get("moderBtn2TipTit"),
-//                Language.get("moderBtn2TipMsg1") + Constant.DOUBLE_ENTER_DELAY + Language.get("moderBtn2TipMsg1")});
-
-        addHead("序号", "关于功能", "描述/解释");
-        addDataNotLanguage("数据备份问题", "事实上作者无法提供可行的备份方案，因为软件不涉及服务器，所有内容都是存储在用户电脑本地的");
-        addDataNotLanguage("活性时间", "活性时间到期后会回退到登录界面，在时间即将到期（10%）时会变为红色");
-        addDataNotLanguage("数据库模式", "基于该软件的数据量、安全性、便捷性等方面的综合考虑，数据库模式在4.x后的版本已经不再维护</br>" +
-                "但依旧可以经过配置文件的修改使用，具体的部署方案（如数据库表的字段是固定的）可能需要询问开发者");
-
-
-        return resultList;
-    }
-
-    private void addData(String function, String description) {
-        resultList.add(new Object[]{false, dataCnt++, Language.get(function), Language.get(description)});
-    }
-
-    private void addDataNotLanguage(String function, String description) {
-        resultList.add(new Object[]{false, dataCnt++, function, description});
-    }
-
-    private void addHead(String num, String head, String description) {
-        resultList.add(new Object[]{true, num, head, description});
-    }
-
     public void openFile() {
         if (JdbcConnection.IS_TEST || !fucFile.exists()) {
             createFile();
         }
         FileTool.openFile(fucFile.getPath());
+    }
+
+    /**
+     * 表格数据集合
+     *
+     * @Author Crane Resigned
+     * @Date 2024/4/26 17:31:30
+     */
+    static class FucContentList extends ArrayList<Object[]> {
+
+        private int count;
+
+        public void addHead(String head, String des) {
+            super.add(new Object[]{true, Language.get("function.num"), Language.get(head), Language.get(des)});
+        }
+
+        public void addData(String function, String description) {
+            super.add(new Object[]{false, ++count, Language.get(function), Language.get(description)});
+        }
+
     }
 
 }

@@ -56,36 +56,31 @@ public class HtmlBuilderService {
      * @date 2023/12/7 17:03:21
      */
     public HtmlBuilderService createTable(List<Object[]> tableData) {
-        htmlBuilder.append("<table class='table'");
+        htmlBuilder.append("<table class='table'>");
 
         int trCnt = tableData.size();
         if (trCnt == 0) {
             return this;
         }
 
-        Object[] title = tableData.get(0);
-        if (Boolean.parseBoolean(title[0].toString())) {
-            int dataLen = title.length;
-            htmlBuilder.append("<thead><tr>");
-            for (int j = 1; j < dataLen; j++) {
-                htmlBuilder.append("<th scope='col'>").append(title[j]).append("</th>");
+        tableData.forEach(object -> {
+            int dataLen = object.length;
+            if(Boolean.parseBoolean(object[0].toString())){
+                htmlBuilder.append("<tr>");
+                for (int j = 1; j < dataLen; j++) {
+                    htmlBuilder.append("<th scope='col'>").append(object[j]).append("</th>");
+                }
+                htmlBuilder.append("</tr>");
+            }else {
+                htmlBuilder.append("<tr>");
+                htmlBuilder.append("<th scope='row'>").append(object[1]).append("</th>");
+                for (int j = 2; j < dataLen; j++) {
+                    htmlBuilder.append("<td>").append(object[j]).append("</td>");
+                }
+                htmlBuilder.append("</tr>");
             }
-            htmlBuilder.append("</tr></thead>");
-        }
+        });
 
-        int len = tableData.size();
-        htmlBuilder.append("<tbody>");
-        for (int i = 1; i < len; i++) {
-            htmlBuilder.append("<tr>");
-            Object[] rowData = tableData.get(i);
-            int dataLen = rowData.length;
-            htmlBuilder.append("<th scope='row'>").append(rowData[1]).append("</th>");
-            for (int j = 2; j < dataLen; j++) {
-                htmlBuilder.append("<td>").append(rowData[j]).append("</td>");
-            }
-            htmlBuilder.append("</tr>");
-        }
-        htmlBuilder.append("</tbody>");
         htmlBuilder.append("</table>");
         return this;
     }
