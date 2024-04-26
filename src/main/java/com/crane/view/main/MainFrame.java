@@ -516,7 +516,7 @@ public class MainFrame extends JFrame {
         this.add(clearBtn);
 
         realTimeSearchBtn = new JToggleButton(Language.get("moderBtn"), true);
-        realTimeSearchBtn.setBounds(1095, -30, 100, 45);
+        realTimeSearchBtn.setBounds(1095, -37, 100, 45);
         new AccessAnimationService(realTimeSearchBtn).bind(30, 1, AccessAnimationService.Direction.MinusDown);
         realTimeSearchBtn.setFocusPainted(false);
         BlinkBorderHelper.addBorder(realTimeSearchBtn, BorderFactory.createLineBorder(Color.decode(
@@ -547,7 +547,7 @@ public class MainFrame extends JFrame {
 
         //切换场景
         JButton switchSceneBtn = new JButton(Language.get("switchBtn"));
-        switchSceneBtn.setBounds(990, -30, 100, 45);
+        switchSceneBtn.setBounds(990, -37, 100, 45);
         new AccessAnimationService(switchSceneBtn).bind(30, 1, AccessAnimationService.Direction.MinusDown);
         switchSceneBtn.setFocusPainted(false);
         BlinkBorderHelper.addBorder(switchSceneBtn, BorderFactory.createLineBorder(Color.decode(
@@ -564,7 +564,7 @@ public class MainFrame extends JFrame {
 
         //查看日志按钮
         JButton lookLogBtn = new JButton(Language.get("lookLogBtn"));
-        lookLogBtn.setBounds(885, -30, 100, 45);
+        lookLogBtn.setBounds(885, -37, 100, 45);
         new AccessAnimationService(lookLogBtn).bind(30, 1, AccessAnimationService.Direction.MinusDown);
         lookLogBtn.setFocusPainted(false);
         BlinkBorderHelper.addBorder(lookLogBtn, BorderFactory.createLineBorder(Color.decode(
@@ -578,7 +578,7 @@ public class MainFrame extends JFrame {
 
         //查看功能按钮
         JButton lookFunBtn = new JButton(Language.get("mainLookFunBtn"));
-        lookFunBtn.setBounds(780, -30, 100, 45);
+        lookFunBtn.setBounds(780, -37, 100, 45);
         new AccessAnimationService(lookFunBtn).bind(30, 1, AccessAnimationService.Direction.MinusDown);
         lookFunBtn.setFocusPainted(false);
         BlinkBorderHelper.addBorder(lookFunBtn, BorderFactory.createLineBorder(Color.decode(
@@ -592,14 +592,15 @@ public class MainFrame extends JFrame {
 
         //免责声明
         disclaimerLabel = new JLabel(Language.get("disclaimer"));
-        disclaimerLabel.setBounds(420, 723, 800, 30);
+        disclaimerLabel.setBounds(1103, 723, 800, 30);
+        new AccessAnimationService(disclaimerLabel).bind(650,1, AccessAnimationService.Direction.Left);
         disclaimerLabel.setForeground(Color.decode(colorConfig.get("disclaimLabel")));
-        disclaimerLabel.setFont(new Font("微软雅黑", Font.PLAIN, 16));
+        disclaimerLabel.setFont(new Font("微软雅黑", Font.ITALIC, 16));
         this.add(disclaimerLabel);
 
         //关于
         aboutBtn = new JButton(Language.get("aboutBtn"));
-        aboutBtn.setBounds(-8, 0, 60, 30);
+        aboutBtn.setBounds(-8, 32, 60, 30);
         aboutBtn.setForeground(Color.decode(colorConfig.get("aboutBtnFore")));
         aboutBtn.setBackground(Color.decode(colorConfig.get("aboutBtnBg")));
         aboutBtn.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
@@ -615,7 +616,7 @@ public class MainFrame extends JFrame {
 
         //导出数据按钮
         exportBtn = new JButton(Language.get("exportBtn"));
-        exportBtn.setBounds(1145, 26, 100, 36);
+        exportBtn.setBounds(1177, 26, 80, 36);
         exportBtn.setForeground(Color.decode(colorConfig.get("exportBtnFore")));
         exportBtn.setBackground(Color.decode(colorConfig.get("exportBtnBg")));
         exportBtn.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
@@ -631,7 +632,7 @@ public class MainFrame extends JFrame {
 
         //导入
         importBtn = new JButton(Language.get("importBtn"));
-        importBtn.setBounds(1145, 70, 100, 36);
+        importBtn.setBounds(1177, 70, 80, 36);
         importBtn.setForeground(Color.decode(colorConfig.get("importBtnFore")));
         importBtn.setBackground(Color.decode(colorConfig.get("importBtnBg")));
         importBtn.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
@@ -656,7 +657,7 @@ public class MainFrame extends JFrame {
 
         //活性时间锁
         activistLockBtn = new JToggleButton(Language.get("activistBtn"));
-        activistLockBtn.setBounds(250, 0, 80, 30);
+        activistLockBtn.setBounds(-8, 0, 60, 30);
         activistLockBtn.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
         activistLockBtn.setForeground(Color.decode(colorConfig.get("activeBtnFore")));
         activistLockBtn.setBorder(null);
@@ -685,7 +686,7 @@ public class MainFrame extends JFrame {
         //前期版本兼容性导入数据
         //3.0
         JButton importBtn3 = new JButton("PM3.0");
-        importBtn3.setBounds(-52, 32, 60, 30);
+        importBtn3.setBounds(-52, 64, 60, 30);
         importBtn3.setForeground(Color.decode(colorConfig.get("importBtn3Fore")));
         importBtn3.setBackground(Color.decode(colorConfig.get("importBtn3Bg")));
         importBtn3.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
@@ -703,7 +704,7 @@ public class MainFrame extends JFrame {
 
         //4.0
         JButton importBtn4 = new JButton("PM4.2");
-        importBtn4.setBounds(-52, 64, 60, 30);
+        importBtn4.setBounds(-52, 96, 60, 30);
         importBtn4.setFocusPainted(false);
         new AccessAnimationService(importBtn4).bind(52, 1, AccessAnimationService.Direction.right);
         importBtn4.setForeground(Color.decode(colorConfig.get("importBtn4Fore")));

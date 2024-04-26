@@ -187,10 +187,10 @@ public class LockFrame extends JFrame {
         this.add(secretText);
 
         //回车登录提示
-        loginTip = new JLabel("√Enter");
-        loginTip.setBounds(375, 155, 100, 30);
+        loginTip = new JLabel(Language.get("loginEnterLabel"));
+        loginTip.setBounds(340, 155, 100, 30);
         loginTip.setForeground(Color.decode(colorConfig.get("loginTip")));
-        loginTip.setFont(new Font("微软雅黑", Font.BOLD, 14));
+        loginTip.setFont(new Font("微软雅黑", Font.BOLD, 13));
         this.add(loginTip);
 
         //是否是本地数据库
@@ -315,7 +315,7 @@ public class LockFrame extends JFrame {
         lookFunBtn.setBounds(361, 0, 100, 30);
         lookFunBtn.setForeground(Color.decode(colorConfig.get("lookFun")));
         lookFunBtn.setBackground(Color.decode(colorConfig.get("lookFunBg")));
-        lookFunBtn.setFont(new Font("微软雅黑", Font.BOLD, 13));
+        lookFunBtn.setFont(new Font("微软雅黑", Font.PLAIN, 13));
         lookFunBtn.setHorizontalAlignment(JLabel.CENTER);
         lookFunBtn.setBorder(null);
         lookFunBtn.addActionListener(e -> {
