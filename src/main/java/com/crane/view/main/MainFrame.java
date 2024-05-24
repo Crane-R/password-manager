@@ -147,7 +147,7 @@ public class MainFrame extends JFrame {
                 + (Constant.IS_LIGHT ? Language.get("isLightWeightVersion") : Language.get("isLightWeightVersion2")));
         this.setSize(1200, 800);
         this.setLayout(null);
-//        this.setResizable(false);
+        this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //设置标题栏的图标
