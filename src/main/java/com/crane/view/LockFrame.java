@@ -102,8 +102,8 @@ public class LockFrame extends JFrame {
         final boolean isHaveKey = SecurityService.checkKeyAmountIsNotZero();
 
         //窗体初始化
-        this.setTitle(isHaveKey ? JdbcConnection.IS_TEST ? MainFrameCst.TEST_TITLE : MainFrameCst.MAIN_TITLE
-                : Language.get("haveNotKeyTitle"));
+        String currentTitle = isHaveKey ? JdbcConnection.IS_TEST ? MainFrameCst.TEST_TITLE : MainFrameCst.MAIN_TITLE
+                : Language.get("haveNotKeyTitle");
         this.setSize(490, 300);
         this.setLayout(null);
         this.setResizable(false);
@@ -112,7 +112,8 @@ public class LockFrame extends JFrame {
         this.setIconImage(ImageService.getTitleImage());
         this.getContentPane().setBackground(Color.decode(colorConfig.get("lockBg")));
 
-        tipLabel = new JLabel(isHaveKey ? Language.get("haveKey") : Language.get("haveNotKey"));
+        String currentTipLabelKey = isHaveKey ? Language.get("haveKey") : Language.get("haveNotKey");
+        tipLabel = new JLabel(currentTipLabelKey);
         tipLabel.setBounds(50, 50, 400, 40);
         tipLabel.setForeground(Color.decode(colorConfig.get("lockTipLabel")));
         tipLabel.setFont(new Font("微软雅黑", Font.BOLD, 25));
@@ -135,7 +136,7 @@ public class LockFrame extends JFrame {
                         if (!SecurityService.checkKeyFileIsExist(passTxt)) {
                             if (passTxt.length() < Constant.LEAST_PASS_LEN) {
                                 ShowMessage.showWarningMessage(Language.get("leastPassLengthMsg")
-                                        +Constant.LEAST_PASS_LEN, Language.get("leastPassLengthTit"));
+                                        + Constant.LEAST_PASS_LEN, Language.get("leastPassLengthTit"));
                                 return;
                             }
                             SecurityService.createKey(passTxt);
@@ -157,7 +158,7 @@ public class LockFrame extends JFrame {
                             log.info("一个密匙都没有，创建密匙");
                             if (passTxt.length() < Constant.LEAST_PASS_LEN) {
                                 ShowMessage.showWarningMessage(Language.get("leastPassLengthMsg")
-                                        +Constant.LEAST_PASS_LEN, Language.get("leastPassLengthTit"));
+                                        + Constant.LEAST_PASS_LEN, Language.get("leastPassLengthTit"));
                                 return;
                             }
                             SecurityService.createKey(passTxt);
@@ -221,8 +222,9 @@ public class LockFrame extends JFrame {
         });
         BlinkBorderHelper.addBorder(isLocal, BorderFactory.createLineBorder(Color.WHITE, 2), null);
         this.add(isLocal);
+        this.setTitle(currentTitle + " - " + Language.get(isLocal.isSelected() ? "isFileMode" : "isDataMode"));
 
-        isCreateScene = new JToggleButton(Language.get("isCreateScene"));
+        isCreateScene = new JToggleButton(Language.get("loginShowScene"));
         isCreateScene.setBounds(50, 200, 100, 30);
         isCreateScene.setForeground(Color.decode(colorConfig.get("isCreateScene")));
         isCreateScene.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
@@ -236,10 +238,11 @@ public class LockFrame extends JFrame {
         isCreateScene.setBackground(Color.decode(colorConfig.get("isCreateBg")));
         isCreateScene.addActionListener(e -> {
             if (isCreateScene.isSelected()) {
-                isCreateScene.setText(Language.get("sureCreate"));
-                ShowMessage.showInformationMessage(Language.get("isCreateSceneTipMsg"), Language.get("isCreateSceneTipTitle"));
+                isCreateScene.setText(Language.get("registerShowScene"));
+                tipLabel.setText(Language.get("registerKey"));
             } else {
-                isCreateScene.setText(Language.get("isCreateScene"));
+                isCreateScene.setText(Language.get("loginShowScene"));
+                tipLabel.setText(currentTipLabelKey);
             }
         });
         BlinkBorderHelper.addBorder(isCreateScene, BorderFactory.createLineBorder(Color.WHITE, 2), null);
@@ -249,7 +252,7 @@ public class LockFrame extends JFrame {
         if (isFileModel) {
             isLocal.setVisible(false);
         }
-        isLightWeightVersion = new JToggleButton(isFileModel ? Language.get("isLightWeightVersion") : Language.get("isLightWeightVersion2"), isFileModel);
+        isLightWeightVersion = new JToggleButton(isFileModel ? Language.get("isFileMode") : Language.get("isDataMode"), isFileModel);
         isLightWeightVersion.setBounds(330, 200, 100, 30);
         isLightWeightVersion.setForeground(Color.decode(colorConfig.get("isLightWeightVersion")));
         isLightWeightVersion.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
@@ -263,13 +266,16 @@ public class LockFrame extends JFrame {
         isLightWeightVersion.setBackground(Color.decode(colorConfig.get("isLightBg")));
         isLightWeightVersion.addActionListener(e -> {
             boolean selected = isLightWeightVersion.isSelected();
+            String fileMode = Language.get("isFileMode");
+            String dataMode = Language.get("isDataMode");
             if (selected) {
-                isLightWeightVersion.setText(Language.get("isLightWeightVersion"));
+                isLightWeightVersion.setText(fileMode);
                 isLocal.setVisible(false);
+                this.setTitle(currentTitle + " - " + dataMode);
             } else {
-                isLightWeightVersion.setText(Language.get("isLightWeightVersion2"));
+                isLightWeightVersion.setText(dataMode);
                 isLocal.setVisible(true);
-                ShowMessage.showPlainMessage(Language.get("isLightWeightVersion2TipMsg"), Language.get("isLightWeightVersion2TipTitle"));
+                this.setTitle(currentTitle + " - " + fileMode);
             }
             //设置默认模式
             new Config(null).set("isFileModel", String.valueOf(selected));
@@ -321,9 +327,11 @@ public class LockFrame extends JFrame {
         lookFunBtn.addActionListener(e -> {
             new LookFucService().openFile();
         });
-        this.add(lookFunBtn);
-
-        this.add(isEng);
+        JLayeredPane funBtnEngLay = new JLayeredPane();
+        funBtnEngLay.setSize(this.getSize());
+        funBtnEngLay.add(lookFunBtn, 0);
+        funBtnEngLay.add(isEng, 9);
+        this.add(funBtnEngLay);
     }
 
     private void close() {

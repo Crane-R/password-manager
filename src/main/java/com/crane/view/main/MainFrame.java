@@ -177,7 +177,11 @@ public class MainFrame extends JFrame {
         jScrollPane.setBounds(42, 125, 1100, 556);
         jScrollPane.getVerticalScrollBar().setUI(new ScrollBarUi());
         jScrollPane.getViewport().setBackground(Color.decode(colorConfig.get("scrollPaneBg")));
-        this.add(jScrollPane);
+        jScrollPane.setBorder(BorderFactory.createLineBorder(Color.decode(colorConfig.get("scrollPaneBor"))));
+        JLayeredPane mainLayeredPane = new JLayeredPane();
+        mainLayeredPane.setSize(1200, 800);
+        mainLayeredPane.add(jScrollPane, 9);
+
 
         //右键菜单
         JMenuItem updateMenuItem = new JMenuItem(Language.get("rightBtnMenuUpdate"));
@@ -516,8 +520,8 @@ public class MainFrame extends JFrame {
         this.add(clearBtn);
 
         realTimeSearchBtn = new JToggleButton(Language.get("moderBtn"), true);
-        realTimeSearchBtn.setBounds(1095, -37, 100, 45);
-        new AccessAnimationService(realTimeSearchBtn).bind(30, 1, AccessAnimationService.Direction.MinusDown);
+        realTimeSearchBtn.setBounds(1177, 140, 100, 30);
+        new AccessAnimationService(realTimeSearchBtn).bind(80, 1, AccessAnimationService.Direction.Left);
         realTimeSearchBtn.setFocusPainted(false);
         BlinkBorderHelper.addBorder(realTimeSearchBtn, BorderFactory.createLineBorder(Color.decode(
                 colorConfig.get("realTimeBtnBorderIn")), 2), null);
@@ -547,8 +551,8 @@ public class MainFrame extends JFrame {
 
         //切换场景
         JButton switchSceneBtn = new JButton(Language.get("switchBtn"));
-        switchSceneBtn.setBounds(990, -37, 100, 45);
-        new AccessAnimationService(switchSceneBtn).bind(30, 1, AccessAnimationService.Direction.MinusDown);
+        switchSceneBtn.setBounds(1177, 105, 100, 30);
+        new AccessAnimationService(switchSceneBtn).bind(80, 1, AccessAnimationService.Direction.Left);
         switchSceneBtn.setFocusPainted(false);
         BlinkBorderHelper.addBorder(switchSceneBtn, BorderFactory.createLineBorder(Color.decode(
                 colorConfig.get("switchBtnBorderIn")), 2), null);
@@ -564,8 +568,8 @@ public class MainFrame extends JFrame {
 
         //查看日志按钮
         JButton lookLogBtn = new JButton(Language.get("lookLogBtn"));
-        lookLogBtn.setBounds(885, -37, 100, 45);
-        new AccessAnimationService(lookLogBtn).bind(30, 1, AccessAnimationService.Direction.MinusDown);
+        lookLogBtn.setBounds(1177, 70, 100, 30);
+        new AccessAnimationService(lookLogBtn).bind(80, 1, AccessAnimationService.Direction.Left);
         lookLogBtn.setFocusPainted(false);
         BlinkBorderHelper.addBorder(lookLogBtn, BorderFactory.createLineBorder(Color.decode(
                 colorConfig.get("logBtnBorderIn")), 2), null);
@@ -578,8 +582,8 @@ public class MainFrame extends JFrame {
 
         //查看功能按钮
         JButton lookFunBtn = new JButton(Language.get("mainLookFunBtn"));
-        lookFunBtn.setBounds(780, -37, 100, 45);
-        new AccessAnimationService(lookFunBtn).bind(30, 1, AccessAnimationService.Direction.MinusDown);
+        lookFunBtn.setBounds(1177, 35, 100, 30);
+        new AccessAnimationService(lookFunBtn).bind(80, 1, AccessAnimationService.Direction.Left);
         lookFunBtn.setFocusPainted(false);
         BlinkBorderHelper.addBorder(lookFunBtn, BorderFactory.createLineBorder(Color.decode(
                 colorConfig.get("funcBtnBorderIn")), 2), null);
@@ -593,14 +597,14 @@ public class MainFrame extends JFrame {
         //免责声明
         disclaimerLabel = new JLabel(Language.get("disclaimer"));
         disclaimerLabel.setBounds(1103, 723, 800, 30);
-        new AccessAnimationService(disclaimerLabel).bind(650,1, AccessAnimationService.Direction.Left);
+        new AccessAnimationService(disclaimerLabel).bind(650, 1, AccessAnimationService.Direction.Left);
         disclaimerLabel.setForeground(Color.decode(colorConfig.get("disclaimLabel")));
         disclaimerLabel.setFont(new Font("微软雅黑", Font.ITALIC, 16));
         this.add(disclaimerLabel);
 
         //关于
         aboutBtn = new JButton(Language.get("aboutBtn"));
-        aboutBtn.setBounds(-8, 32, 60, 30);
+        aboutBtn.setBounds(1177, 0, 80, 30);
         aboutBtn.setForeground(Color.decode(colorConfig.get("aboutBtnFore")));
         aboutBtn.setBackground(Color.decode(colorConfig.get("aboutBtnBg")));
         aboutBtn.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
@@ -612,16 +616,17 @@ public class MainFrame extends JFrame {
         });
         BlinkBorderHelper.addBorder(aboutBtn, BorderFactory.createLineBorder(Color.decode(
                 colorConfig.get("aboutBtnBlinkBorIn")), 2), null);
+        new AccessAnimationService(aboutBtn).bind(50, 1, AccessAnimationService.Direction.Left);
         this.add(aboutBtn);
 
         //导出数据按钮
         exportBtn = new JButton(Language.get("exportBtn"));
-        exportBtn.setBounds(1177, 26, 80, 36);
+        exportBtn.setBounds(1177, 280, 100, 30);
         exportBtn.setForeground(Color.decode(colorConfig.get("exportBtnFore")));
         exportBtn.setBackground(Color.decode(colorConfig.get("exportBtnBg")));
         exportBtn.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
         exportBtn.setHorizontalAlignment(JLabel.CENTER);
-        new AccessAnimationService(exportBtn).bind(50, 1, AccessAnimationService.Direction.Left);
+        new AccessAnimationService(exportBtn).bind(80, 1, AccessAnimationService.Direction.Left);
         exportBtn.addActionListener(e -> {
             new ExportImportDataFrame(ExportImportCst.EXPORT).setVisible(true);
             ActiveTimeService.activeTimeFresh();
@@ -632,12 +637,12 @@ public class MainFrame extends JFrame {
 
         //导入
         importBtn = new JButton(Language.get("importBtn"));
-        importBtn.setBounds(1177, 70, 80, 36);
+        importBtn.setBounds(1177, 245, 100, 30);
         importBtn.setForeground(Color.decode(colorConfig.get("importBtnFore")));
         importBtn.setBackground(Color.decode(colorConfig.get("importBtnBg")));
         importBtn.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
         importBtn.setHorizontalAlignment(JLabel.CENTER);
-        new AccessAnimationService(importBtn).bind(50, 1, AccessAnimationService.Direction.Left);
+        new AccessAnimationService(importBtn).bind(80, 1, AccessAnimationService.Direction.Left);
         importBtn.addActionListener(e -> {
             new ExportImportDataFrame(ExportImportCst.IMPORT).setVisible(true);
             ActiveTimeService.activeTimeFresh();
@@ -686,7 +691,7 @@ public class MainFrame extends JFrame {
         //前期版本兼容性导入数据
         //3.0
         JButton importBtn3 = new JButton("PM3.0");
-        importBtn3.setBounds(-52, 64, 60, 30);
+        importBtn3.setBounds(1177, 175, 100, 30);
         importBtn3.setForeground(Color.decode(colorConfig.get("importBtn3Fore")));
         importBtn3.setBackground(Color.decode(colorConfig.get("importBtn3Bg")));
         importBtn3.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
@@ -698,15 +703,15 @@ public class MainFrame extends JFrame {
             ActiveTimeService.activeTimeFresh();
         });
         importBtn3.setFocusPainted(false);
-        new AccessAnimationService(importBtn3).bind(52, 1, AccessAnimationService.Direction.right);
+        new AccessAnimationService(importBtn3).bind(80, 1, AccessAnimationService.Direction.Left);
         importBtn3.setEnabled(!Constant.IS_LIGHT);
         this.add(importBtn3);
 
         //4.0
         JButton importBtn4 = new JButton("PM4.2");
-        importBtn4.setBounds(-52, 96, 60, 30);
+        importBtn4.setBounds(1177, 210, 100, 30);
         importBtn4.setFocusPainted(false);
-        new AccessAnimationService(importBtn4).bind(52, 1, AccessAnimationService.Direction.right);
+        new AccessAnimationService(importBtn4).bind(80, 1, AccessAnimationService.Direction.Left);
         importBtn4.setForeground(Color.decode(colorConfig.get("importBtn4Fore")));
         importBtn4.setBackground(Color.decode(colorConfig.get("importBtn4Bg")));
         importBtn4.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
@@ -722,7 +727,7 @@ public class MainFrame extends JFrame {
 
         //输出框
         outputArea = new QueueTextArea();
-        outputArea.setBounds(42, 681, 1099, 44);
+        outputArea.setBounds(42, 682, 1100, 44);
         outputArea.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
         outputArea.setEditable(false);
         outputArea.setBackground(Color.decode(colorConfig.get("outputAreaBg")));
@@ -730,6 +735,7 @@ public class MainFrame extends JFrame {
         outputArea.setBorder(BorderFactory.createLineBorder(Color.decode(colorConfig.get("outputAreaBor"))));
         this.add(outputArea);
 
+        this.add(mainLayeredPane);
         mainFrame = this;
     }
 

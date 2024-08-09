@@ -1,5 +1,6 @@
 package com.crane.view;
 
+import cn.hutool.core.date.DateUtil;
 import com.crane.constant.VersionCst;
 import com.crane.constant.Constant;
 import com.crane.constant.MainFrameCst;
@@ -68,7 +69,7 @@ public class AboutFrame extends JFrame {
 
         //版权信息
         JLabel copyrightLabel = new JLabel("<html><b style='color:" + colorConfig.get("copyRight")
-                + ";'>Copyright &copy; 2022-2024 Crane Resigned.</b></html>");
+                + ";'>Copyright &copy; 2022-"+ DateUtil.year(DateUtil.date()) +" Crane Resigned.</b></html>");
         copyrightLabel.setBounds(30, 205, 600, 60);
         copyrightLabel.setFont(new Font("微软雅黑",Font.BOLD,16));
         this.add(copyrightLabel);

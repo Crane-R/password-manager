@@ -3,6 +3,7 @@ package com.crane.test;
 import cn.hutool.core.codec.Rot;
 import com.crane.view.LockFrame;
 import com.crane.view.function.service.LogService;
+import com.crane.view.function.tools.ShowMessage;
 import com.crane.view.function.tools.VersionCheckTool;
 import com.crane.view.function.service.FrontLoading;
 import lombok.extern.slf4j.Slf4j;
@@ -16,14 +17,14 @@ import java.io.IOException;
 public class Test {
 
     @org.junit.Test
-    public void test(){
+    public void test() {
         String a = "abc123";
-        a=Rot.encode13(a);
+        a = Rot.encode13(a);
         System.out.println(a);
-        a=Rot.decode13(a);
+        a = Rot.decode13(a);
         System.out.println(a);
     }
-    
+
     public static void main(String[] args) throws IOException {
 //        new MainFrame().setVisible(true);
         try {
@@ -34,9 +35,9 @@ public class Test {
             LockFrame.start();
         } catch (Exception e) {
             log.error(e.getMessage());
+            ShowMessage.showErrorMessage(e.getStackTrace()[0].toString(), "出现致命错误");
             new LogService().showLog();
         }
-
 
 
 //        new AboutFrame().setVisible(true);

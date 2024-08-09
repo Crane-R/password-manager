@@ -57,7 +57,7 @@ public class AccessAnimationService {
         Left(-1, 0),
         right(1, 0),
         /**
-         * 当x或y存在负数时，选择此枚举
+         * 当源组件x或y存在负数时，选择此枚举
          *
          * @Author AXing
          * @Date 2023/12/21 18:14:16

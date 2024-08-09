@@ -2,6 +2,7 @@ package com.crane.view.function.service;
 
 import cn.hutool.core.date.DateUtil;
 import com.crane.constant.Constant;
+import com.crane.view.function.config.Config;
 import com.crane.view.function.config.Language;
 import com.crane.view.main.MainFrame;
 import com.crane.view.LockFrame;
@@ -54,6 +55,8 @@ public class ActiveTimeService {
 
     private static ScheduledExecutorService ACTIVIST_TIMER;
 
+    private static final Config colorConfig = Constant.colorConfig;
+
     /**
      * 创建主界面时校正标识以确保活性时间功能正常
      *
@@ -74,7 +77,7 @@ public class ActiveTimeService {
         if (isActiveLock) {
             return;
         }
-        MainFrame.activistTimeLabel.setForeground(Color.decode("#1A5599"));
+        MainFrame.activistTimeLabel.setForeground(Color.decode(colorConfig.get("activistTimeLabel")));
         TIME[0] = Constant.ACTIVE_TIME;
         if (!isStart) {
             ACTIVIST_TIMER = Executors.newSingleThreadScheduledExecutor();
@@ -109,7 +112,7 @@ public class ActiveTimeService {
      * @Date 2023-05-24 17:30:32
      */
     public static void activeTimeLock() {
-        if(Objects.isNull(ACTIVIST_TIMER)){
+        if (Objects.isNull(ACTIVIST_TIMER)) {
             return;
         }
         isStart = false;
