@@ -23,7 +23,7 @@ public class Test {
         a=Rot.decode13(a);
         System.out.println(a);
     }
-
+    
     public static void main(String[] args) throws IOException {
 //        new MainFrame().setVisible(true);
         try {
