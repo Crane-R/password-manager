@@ -8,12 +8,10 @@ import com.crane.constant.MainFrameCst;
 import com.crane.model.jdbc.JdbcConnection;
 import com.crane.view.function.config.Config;
 import com.crane.view.function.config.Language;
-import com.crane.view.function.service.ImageService;
 import com.crane.view.function.service.LookFucService;
 import com.crane.view.function.tools.ShowMessage;
 import com.crane.view.main.MainFrame;
 import com.crane.view.module.ComboBoxRender;
-import com.crane.view.module.CustomTitle;
 import com.crane.view.module.stylehelper.BlinkBorderHelper;
 import com.crane.model.service.SecurityService;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +33,7 @@ import java.awt.event.KeyEvent;
  * @author Crane Resigned
  */
 @Slf4j
-public class LockFrame extends JFrame {
+public class LockFrame extends CustomFrame {
 
     /**
      * 是否本地开关
@@ -90,33 +88,16 @@ public class LockFrame extends JFrame {
 
     protected JButton lookFunBtn;
 
-    /**
-     * 颜色配置对象
-     *
-     * @author AXing
-     * @date 2023/12/7 14:35:01
-     */
-    private final Config colorConfig = Constant.colorConfig;
-
     public LockFrame() {
+        super(484, 300);
         //检测密钥文件是否存在
         final boolean isHaveKey = SecurityService.checkKeyAmountIsNotZero();
-
         //窗体初始化
         String currentTitle = isHaveKey ? JdbcConnection.IS_TEST ? MainFrameCst.TEST_TITLE : MainFrameCst.MAIN_TITLE
                 : Language.get("haveNotKeyTitle");
-        this.setSize(484, 300);
-        this.setLayout(null);
-        this.setResizable(false);
-        this.setLocationRelativeTo(null);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setIconImage(ImageService.getTitleImage());
         this.getContentPane().setBackground(Color.decode(colorConfig.get("lockBg")));
-        this.setUndecorated(true);
 
-        CustomTitle title = new CustomTitle(this);
-        title.setTitle(currentTitle);
-        this.add(title);
+        this.setTitle(currentTitle);
 
         String currentTipLabelKey = isHaveKey ? Language.get("haveKey") : Language.get("haveNotKey");
         tipLabel = new JLabel(currentTipLabelKey);
@@ -228,7 +209,7 @@ public class LockFrame extends JFrame {
         });
         BlinkBorderHelper.addBorder(isLocal, BorderFactory.createLineBorder(Color.WHITE, 2), null);
         this.add(isLocal);
-        title.setTitle(currentTitle + " - " + Language.get(isLocal.isSelected() ? "isFileMode" : "isDataMode"));
+        this.setTitle(currentTitle + " - " + Language.get(isLocal.isSelected() ? "isFileMode" : "isDataMode"));
 
         isCreateScene = new JToggleButton(Language.get("loginShowScene"));
         isCreateScene.setBounds(50, 226, 100, 30);
@@ -277,11 +258,11 @@ public class LockFrame extends JFrame {
             if (selected) {
                 isLightWeightVersion.setText(fileMode);
                 isLocal.setVisible(false);
-                title.setTitle(currentTitle + " - " + dataMode);
+                this.setTitle(currentTitle + " - " + dataMode);
             } else {
                 isLightWeightVersion.setText(dataMode);
                 isLocal.setVisible(true);
-                title.setTitle(currentTitle + " - " + fileMode);
+                this.setTitle(currentTitle + " - " + fileMode);
             }
             //设置默认模式
             new Config(null).set("isFileModel", String.valueOf(selected));

@@ -1,6 +1,7 @@
 package com.crane.view.module;
 
 import com.crane.constant.Constant;
+import com.crane.view.CustomFrame;
 import com.crane.view.function.config.Config;
 
 import javax.swing.*;
@@ -25,16 +26,15 @@ public class CustomTitle extends JPanel {
     private int newX, newY, oldX, oldY;
     private int startX, startY;
 
-    public CustomTitle(JFrame currentFrame) {
-
-        this.setBackground(Color.decode(colorConfig.get("titleBg")));
+    public CustomTitle(CustomFrame currentFrame) {
         //26
-        this.setBounds(0, 0, currentFrame.getWidth(), 26);
+        this.setBounds(1, 1, currentFrame.getWidth() - 2, 25);
+        this.setBackground(Color.decode(colorConfig.get("titleBg")));
         this.setLayout(null);
 
         //标题文本
         titleLabel = new JLabel();
-        titleLabel.setBounds(10, 0, 390, 26);
+        titleLabel.setBounds(10, 0, 390, 25);
         titleLabel.setFont(new Font("微软雅黑", Font.PLAIN, 12));
         MouseAdapter titleDragEvent = new MouseAdapter() {
             /**
@@ -77,10 +77,10 @@ public class CustomTitle extends JPanel {
         //最小化图标
         ImageIcon minimizeIcon = new ImageIcon(Objects.requireNonNull(classLoader.getResource("img/icon/z4.png")));
         JButton miniBtn = new JButton();
-        miniBtn.setBackground(null);
+        miniBtn.setBackground(Color.decode(colorConfig.get("titleBg")));
         miniBtn.setFocusPainted(false);
         miniBtn.setBorder(null);
-        miniBtn.setBounds(currentFrame.getWidth() - 87, 1, 44, 24);
+        miniBtn.setBounds(currentFrame.getWidth() - 87, 1, 42, 23);
         miniBtn.setIcon(new ImageIcon(minimizeIcon.getImage().getScaledInstance(18, 18, 1)));
         miniBtn.addMouseListener(new MouseListener() {
             @Override
@@ -105,7 +105,7 @@ public class CustomTitle extends JPanel {
 
             @Override
             public void mouseExited(MouseEvent e) {
-                miniBtn.setBackground(null);
+                miniBtn.setBackground(Color.decode(colorConfig.get("titleBg")));
             }
         });
         this.add(miniBtn);
@@ -114,8 +114,8 @@ public class CustomTitle extends JPanel {
         ImageIcon icon = new ImageIcon(Objects.requireNonNull(classLoader.getResource("img/icon/5h.png")));
         ImageIcon inIcon = new ImageIcon(Objects.requireNonNull(classLoader.getResource("img/icon/5b.png")));
         JButton closeBtn = new JButton();
-        closeBtn.setBackground(null);
-        closeBtn.setBounds(currentFrame.getWidth() - 45, 1, 44, 24);
+        closeBtn.setBackground(Color.decode(colorConfig.get("titleBg")));
+        closeBtn.setBounds(currentFrame.getWidth() - 45, 1, 42, 23);
         closeBtn.setFocusPainted(false);
         closeBtn.setBorder(null);
         closeBtn.setIcon(new ImageIcon(icon.getImage().getScaledInstance(18, 18, 1)));
@@ -143,7 +143,7 @@ public class CustomTitle extends JPanel {
 
             @Override
             public void mouseExited(MouseEvent e) {
-                closeBtn.setBackground(null);
+                closeBtn.setBackground(Color.decode(colorConfig.get("titleBg")));
                 closeBtn.setIcon(new ImageIcon(icon.getImage().getScaledInstance(18, 18, 1)));
             }
         });
@@ -154,4 +154,5 @@ public class CustomTitle extends JPanel {
     public void setTitle(String titleContent) {
         titleLabel.setText(titleContent);
     }
+
 }

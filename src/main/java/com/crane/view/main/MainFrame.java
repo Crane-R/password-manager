@@ -39,7 +39,7 @@ import java.util.concurrent.*;
  * @author Crane Resigned
  */
 @Slf4j
-public class MainFrame extends JFrame {
+public class MainFrame extends CustomFrame {
 
     /**
      * 搜索文本
@@ -138,25 +138,14 @@ public class MainFrame extends JFrame {
 
     protected JLabel disclaimerLabel;
 
-    private final Config colorConfig = Constant.colorConfig;
-
     @Getter
     private static QueueTextArea outputArea;
 
     public MainFrame() {
-        this.setSize(1190, 800);
-        this.setLayout(null);
-        this.setResizable(false);
-        this.setLocationRelativeTo(null);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        super(1190,800);
         //设置标题栏的图标
-        this.setIconImage(ImageService.getTitleImage());
         this.getContentPane().setBackground(Color.decode(colorConfig.get("contentPaneBg")));
-        this.setUndecorated(true);
-        CustomTitle title = new CustomTitle(this);
-        this.add(title);
-
-        title.setTitle((JdbcConnection.IS_TEST ? MainFrameCst.TEST_TITLE : MainFrameCst.MAIN_TITLE) + " >> "
+        this.setTitle((JdbcConnection.IS_TEST ? MainFrameCst.TEST_TITLE : MainFrameCst.MAIN_TITLE) + " >> "
                 + (Constant.IS_LIGHT ? Language.get("isLightWeightVersion") : Language.get("isLightWeightVersion2")));
 
 //        this.setUndecorated(true);
