@@ -1,6 +1,6 @@
 package com.crane.view.function.service;
 
-import com.crane.view.main.MainFrame;
+import com.crane.view.MainFrame;
 
 /**
  * 输出消息服务

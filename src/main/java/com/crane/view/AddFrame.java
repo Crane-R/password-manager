@@ -8,12 +8,9 @@ import com.crane.model.bean.Account;
 import com.crane.model.dao.AccountDao;
 import com.crane.model.service.AccountService;
 import com.crane.model.service.lightweight.LightService;
-import com.crane.view.function.config.Config;
 import com.crane.view.function.config.Language;
-import com.crane.view.function.service.ImageService;
 import com.crane.view.function.service.MessageService;
 import com.crane.view.function.tools.ShowMessage;
-import com.crane.view.main.MainFrame;
 import com.crane.view.module.stylehelper.BlinkBorderHelper;
 import com.crane.view.function.service.ActiveTimeService;
 import com.crane.model.service.SecurityService;
@@ -21,8 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.util.LinkedList;
 import java.util.Objects;
 
@@ -33,7 +28,7 @@ import java.util.Objects;
  * @Date 2022-04-21 16:02:01
  */
 @Slf4j
-public class AddFrame extends JFrame {
+public class AddFrame extends CustomFrame {
 
     /**
      * 验证提示文本
@@ -60,6 +55,14 @@ public class AddFrame extends JFrame {
     private final String DELETE = Language.get("purposeDelete");
 
     public AddFrame(LinkedList<String> list, MainFrame mainFrame) {
+        super(410, 390, e -> {
+
+            //启动活性锁
+            if (!MainFrame.getActivistLockBtn().isSelected()) {
+                ActiveTimeService.activeTimeLock();
+            }
+            mainFrame.setVisible(true);
+        });
 
         //当前处理账户的id
         Integer currentId = "".equals(list.get(0)) ? null : Integer.valueOf(list.get(0));
@@ -67,87 +70,79 @@ public class AddFrame extends JFrame {
         System.out.println("改变窗口传入的list：" + list);
 
         String purpose = list.get(list.size() - 1);
-        this.setTitle(StrUtil.equals(purpose, DELETE) ? Language.get("sureDelete") : MainFrameCst.SIMPLE_TITLE + " >> "
+        this.setTitle(StrUtil.equals(purpose, DELETE) ? Language.get("sureDelete") : MainFrameCst.SIMPLE_TITLE + " - "
                 + purpose + Language.get("aAcount"));
-        this.setLayout(null);
-        this.setResizable(false);
-        this.setSize(410, 390);
         if (StrUtil.equals(purpose, ADD)) {
             this.setLocation(1100, 330);
         } else {
             this.setLocationRelativeTo(null);
         }
-        Config colorConfig = Constant.colorConfig;
         this.getContentPane().setBackground(Color.decode(colorConfig.get("addContentPaneBg")));
 
-        //设置标题栏的图标
-        Image image = ImageService.getTitleImage();
-        this.setIconImage(image);
-
         //四个标签和四个输入框
-        JLabel jLabel = new JLabel(Language.get("accountName"));
-        jLabel.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
-        jLabel.setBounds(30, 25, 100, 40);
-        this.add(jLabel);
+        JLabel accountNameLabel = new JLabel(Language.get("accountName"));
+        accountNameLabel.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
+        accountNameLabel.setBounds(30, 51, 100, 40);
+        this.add(accountNameLabel);
 
-        JLabel jLabel1 = new JLabel(Language.get("addUsername"));
-        jLabel1.setBounds(30, 75, 100, 40);
-        jLabel1.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
-        this.add(jLabel1);
+        JLabel userNameLabel = new JLabel(Language.get("addUsername"));
+        userNameLabel.setBounds(30, 101, 100, 40);
+        userNameLabel.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
+        this.add(userNameLabel);
 
-        JLabel jLabel2 = new JLabel(Language.get("addPassword"));
-        jLabel2.setBounds(30, 125, 100, 40);
-        jLabel2.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
-        this.add(jLabel2);
+        JLabel passwordLabel = new JLabel(Language.get("addPassword"));
+        passwordLabel.setBounds(30, 151, 100, 40);
+        passwordLabel.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
+        this.add(passwordLabel);
 
         JLabel surePassLabel = new JLabel(Language.get("surePassword"));
-        surePassLabel.setBounds(30, 175, 100, 40);
+        surePassLabel.setBounds(30, 201, 100, 40);
         surePassLabel.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
         this.add(surePassLabel);
 
-        JLabel jLabel3 = new JLabel(Language.get("others"));
-        jLabel3.setBounds(30, 225, 100, 40);
-        jLabel3.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
-        this.add(jLabel3);
+        JLabel otherLabel = new JLabel(Language.get("others"));
+        otherLabel.setBounds(30, 251, 100, 40);
+        otherLabel.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
+        this.add(otherLabel);
 
-        JTextField jTextField = new JTextField(list.get(1));
-        jTextField.setBounds(110, 30, 260, 30);
-        jTextField.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
-        BlinkBorderHelper.addBorder(jTextField, BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorIn1")), 2)
+        JTextField accountNameTextField = new JTextField(list.get(1));
+        accountNameTextField.setBounds(110, 56, 260, 30);
+        accountNameTextField.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
+        BlinkBorderHelper.addBorder(accountNameTextField, BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorIn1")), 2)
                 , BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorOut1")), 1));
-        this.add(jTextField);
+        this.add(accountNameTextField);
 
-        JTextField jTextField1 = new JTextField(list.get(2));
-        jTextField1.setBounds(110, 80, 260, 30);
-        jTextField1.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
-        BlinkBorderHelper.addBorder(jTextField1, BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorIn2")), 2)
+        JTextField usernameTextField = new JTextField(list.get(2));
+        usernameTextField.setBounds(110, 106, 260, 30);
+        usernameTextField.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
+        BlinkBorderHelper.addBorder(usernameTextField, BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorIn2")), 2)
                 , BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorOut2")), 1));
-        this.add(jTextField1);
+        this.add(usernameTextField);
 
-        JTextField jTextField2 = new JTextField(list.get(3));
-        jTextField2.setBounds(110, 130, 260, 30);
-        jTextField2.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
-        BlinkBorderHelper.addBorder(jTextField2, BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorIn3")), 2)
+        JTextField passwordTextField = new JTextField(list.get(3));
+        passwordTextField.setBounds(110, 156, 260, 30);
+        passwordTextField.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
+        BlinkBorderHelper.addBorder(passwordTextField, BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorIn3")), 2)
                 , BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorOut3")), 1));
-        this.add(jTextField2);
+        this.add(passwordTextField);
 
         JTextField surePassTextField = new JTextField(list.get(3));
-        surePassTextField.setBounds(110, 180, 260, 30);
+        surePassTextField.setBounds(110, 206, 260, 30);
         surePassTextField.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
         BlinkBorderHelper.addBorder(surePassTextField, BorderFactory.createLineBorder(Color.decode(colorConfig.get("surePassBlinkBorIn")), 2)
                 , BorderFactory.createLineBorder(Color.decode(colorConfig.get("surePassBlinkBorOut")), 1));
         this.add(surePassTextField);
 
-        JTextField jTextField3 = new JTextField(list.get(4));
-        jTextField3.setBounds(110, 230, 260, 30);
-        jTextField3.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
-        BlinkBorderHelper.addBorder(jTextField3, BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorIn4")), 2)
+        JTextField otherTextField = new JTextField(list.get(4));
+        otherTextField.setBounds(110, 256, 260, 30);
+        otherTextField.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
+        BlinkBorderHelper.addBorder(otherTextField, BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorIn4")), 2)
                 , BorderFactory.createLineBorder(Color.decode(colorConfig.get("textFieldBlinkBorOut4")), 1));
-        this.add(jTextField3);
+        this.add(otherTextField);
 
         //两个按钮
         JButton resetButton = new JButton(Language.get("resetBtn"));
-        resetButton.setBounds(30, 290, 80, 30);
+        resetButton.setBounds(30, 316, 100, 30);
         resetButton.setFocusPainted(false);
         resetButton.setForeground(Color.decode(colorConfig.get("resetBtnFore")));
         resetButton.setBackground(Color.decode(colorConfig.get("resetBtnBg")));
@@ -155,10 +150,10 @@ public class AddFrame extends JFrame {
         resetButton.setBorder(null);
         resetButton.addActionListener(e -> {
             //清空所有文本框
-            jTextField.setText("");
-            jTextField1.setText("");
-            jTextField2.setText("");
-            jTextField3.setText("");
+            accountNameTextField.setText("");
+            usernameTextField.setText("");
+            passwordTextField.setText("");
+            otherTextField.setText("");
             surePassTextField.setText("");
         });
         BlinkBorderHelper.addBorder(resetButton, BorderFactory.createLineBorder(Color.decode(colorConfig.get("resetBtnBlinkBorIn")), 2), null);
@@ -166,7 +161,7 @@ public class AddFrame extends JFrame {
 
         //生成随机强密码按钮
         JButton generatePassBtn = new JButton(Language.get("generateBtn"));
-        generatePassBtn.setBounds(140, 290, 100, 30);
+        generatePassBtn.setBounds(150, 316, 100, 30);
         generatePassBtn.setFocusPainted(false);
         generatePassBtn.setForeground(Color.decode(colorConfig.get("generateBtnFore")));
         generatePassBtn.setBackground(Color.decode(colorConfig.get("generateBtnBg")));
@@ -174,7 +169,7 @@ public class AddFrame extends JFrame {
         generatePassBtn.setBorder(null);
         generatePassBtn.addActionListener(e -> {
             String randomPassword = SecurityService.generateRandomStrongPassword();
-            jTextField2.setText(randomPassword);
+            passwordTextField.setText(randomPassword);
             surePassTextField.setText(randomPassword);
         });
         BlinkBorderHelper.addBorder(generatePassBtn, BorderFactory.createLineBorder(Color.decode(colorConfig.get("generateBtnBlinkBorIn")), 2), null);
@@ -182,7 +177,7 @@ public class AddFrame extends JFrame {
 
         //动态按钮信息
         JButton submitButton = new JButton(purpose);
-        submitButton.setBounds(270, 290, 100, 30);
+        submitButton.setBounds(270, 316, 100, 30);
         submitButton.setFocusPainted(false);
         submitButton.setForeground(Color.decode(colorConfig.get("submitBtnFore")));
         submitButton.setBackground(Color.decode(colorConfig.get("submitBtnBg")));
@@ -191,14 +186,14 @@ public class AddFrame extends JFrame {
         BlinkBorderHelper.addBorder(submitButton, BorderFactory.createLineBorder(Color.decode(colorConfig.get("submitBtnBlinkBorIn")), 2), null);
         submitButton.addActionListener(e -> {
             //检验确认密码是否和密码相同
-            if (!StrUtil.equals(jTextField2.getText(), surePassTextField.getText())) {
+            if (!StrUtil.equals(passwordTextField.getText(), surePassTextField.getText())) {
                 ShowMessage.showWarningMessage(Language.get("errPassTipMsg"), Language.get("errPassTipTit"));
                 return;
             }
 
             //长度验证
-            int[] curLength = {jTextField.getText().length(), jTextField1.getText().length(), jTextField2.getText().length(),
-                    jTextField3.getText().length()};
+            int[] curLength = {accountNameTextField.getText().length(), usernameTextField.getText().length(), passwordTextField.getText().length(),
+                    otherTextField.getText().length()};
             int len = 4;
             for (int i = 0; i < len; i++) {
                 if (curLength[i] > MAX_LENGTH[i]) {
@@ -206,16 +201,16 @@ public class AddFrame extends JFrame {
                             + Language.get("maxLengthTipMsg2"), Language.get("maxLengthTipTit"));
                     switch (i) {
                         case 0:
-                            jTextField.setText("");
+                            accountNameTextField.setText("");
                             return;
                         case 1:
-                            jTextField1.setText("");
+                            usernameTextField.setText("");
                             return;
                         case 2:
-                            jTextField2.setText("");
+                            passwordTextField.setText("");
                             return;
                         case 3:
-                            jTextField3.setText("");
+                            otherTextField.setText("");
                             return;
                         default:
                             return;
@@ -224,24 +219,24 @@ public class AddFrame extends JFrame {
             }
 
             //账户为空
-            if ("".equals(jTextField.getText())) {
+            if ("".equals(accountNameTextField.getText())) {
                 log.info(OUT_PUT_TEXTS[0]);
                 ShowMessage.showWarningMessage(OUT_PUT_TEXTS[0], "Warning");
                 //用户名为空
-            } else if ("".equals(jTextField1.getText())) {
+            } else if ("".equals(usernameTextField.getText())) {
                 log.info(OUT_PUT_TEXTS[1]);
                 ShowMessage.showWarningMessage(OUT_PUT_TEXTS[1], "Warning");
                 //密码为空
-            } else if ("".equals(jTextField2.getText())) {
+            } else if ("".equals(passwordTextField.getText())) {
                 log.info(OUT_PUT_TEXTS[2]);
                 ShowMessage.showWarningMessage(OUT_PUT_TEXTS[2], "Warning");
             } else {
                 Boolean isTrue = null;
                 int effect = Integer.MIN_VALUE;
-                String accountName = jTextField.getText().trim();
-                String username = SecurityService.encodeBase64Salt(jTextField1.getText().trim());
-                String password = SecurityService.encodeBase64Salt(jTextField2.getText().trim());
-                String other = SecurityService.encodeBase64Salt(jTextField3.getText().trim());
+                String accountName = accountNameTextField.getText().trim();
+                String username = SecurityService.encodeBase64Salt(usernameTextField.getText().trim());
+                String password = SecurityService.encodeBase64Salt(passwordTextField.getText().trim());
+                String other = SecurityService.encodeBase64Salt(otherTextField.getText().trim());
                 String userKey = SecurityService.getUuidKey();
                 LightService lightService = new LightService();
                 if (StrUtil.isBlank(purpose)) {
@@ -273,8 +268,6 @@ public class AddFrame extends JFrame {
 
                 //The Dao add method : return false is true
                 if (Boolean.FALSE.equals(isTrue) || effect == 1) {
-                    //更新账户数量
-                    MainFrame.getResultNumbers().setText(AccountService.getLatestAccountNumberText());
                     log.info(purpose.concat("操作成功"));
                     MessageService.outputMessage(purpose.concat("操作成功"));
                 } else {
@@ -301,53 +294,6 @@ public class AddFrame extends JFrame {
             }
         });
         this.add(submitButton);
-
-        //增加关闭新增窗口的事件
-        this.addWindowListener(new WindowListener() {
-            @Override
-            public void windowOpened(WindowEvent e) {
-                log.info("窗口打开");
-            }
-
-            @Override
-            public void windowClosing(WindowEvent e) {
-                log.info("窗口点击关闭");
-                //启动活性锁
-                if (!MainFrame.getActivistLockBtn().isSelected()) {
-                    ActiveTimeService.activeTimeLock();
-                }
-                mainFrame.setVisible(true);
-            }
-
-            @Override
-            public void windowClosed(WindowEvent e) {
-                log.info("窗口关闭后（调用this.dispose）");
-                if (!MainFrame.getActivistLockBtn().isSelected()) {
-                    ActiveTimeService.activeTimeLock();
-                }
-                mainFrame.setVisible(true);
-            }
-
-            @Override
-            public void windowIconified(WindowEvent e) {
-                log.info("窗口最小化");
-            }
-
-            @Override
-            public void windowDeiconified(WindowEvent e) {
-                log.info("窗口取消最小化");
-            }
-
-            @Override
-            public void windowActivated(WindowEvent e) {
-                log.info("窗口激活");
-            }
-
-            @Override
-            public void windowDeactivated(WindowEvent e) {
-                log.info("窗口失活");
-            }
-        });
 
     }
 

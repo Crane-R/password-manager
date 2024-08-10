@@ -5,7 +5,7 @@ import com.crane.constant.MainFrameCst;
 import com.crane.model.bean.Account;
 import com.crane.model.service.AccountService;
 import com.crane.model.service.SecurityService;
-import com.crane.view.main.MainFrame;
+import com.crane.view.MainFrame;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.table.DefaultTableModel;
@@ -110,8 +110,6 @@ public class LightService {
             log.info("事件并发异常（使用了线程池）");
             e.printStackTrace();
         }
-        //更新账户数量
-        MainFrame.getResultNumbers().setText(AccountService.getLatestAccountNumberText());
     }
 
 }

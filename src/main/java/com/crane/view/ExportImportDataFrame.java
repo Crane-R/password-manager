@@ -41,46 +41,28 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Crane Resigned
  */
 @Slf4j
-public class ExportImportDataFrame extends LockFrame {
+public class ExportImportDataFrame extends CustomFrame {
 
     protected JTextField pathTextField;
 
-    private Config color = Constant.colorConfig;
+    protected JLabel tipLabel;
 
     public ExportImportDataFrame(ExportImportCst exportImportCst) {
-        super();
+        super(500, 300, null);
         this.setTitle(exportImportCst.TITLE);
-        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-        //修改提示文本
-        tipLabel.setText(exportImportCst.TIP_LABEL);
+        tipLabel = new JLabel(exportImportCst.TIP_LABEL);
+        tipLabel.setBounds(50, 76, 400, 40);
+        tipLabel.setForeground(Color.decode(colorConfig.get("lockTipLabel")));
         tipLabel.setFont(new Font("微软雅黑", Font.BOLD, 18));
-
-        //移除是否本地
-        this.remove(isLocal);
-
-        //移除是否创建新密钥登录
-        this.remove(isCreateScene);
-
-        //移除密码框
-        this.remove(secretText);
-
-        //移除回车标
-        this.remove(loginTip);
-
-        //移除是否轻量版
-        this.remove(isLightWeightVersion);
-
-        this.remove(isEng);
-
-        this.remove(lookFunBtn);
+        this.add(tipLabel);
 
         //文本框
         pathTextField = new JTextField();
-        pathTextField.setBounds(50, 120, 380, 35);
+        pathTextField.setBounds(50, 146, 380, 35);
         pathTextField.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
-        pathTextField.setForeground(Color.decode(color.get("pathTextFore")));
-        pathTextField.setBorder(BorderFactory.createLineBorder(Color.decode(color.get("pathTextLineBor"))));
+        pathTextField.setForeground(Color.decode(colorConfig.get("pathTextFore")));
+        pathTextField.setBorder(BorderFactory.createLineBorder(Color.decode(colorConfig.get("pathTextLineBor"))));
         pathTextField.setHorizontalAlignment(JPasswordField.CENTER);
         pathTextField.addKeyListener(new KeyAdapter() {
             @Override
@@ -95,12 +77,12 @@ public class ExportImportDataFrame extends LockFrame {
 
         //文件选择器
         JButton chooseFile = new JButton(Language.get("chooseFileBtn"));
-        chooseFile.setBounds(50, 200, 100, 30);
-        chooseFile.setForeground(Color.decode(color.get("chooseFileBtnFore")));
+        chooseFile.setBounds(50, 226, 100, 30);
+        chooseFile.setForeground(Color.decode(colorConfig.get("chooseFileBtnFore")));
         chooseFile.setFont(DefaultFont.WEI_RUAN_BOLD_12.getFont());
         chooseFile.setBorder(null);
         chooseFile.setFocusPainted(false);
-        chooseFile.setBackground(Color.decode(color.get("chooseFileBtnBg")));
+        chooseFile.setBackground(Color.decode(colorConfig.get("chooseFileBtnBg")));
         chooseFile.addActionListener(e -> {
             JFileChooser chooser = new JFileChooser(getRecentlyPath());
             chooser.setSize(1500, 900);
@@ -121,12 +103,12 @@ public class ExportImportDataFrame extends LockFrame {
 
         //确认按钮
         JButton sureBtn = new JButton(exportImportCst.IS_EXPORT ? Language.get("exportSureBtn") : Language.get("importSureBtn"));
-        sureBtn.setBounds(330, 200, 100, 30);
-        sureBtn.setForeground(Color.decode(color.get("sureBtnFore")));
+        sureBtn.setBounds(330, 226, 100, 30);
+        sureBtn.setForeground(Color.decode(colorConfig.get("sureBtnFore")));
         sureBtn.setFont(DefaultFont.WEI_RUAN_BOLD_12.getFont());
         sureBtn.setBorder(null);
         sureBtn.setFocusPainted(false);
-        sureBtn.setBackground(Color.decode(color.get("sureBtnBg")));
+        sureBtn.setBackground(Color.decode(colorConfig.get("sureBtnBg")));
         sureBtn.addActionListener(e -> {
             if (exportImportCst.IS_EXPORT) {
                 exportFile();

@@ -8,6 +8,7 @@ import java.io.File;
 
 /**
  * 日志服务
+ * 该服务是依赖于exe4j的哦
  *
  * @author AXing
  * @date 2023/12/22 20:42:55

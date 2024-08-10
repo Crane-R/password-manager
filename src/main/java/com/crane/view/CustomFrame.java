@@ -5,11 +5,11 @@ import com.crane.view.function.config.Config;
 import com.crane.view.function.service.ImageService;
 import com.crane.view.module.CustomTitle;
 import com.crane.view.module.MainContentPanel;
-import com.crane.view.module.ShadowPanel;
 import lombok.Getter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 /**
  * 自定义窗口
@@ -39,7 +39,7 @@ public class CustomFrame extends JFrame {
     @Getter
     protected CustomTitle customTitle;
 
-    public CustomFrame(int width, int height) {
+    public CustomFrame(int width, int height, ActionListener closeBtnListener) {
         this.setSize(width, height);
         this.setLayout(null);
         this.setResizable(false);
@@ -50,7 +50,7 @@ public class CustomFrame extends JFrame {
         mainContentPanel = new MainContentPanel(this);
         super.add(mainContentPanel);
 
-        customTitle = new CustomTitle(this);
+        customTitle = new CustomTitle(this, closeBtnListener);
         this.add(customTitle);
     }
 
@@ -58,6 +58,7 @@ public class CustomFrame extends JFrame {
     @Override
     public void setTitle(String title) {
         customTitle.setTitle(title);
+        super.setTitle(title);
     }
 
     @Override

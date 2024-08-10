@@ -10,7 +10,6 @@ import com.crane.view.function.config.Config;
 import com.crane.view.function.config.Language;
 import com.crane.view.function.service.LookFucService;
 import com.crane.view.function.tools.ShowMessage;
-import com.crane.view.main.MainFrame;
 import com.crane.view.module.ComboBoxRender;
 import com.crane.view.module.stylehelper.BlinkBorderHelper;
 import com.crane.model.service.SecurityService;
@@ -89,15 +88,13 @@ public class LockFrame extends CustomFrame {
     protected JButton lookFunBtn;
 
     public LockFrame() {
-        super(484, 300);
+        super(484, 300, e -> System.exit(0));
         //检测密钥文件是否存在
         final boolean isHaveKey = SecurityService.checkKeyAmountIsNotZero();
         //窗体初始化
         String currentTitle = isHaveKey ? JdbcConnection.IS_TEST ? MainFrameCst.TEST_TITLE : MainFrameCst.MAIN_TITLE
                 : Language.get("haveNotKeyTitle");
         this.getContentPane().setBackground(Color.decode(colorConfig.get("lockBg")));
-
-        this.setTitle(currentTitle);
 
         String currentTipLabelKey = isHaveKey ? Language.get("haveKey") : Language.get("haveNotKey");
         tipLabel = new JLabel(currentTipLabelKey);
@@ -209,7 +206,6 @@ public class LockFrame extends CustomFrame {
         });
         BlinkBorderHelper.addBorder(isLocal, BorderFactory.createLineBorder(Color.WHITE, 2), null);
         this.add(isLocal);
-        this.setTitle(currentTitle + " - " + Language.get(isLocal.isSelected() ? "isFileMode" : "isDataMode"));
 
         isCreateScene = new JToggleButton(Language.get("loginShowScene"));
         isCreateScene.setBounds(50, 226, 100, 30);
@@ -239,7 +235,11 @@ public class LockFrame extends CustomFrame {
         if (isFileModel) {
             isLocal.setVisible(false);
         }
-        isLightWeightVersion = new JToggleButton(isFileModel ? Language.get("isFileMode") : Language.get("isDataMode"), isFileModel);
+        String fileMode = Language.get("isFileMode");
+        String dataMode = Language.get("isDataMode");
+        isLightWeightVersion = new JToggleButton(isFileModel ? fileMode : dataMode, isFileModel);
+        //如果是文件模式的话，标题显示文件模式，按钮显示数据库模式
+        this.setTitle(currentTitle + " - " + (isFileModel ? dataMode : fileMode));
         isLightWeightVersion.setBounds(330, 226, 100, 30);
         isLightWeightVersion.setForeground(Color.decode(colorConfig.get("isLightWeightVersion")));
         isLightWeightVersion.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
@@ -253,8 +253,7 @@ public class LockFrame extends CustomFrame {
         isLightWeightVersion.setBackground(Color.decode(colorConfig.get("isLightBg")));
         isLightWeightVersion.addActionListener(e -> {
             boolean selected = isLightWeightVersion.isSelected();
-            String fileMode = Language.get("isFileMode");
-            String dataMode = Language.get("isDataMode");
+
             if (selected) {
                 isLightWeightVersion.setText(fileMode);
                 isLocal.setVisible(false);

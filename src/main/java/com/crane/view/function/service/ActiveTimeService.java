@@ -4,7 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import com.crane.constant.Constant;
 import com.crane.view.function.config.Config;
 import com.crane.view.function.config.Language;
-import com.crane.view.main.MainFrame;
+import com.crane.view.MainFrame;
 import com.crane.view.LockFrame;
 import lombok.extern.slf4j.Slf4j;
 

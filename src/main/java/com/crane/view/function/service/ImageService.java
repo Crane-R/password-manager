@@ -24,7 +24,7 @@ public class ImageService {
      */
     public static Image getTitleImage() {
         try {
-            return ImageIO.read(Objects.requireNonNull(ActiveTimeService.class.getResource("/img/pmv6.4.2.png")));
+            return ImageIO.read(Objects.requireNonNull(ActiveTimeService.class.getResource("/img/logo/FluentPassword48Regular.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }

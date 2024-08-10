@@ -1,4 +1,4 @@
-package com.crane.view.main;
+package com.crane.view;
 
 public class EngMainFrame extends MainFrame {
 

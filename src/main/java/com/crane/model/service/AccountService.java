@@ -5,7 +5,7 @@ import com.crane.constant.MainFrameCst;
 import com.crane.view.function.config.Language;
 import com.crane.model.bean.Account;
 import com.crane.model.dao.AccountDao;
-import com.crane.view.main.MainFrame;
+import com.crane.view.MainFrame;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -91,9 +91,20 @@ public class AccountService {
      * Author: Crane Resigned
      * Date: 2022-11-26 20:02:11
      */
+    @Deprecated
     public static String getLatestAccountNumberText() {
         return Language.get("lastestAccountNumberText1").concat(String.valueOf(MainFrame.jTable.getRowCount()))
                 .concat(Language.get("lastestAccountNumberText2"));
+    }
+
+    /**
+     * getLatestAccountNumberText方法的替代者，因为主界面的结果显示标签被废除了
+     *
+     * @Author CraneResigned
+     * @Date 2024/8/10 23:09:37
+     */
+    public static Integer getLatestAccountNumber() {
+        return MainFrame.jTable.getRowCount();
     }
 
     /**
@@ -114,14 +125,10 @@ public class AccountService {
             log.info("事件并发异常（使用了线程池）");
             e.printStackTrace();
         }
-        //更新账户数量
-        MainFrame.getResultNumbers().setText(AccountService.getLatestAccountNumberText());
     }
 
     public static void setTableMessages(Object[][] data) {
         MainFrame.jTable.setModel(new DefaultTableModel(data, MainFrameCst.getTitles()));
-        //更新账户数量
-        MainFrame.getResultNumbers().setText(AccountService.getLatestAccountNumberText());
     }
 
     /**

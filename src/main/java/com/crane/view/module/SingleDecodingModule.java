@@ -1,4 +1,4 @@
-package com.crane.view.main;
+package com.crane.view.module;
 
 import com.crane.constant.DefaultFont;
 import com.crane.model.service.SecurityService;

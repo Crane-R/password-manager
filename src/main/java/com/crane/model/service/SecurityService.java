@@ -5,6 +5,7 @@ import cn.hutool.core.lang.generator.SnowflakeGenerator;
 import cn.hutool.core.util.StrUtil;
 import com.crane.constant.Constant;
 import com.crane.model.bean.Account;
+import com.crane.view.function.config.Config;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
@@ -262,7 +263,23 @@ public final class SecurityService {
              * @Author Crane Resigned
              * @Date 2023-09-01 13:14:03
              */
-            private final int PASS_LENGTH = 8;
+            private final int PASS_LENGTH;
+
+            {
+                int passLength;
+                String length = new Config("config/configurable.properties").get("GENERATE_PASSWORD_LENGTH");
+                if (StrUtil.isBlank(length)) {
+                    passLength = 12;
+                } else {
+                    try {
+                        passLength = Integer.parseInt(length);
+                    } catch (Exception e) {
+                        log.error(e.getStackTrace()[0].toString());
+                        passLength = 12;
+                    }
+                }
+                PASS_LENGTH = passLength;
+            }
 
             public String generateRandomStrongPassword() {
                 StringBuilder finallyPass = new StringBuilder();
