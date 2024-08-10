@@ -13,6 +13,7 @@ import com.crane.view.function.service.LookFucService;
 import com.crane.view.function.tools.ShowMessage;
 import com.crane.view.main.MainFrame;
 import com.crane.view.module.ComboBoxRender;
+import com.crane.view.module.CustomTitle;
 import com.crane.view.module.stylehelper.BlinkBorderHelper;
 import com.crane.model.service.SecurityService;
 import lombok.extern.slf4j.Slf4j;
@@ -104,23 +105,28 @@ public class LockFrame extends JFrame {
         //窗体初始化
         String currentTitle = isHaveKey ? JdbcConnection.IS_TEST ? MainFrameCst.TEST_TITLE : MainFrameCst.MAIN_TITLE
                 : Language.get("haveNotKeyTitle");
-        this.setSize(490, 300);
+        this.setSize(484, 300);
         this.setLayout(null);
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setIconImage(ImageService.getTitleImage());
         this.getContentPane().setBackground(Color.decode(colorConfig.get("lockBg")));
+        this.setUndecorated(true);
+
+        CustomTitle title = new CustomTitle(this);
+        title.setTitle(currentTitle);
+        this.add(title);
 
         String currentTipLabelKey = isHaveKey ? Language.get("haveKey") : Language.get("haveNotKey");
         tipLabel = new JLabel(currentTipLabelKey);
-        tipLabel.setBounds(50, 50, 400, 40);
+        tipLabel.setBounds(50, 76, 400, 40);
         tipLabel.setForeground(Color.decode(colorConfig.get("lockTipLabel")));
         tipLabel.setFont(new Font("微软雅黑", Font.BOLD, 25));
         this.add(tipLabel);
 
         secretText = new JPasswordField();
-        secretText.setBounds(50, 120, 380, 35);
+        secretText.setBounds(50, 146, 380, 35);
         secretText.setFont(new Font("微软雅黑", Font.BOLD, 20));
         secretText.setForeground(Color.decode(colorConfig.get("lockSecretText")));
         secretText.setBorder(BorderFactory.createLineBorder(Color.decode(colorConfig.get("lockSecretTextBorder"))));
@@ -189,7 +195,7 @@ public class LockFrame extends JFrame {
 
         //回车登录提示
         loginTip = new JLabel(Language.get("loginEnterLabel"));
-        loginTip.setBounds(340, 155, 100, 30);
+        loginTip.setBounds(340, 181, 100, 30);
         loginTip.setForeground(Color.decode(colorConfig.get("loginTip")));
         loginTip.setFont(new Font("微软雅黑", Font.BOLD, 13));
         this.add(loginTip);
@@ -197,7 +203,7 @@ public class LockFrame extends JFrame {
         //是否是本地数据库
         boolean isLocalServer = Boolean.parseBoolean(new Config(null).get("isLocalServer"));
         isLocal = new JToggleButton(isLocalServer ? Language.get("isLocal") : Language.get("isLocal2"), isLocalServer);
-        isLocal.setBounds(185, 200, 110, 30);
+        isLocal.setBounds(185, 226, 110, 30);
         isLocal.setForeground(Color.WHITE);
         isLocal.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         isLocal.setBackground(Color.decode(colorConfig.get("isLocalBg")));
@@ -222,10 +228,10 @@ public class LockFrame extends JFrame {
         });
         BlinkBorderHelper.addBorder(isLocal, BorderFactory.createLineBorder(Color.WHITE, 2), null);
         this.add(isLocal);
-        this.setTitle(currentTitle + " - " + Language.get(isLocal.isSelected() ? "isFileMode" : "isDataMode"));
+        title.setTitle(currentTitle + " - " + Language.get(isLocal.isSelected() ? "isFileMode" : "isDataMode"));
 
         isCreateScene = new JToggleButton(Language.get("loginShowScene"));
-        isCreateScene.setBounds(50, 200, 100, 30);
+        isCreateScene.setBounds(50, 226, 100, 30);
         isCreateScene.setForeground(Color.decode(colorConfig.get("isCreateScene")));
         isCreateScene.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         isCreateScene.setUI(new MetalToggleButtonUI() {
@@ -253,7 +259,7 @@ public class LockFrame extends JFrame {
             isLocal.setVisible(false);
         }
         isLightWeightVersion = new JToggleButton(isFileModel ? Language.get("isFileMode") : Language.get("isDataMode"), isFileModel);
-        isLightWeightVersion.setBounds(330, 200, 100, 30);
+        isLightWeightVersion.setBounds(330, 226, 100, 30);
         isLightWeightVersion.setForeground(Color.decode(colorConfig.get("isLightWeightVersion")));
         isLightWeightVersion.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         isLightWeightVersion.setUI(new MetalToggleButtonUI() {
@@ -271,11 +277,11 @@ public class LockFrame extends JFrame {
             if (selected) {
                 isLightWeightVersion.setText(fileMode);
                 isLocal.setVisible(false);
-                this.setTitle(currentTitle + " - " + dataMode);
+                title.setTitle(currentTitle + " - " + dataMode);
             } else {
                 isLightWeightVersion.setText(dataMode);
                 isLocal.setVisible(true);
-                this.setTitle(currentTitle + " - " + fileMode);
+                title.setTitle(currentTitle + " - " + fileMode);
             }
             //设置默认模式
             new Config(null).set("isFileModel", String.valueOf(selected));
@@ -285,7 +291,7 @@ public class LockFrame extends JFrame {
 
         isEng = new JComboBox<>(Language.getLanguages());
         isEng.setSelectedItem(Language.get("language"));
-        isEng.setBounds(400, 0, 80, 30);
+        isEng.setBounds(400, 26, 80, 30);
         isEng.setForeground(Color.decode(colorConfig.get("isEng")));
         isEng.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         isEng.setBackground(Color.decode(colorConfig.get("isEngBg")));
@@ -318,7 +324,7 @@ public class LockFrame extends JFrame {
 
         //查看功能按钮
         lookFunBtn = new JButton(Language.get("lookFunBtn"));
-        lookFunBtn.setBounds(361, 0, 100, 30);
+        lookFunBtn.setBounds(361, 26, 100, 30);
         lookFunBtn.setForeground(Color.decode(colorConfig.get("lookFun")));
         lookFunBtn.setBackground(Color.decode(colorConfig.get("lookFunBg")));
         lookFunBtn.setFont(new Font("微软雅黑", Font.PLAIN, 13));

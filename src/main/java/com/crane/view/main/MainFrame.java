@@ -14,6 +14,7 @@ import com.crane.view.function.config.Language;
 import com.crane.view.function.service.*;
 import com.crane.view.function.tools.ShowMessage;
 import com.crane.view.function.tools.TextTools;
+import com.crane.view.module.CustomTitle;
 import com.crane.view.module.QueueTextArea;
 import com.crane.view.module.ScrollBarUi;
 import com.crane.view.module.stylehelper.BlinkBorderHelper;
@@ -143,9 +144,7 @@ public class MainFrame extends JFrame {
     private static QueueTextArea outputArea;
 
     public MainFrame() {
-        this.setTitle((JdbcConnection.IS_TEST ? MainFrameCst.TEST_TITLE : MainFrameCst.MAIN_TITLE) + " >> "
-                + (Constant.IS_LIGHT ? Language.get("isLightWeightVersion") : Language.get("isLightWeightVersion2")));
-        this.setSize(1200, 800);
+        this.setSize(1190, 800);
         this.setLayout(null);
         this.setResizable(false);
         this.setLocationRelativeTo(null);
@@ -153,10 +152,15 @@ public class MainFrame extends JFrame {
         //设置标题栏的图标
         this.setIconImage(ImageService.getTitleImage());
         this.getContentPane().setBackground(Color.decode(colorConfig.get("contentPaneBg")));
+        this.setUndecorated(true);
+        CustomTitle title = new CustomTitle(this);
+        this.add(title);
+
+        title.setTitle((JdbcConnection.IS_TEST ? MainFrameCst.TEST_TITLE : MainFrameCst.MAIN_TITLE) + " >> "
+                + (Constant.IS_LIGHT ? Language.get("isLightWeightVersion") : Language.get("isLightWeightVersion2")));
 
 //        this.setUndecorated(true);
 //        this.setOpacity(0.5f);
-
 //        this.getContentPane().setBackground(Color.decode("#ffffff"));
 
         //数据显示表格
@@ -174,7 +178,7 @@ public class MainFrame extends JFrame {
         tableHeader.setBackground(Color.WHITE);
         tableHeader.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
         JScrollPane jScrollPane = new JScrollPane(jTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        jScrollPane.setBounds(42, 125, 1100, 556);
+        jScrollPane.setBounds(42, 151, 1100, 556);
         jScrollPane.getVerticalScrollBar().setUI(new ScrollBarUi());
         jScrollPane.getViewport().setBackground(Color.decode(colorConfig.get("scrollPaneBg")));
         jScrollPane.setBorder(BorderFactory.createLineBorder(Color.decode(colorConfig.get("scrollPaneBor"))));
@@ -282,14 +286,14 @@ public class MainFrame extends JFrame {
 
         //搜索
         searchTip = new JLabel(Language.get("searchAny"));
-        searchTip.setBounds(100, 45, 200, 40);
+        searchTip.setBounds(100, 71, 200, 40);
         searchTip.setForeground(Color.decode(colorConfig.get("searchTipFore")));
         searchTip.setFont(new Font("微软雅黑", Font.PLAIN, 16));
         this.add(searchTip);
 
         //搜索文本
         searchText = new JTextField("");
-        searchText.setBounds(280, 50, 380, 30);
+        searchText.setBounds(280, 76, 380, 30);
         searchText.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
         searchText.setForeground(Color.decode(colorConfig.get("searchText")));
         //添加闪烁边框
@@ -362,7 +366,7 @@ public class MainFrame extends JFrame {
         this.add(searchText);
 
         searchButton = new JButton(SEARCH_BTN_TXT1);
-        searchButton.setBounds(720, 50, 100, 30);
+        searchButton.setBounds(720, 76, 100, 30);
         searchButton.setForeground(Color.decode(colorConfig.get("searchBtnFore")));
         searchButton.setBackground(Color.decode(colorConfig.get("searchBtnBg")));
         searchButton.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
@@ -462,7 +466,7 @@ public class MainFrame extends JFrame {
 
         //添加按钮
         JButton addButton = new JButton(Language.get("addBtn"));
-        addButton.setBounds(845, 50, 100, 30);
+        addButton.setBounds(845, 76, 100, 30);
         addButton.setForeground(Color.decode(colorConfig.get("addBtnFore")));
         addButton.setBackground(Color.decode(colorConfig.get("addBtnBg")));
         addButton.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
@@ -487,14 +491,14 @@ public class MainFrame extends JFrame {
 
         //显示结果状态文本（有多少条数据）
         resultNumbers = new JLabel(AccountService.getLatestAccountNumberText());
-        resultNumbers.setBounds(42, 723, 200, 30);
+        resultNumbers.setBounds(42, 749, 200, 30);
         resultNumbers.setForeground(Color.decode(colorConfig.get("resultNumbersFore")));
         resultNumbers.setFont(new Font("微软雅黑", Font.PLAIN, 16));
         this.add(resultNumbers);
 
         //复制消息提醒
         copyAlertLabel = new JLabel();
-        copyAlertLabel.setBounds(200, 725, 300, 30);
+        copyAlertLabel.setBounds(200, 751, 300, 30);
         copyAlertLabel.setForeground(Color.decode(colorConfig.get("copyAlertLabelFore")));
 //        copyAlertLabel.setFont(new Font("微软雅黑", Font.BOLD, 13));
         copyAlertLabel.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
@@ -503,7 +507,7 @@ public class MainFrame extends JFrame {
 
         //清空按钮
         JButton clearBtn = new JButton(Language.get("clearBtn"));
-        clearBtn.setBounds(970, 50, 100, 30);
+        clearBtn.setBounds(970, 76, 100, 30);
         clearBtn.setForeground(Color.decode(colorConfig.get("clearBtnFore")));
         clearBtn.setBackground(Color.decode(colorConfig.get("clearBtnBg")));
         clearBtn.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
@@ -520,7 +524,7 @@ public class MainFrame extends JFrame {
         this.add(clearBtn);
 
         realTimeSearchBtn = new JToggleButton(Language.get("moderBtn"), true);
-        realTimeSearchBtn.setBounds(1177, 140, 100, 30);
+        realTimeSearchBtn.setBounds(1177, 166, 100, 30);
         new AccessAnimationService(realTimeSearchBtn).bind(80, 1, AccessAnimationService.Direction.Left);
         realTimeSearchBtn.setFocusPainted(false);
         BlinkBorderHelper.addBorder(realTimeSearchBtn, BorderFactory.createLineBorder(Color.decode(
@@ -551,7 +555,7 @@ public class MainFrame extends JFrame {
 
         //切换场景
         JButton switchSceneBtn = new JButton(Language.get("switchBtn"));
-        switchSceneBtn.setBounds(1177, 105, 100, 30);
+        switchSceneBtn.setBounds(1177, 131, 100, 30);
         new AccessAnimationService(switchSceneBtn).bind(80, 1, AccessAnimationService.Direction.Left);
         switchSceneBtn.setFocusPainted(false);
         BlinkBorderHelper.addBorder(switchSceneBtn, BorderFactory.createLineBorder(Color.decode(
@@ -568,7 +572,7 @@ public class MainFrame extends JFrame {
 
         //查看日志按钮
         JButton lookLogBtn = new JButton(Language.get("lookLogBtn"));
-        lookLogBtn.setBounds(1177, 70, 100, 30);
+        lookLogBtn.setBounds(1177, 96, 100, 30);
         new AccessAnimationService(lookLogBtn).bind(80, 1, AccessAnimationService.Direction.Left);
         lookLogBtn.setFocusPainted(false);
         BlinkBorderHelper.addBorder(lookLogBtn, BorderFactory.createLineBorder(Color.decode(
@@ -582,7 +586,7 @@ public class MainFrame extends JFrame {
 
         //查看功能按钮
         JButton lookFunBtn = new JButton(Language.get("mainLookFunBtn"));
-        lookFunBtn.setBounds(1177, 35, 100, 30);
+        lookFunBtn.setBounds(1177, 61, 100, 30);
         new AccessAnimationService(lookFunBtn).bind(80, 1, AccessAnimationService.Direction.Left);
         lookFunBtn.setFocusPainted(false);
         BlinkBorderHelper.addBorder(lookFunBtn, BorderFactory.createLineBorder(Color.decode(
@@ -595,16 +599,16 @@ public class MainFrame extends JFrame {
         this.add(lookFunBtn);
 
         //免责声明
-        disclaimerLabel = new JLabel(Language.get("disclaimer"));
-        disclaimerLabel.setBounds(1103, 723, 800, 30);
-        new AccessAnimationService(disclaimerLabel).bind(650, 1, AccessAnimationService.Direction.Left);
-        disclaimerLabel.setForeground(Color.decode(colorConfig.get("disclaimLabel")));
-        disclaimerLabel.setFont(new Font("微软雅黑", Font.ITALIC, 16));
-        this.add(disclaimerLabel);
+//        disclaimerLabel = new JLabel(Language.get("disclaimer"));
+//        disclaimerLabel.setBounds(1103, 749, 800, 30);
+//        new AccessAnimationService(disclaimerLabel).bind(650, 1, AccessAnimationService.Direction.Left);
+//        disclaimerLabel.setForeground(Color.decode(colorConfig.get("disclaimLabel")));
+//        disclaimerLabel.setFont(new Font("微软雅黑", Font.ITALIC, 16));
+//        this.add(disclaimerLabel);
 
         //关于
         aboutBtn = new JButton(Language.get("aboutBtn"));
-        aboutBtn.setBounds(1177, 0, 80, 30);
+        aboutBtn.setBounds(1177, 26, 80, 30);
         aboutBtn.setForeground(Color.decode(colorConfig.get("aboutBtnFore")));
         aboutBtn.setBackground(Color.decode(colorConfig.get("aboutBtnBg")));
         aboutBtn.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
@@ -621,7 +625,7 @@ public class MainFrame extends JFrame {
 
         //导出数据按钮
         exportBtn = new JButton(Language.get("exportBtn"));
-        exportBtn.setBounds(1177, 280, 100, 30);
+        exportBtn.setBounds(1177, 306, 100, 30);
         exportBtn.setForeground(Color.decode(colorConfig.get("exportBtnFore")));
         exportBtn.setBackground(Color.decode(colorConfig.get("exportBtnBg")));
         exportBtn.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
@@ -637,7 +641,7 @@ public class MainFrame extends JFrame {
 
         //导入
         importBtn = new JButton(Language.get("importBtn"));
-        importBtn.setBounds(1177, 245, 100, 30);
+        importBtn.setBounds(1177, 271, 100, 30);
         importBtn.setForeground(Color.decode(colorConfig.get("importBtnFore")));
         importBtn.setBackground(Color.decode(colorConfig.get("importBtnBg")));
         importBtn.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
@@ -652,7 +656,7 @@ public class MainFrame extends JFrame {
         this.add(importBtn);
 
         //到达活性时间后加密table
-        activistTimeLabel.setBounds(65, 0, 200, 30);
+        activistTimeLabel.setBounds(65, 26, 200, 30);
         activistTimeLabel.setForeground(Color.decode(colorConfig.get("activistTimeLabel")));
         activistTimeLabel.setFont(new Font("微软雅黑", Font.PLAIN, 16));
         this.add(activistTimeLabel);
@@ -662,7 +666,7 @@ public class MainFrame extends JFrame {
 
         //活性时间锁
         activistLockBtn = new JToggleButton(Language.get("activistBtn"));
-        activistLockBtn.setBounds(-8, 0, 60, 30);
+        activistLockBtn.setBounds(-8, 26, 60, 30);
         activistLockBtn.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
         activistLockBtn.setForeground(Color.decode(colorConfig.get("activeBtnFore")));
         activistLockBtn.setBorder(null);
@@ -691,7 +695,7 @@ public class MainFrame extends JFrame {
         //前期版本兼容性导入数据
         //3.0
         JButton importBtn3 = new JButton("PM3.0");
-        importBtn3.setBounds(1177, 175, 100, 30);
+        importBtn3.setBounds(1177, 201, 100, 30);
         importBtn3.setForeground(Color.decode(colorConfig.get("importBtn3Fore")));
         importBtn3.setBackground(Color.decode(colorConfig.get("importBtn3Bg")));
         importBtn3.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
@@ -709,7 +713,7 @@ public class MainFrame extends JFrame {
 
         //4.0
         JButton importBtn4 = new JButton("PM4.2");
-        importBtn4.setBounds(1177, 210, 100, 30);
+        importBtn4.setBounds(1177, 236, 100, 30);
         importBtn4.setFocusPainted(false);
         new AccessAnimationService(importBtn4).bind(80, 1, AccessAnimationService.Direction.Left);
         importBtn4.setForeground(Color.decode(colorConfig.get("importBtn4Fore")));
@@ -727,7 +731,7 @@ public class MainFrame extends JFrame {
 
         //输出框
         outputArea = new QueueTextArea();
-        outputArea.setBounds(42, 682, 1100, 44);
+        outputArea.setBounds(42, 708, 1100, 44);
         outputArea.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
         outputArea.setEditable(false);
         outputArea.setBackground(Color.decode(colorConfig.get("outputAreaBg")));

@@ -83,6 +83,14 @@
             <scope>compile</scope>
         </dependency>
 
+        <!-- 展示svg 格式图片的依赖 -->
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf-extras</artifactId>
+            <version>3.0</version>
+        </dependency>
+
+
     </dependencies>
 
 </project>
