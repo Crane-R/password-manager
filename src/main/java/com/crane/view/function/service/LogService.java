@@ -5,6 +5,7 @@ import com.crane.view.function.tools.FileTool;
 import com.crane.view.function.tools.ShowMessage;
 
 import java.io.File;
+import java.nio.file.Paths;
 
 /**
  * 日志服务
@@ -15,8 +16,8 @@ import java.io.File;
  */
 public class LogService {
 
-    public void showLog(){
-        File logFile = new File("log.log");
+    public void showLog() {
+        File logFile = new File(Paths.get("").toAbsolutePath() + "/logs/log.log");
         if (logFile.exists()) {
             FileTool.openFile(logFile.getPath());
         } else {
