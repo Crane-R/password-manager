@@ -1,5 +1,6 @@
 package com.crane.view.function.service;
 
+import com.crane.constant.Constant;
 import com.crane.constant.MainFrameCst;
 import com.crane.model.jdbc.JdbcConnection;
 import com.crane.view.function.config.Language;
@@ -40,14 +41,7 @@ public class LookFucService {
             }
 
             //构建数据
-            FucContentList functionList = new FucContentList();
-            functionList.addHead("function.head0", "function.head0Des");
-            functionList.addData("function.head0.function1", "function.head0.des1");
-            functionList.addData("function.head0.function2", "function.head0.des2");
-            functionList.addHead("function.head1", "function.head1Des");
-            functionList.addData("function.head1.function1", "function.head1.des1");
-            functionList.addData("function.head1.function2", "function.head1.des2");
-            functionList.addData("function.head1.function3", "function.head1.des3");
+            FucContentList functionList = getFunctionList();
 
             String html = new HtmlBuilderService(MainFrameCst.MAIN_TITLE + Language.get("lookFunBtn"))
                     .buildBadgeTitle()
@@ -61,6 +55,39 @@ public class LookFucService {
             log.error(e.toString());
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * 构建功能说明集合
+     *
+     * @Author CraneResigned
+     * @Date 2024/8/11 13:19:12
+     */
+    private static FucContentList getFunctionList() {
+        FucContentList functionList = new FucContentList();
+        functionList.addHead("function.head0", "function.head0.function", "function.head0.des");
+        functionList.addDataByLanguage("loginShowScene", "function.head0.d1");
+        functionList.addDataByLanguage("registerShowScene", "function.head0.d2");
+        functionList.addDataByLanguage("function.head0.f3", "function.head0.d3");
+        functionList.addDataByLanguage("isFileMode", "function.head0.d4");
+        functionList.addDataByLanguage("isDataMode", "function.head0.d5");
+        functionList.addDataByLanguage("isLocal2", "function.head0.d6");
+        functionList.addDataByLanguage("isLocal", "function.head0.d7");
+
+        functionList.addHead("function.head1", "function.head1.function", "function.head1.des");
+        functionList.addDataByLanguage("function.head1.f1", "function.head1.d1");
+        functionList.addDataByLanguage("activistBtn", "function.head1.d2");
+        functionList.addDataByLanguage("activistBtn2", "function.head1.d3");
+        functionList.addDataByLanguage("searchBtn", "function.head1.d4");
+        functionList.addDataByLanguage("searchBtn2", "function.head1.d5");
+        functionList.addDataByLanguage("addBtn", "function.head1.d6");
+        functionList.addDataByLanguage("clearBtn", "function.head1.d7");
+        functionList.addDataByStr(Language.get("moderBtn2"), Language.get("moderBtn2TipMsg1") + Constant.DOUBLE_ENTER_DELAY + Language.get("moderBtn2TipMsg2"));
+        functionList.addDataByLanguage("moderBtn", "moderBtnTipMsg");
+        functionList.addDataByLanguage("function.head1.f8", "function.head1.d8");
+        functionList.addDataByLanguage("function.head1.f9", "function.head1.d9");
+
+        return functionList;
     }
 
     public void openFile() {
@@ -80,12 +107,16 @@ public class LookFucService {
 
         private int count;
 
-        public void addHead(String head, String des) {
-            super.add(new Object[]{true, Language.get("function.num"), Language.get(head), Language.get(des)});
+        public void addHead(String head, String function, String des) {
+            super.add(new Object[]{true, Language.get(head), Language.get(function), Language.get(des)});
         }
 
-        public void addData(String function, String description) {
+        public void addDataByLanguage(String function, String description) {
             super.add(new Object[]{false, ++count, Language.get(function), Language.get(description)});
+        }
+
+        public void addDataByStr(String function, String description) {
+            super.add(new Object[]{false, ++count, function, description});
         }
 
     }

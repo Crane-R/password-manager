@@ -1,5 +1,6 @@
 package com.crane.test;
 
+import com.crane.view.ConfigurableFrame;
 import com.crane.view.module.ShadowPanel;
 
 import javax.swing.*;
@@ -15,7 +16,7 @@ public class TempTest extends JFrame {
 
     public static void main(String[] args) {
 
-        new TempTest().setVisible(true);
+        new ConfigurableFrame().setVisible(true);
 
     }
 

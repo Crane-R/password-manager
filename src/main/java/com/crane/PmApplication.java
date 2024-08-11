@@ -1,4 +1,4 @@
-package com.crane.test;
+package com.crane;
 
 import com.crane.view.function.service.LogService;
 import com.crane.view.function.tools.VersionCheckTool;

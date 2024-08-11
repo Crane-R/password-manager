@@ -180,7 +180,7 @@ public class LockFrame extends CustomFrame {
 
         //是否是本地数据库
         boolean isLocalServer = Boolean.parseBoolean(new Config(null).get("isLocalServer"));
-        isLocal = new JToggleButton(isLocalServer ? Language.get("isLocal") : Language.get("isLocal2"), isLocalServer);
+        isLocal = new JToggleButton(isLocalServer ? Language.get("isLocal2") : Language.get("isLocal"), isLocalServer);
         isLocal.setBounds(185, 226, 110, 30);
         isLocal.setForeground(Color.WHITE);
         isLocal.setFont(DefaultFont.WEI_RUAN_PLAIN_13.getFont());
@@ -197,9 +197,9 @@ public class LockFrame extends CustomFrame {
             boolean selected = isLocal.isSelected();
             if (!selected) {
                 ShowMessage.showWarningMessage(Language.get("isLocal2TipMsg"), Language.get("isLocal2TipTitle"));
-                isLocal.setText(Language.get("isLocal2"));
-            } else {
                 isLocal.setText(Language.get("isLocal"));
+            } else {
+                isLocal.setText(Language.get("isLocal2"));
             }
             //设置默认数据库
             new Config(null).set("isLocalServer", String.valueOf(selected));
