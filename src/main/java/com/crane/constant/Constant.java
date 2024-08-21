@@ -1,6 +1,6 @@
 package com.crane.constant;
 
-import com.crane.view.function.config.Config;
+import com.crane.view.config.Config;
 
 import java.nio.file.Paths;
 

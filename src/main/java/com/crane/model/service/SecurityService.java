@@ -5,7 +5,7 @@ import cn.hutool.core.lang.generator.SnowflakeGenerator;
 import cn.hutool.core.util.StrUtil;
 import com.crane.constant.Constant;
 import com.crane.model.bean.Account;
-import com.crane.view.function.config.Config;
+import com.crane.view.config.Config;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;

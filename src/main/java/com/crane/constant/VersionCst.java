@@ -1,7 +1,7 @@
 package com.crane.constant;
 
 import cn.hutool.core.codec.Rot;
-import com.crane.view.function.config.Config;
+import com.crane.view.config.Config;
 
 /**
  * @Description 版本常量

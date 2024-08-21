@@ -2,10 +2,10 @@ package com.crane.model.service;
 
 import com.crane.constant.Constant;
 import com.crane.constant.MainFrameCst;
-import com.crane.view.function.config.Language;
+import com.crane.view.config.Language;
 import com.crane.model.bean.Account;
 import com.crane.model.dao.AccountDao;
-import com.crane.view.MainFrame;
+import com.crane.view.frame.MainFrame;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;

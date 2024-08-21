@@ -1,6 +1,6 @@
 package com.crane.constant;
 
-import com.crane.view.function.config.Language;
+import com.crane.view.config.Language;
 
 /**
  * Description: 锁界面常量类

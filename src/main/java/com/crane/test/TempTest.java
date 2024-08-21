@@ -1,7 +1,7 @@
 package com.crane.test;
 
-import com.crane.view.ConfigurableFrame;
-import com.crane.view.module.ShadowPanel;
+import com.crane.view.frame.ConfigurableFrame;
+import com.crane.view.frame.module.ShadowPanel;
 
 import javax.swing.*;
 import java.awt.*;
