@@ -30,7 +30,7 @@ public class JdbcConnection {
      * Author: Crane Resigned
      * Date: 2022-12-27 23:31:58
      */
-    public static final boolean IS_TEST = true;
+    public static final boolean IS_TEST = false;
 
     static {
         try {

@@ -6,7 +6,7 @@
 
     <groupId>groupId</groupId>
     <artifactId>password-manager</artifactId>
-    <version>8.0-beta</version>
+    <version>8.0+-beta</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
