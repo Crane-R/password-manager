@@ -162,7 +162,7 @@ public class LockFrame extends CustomFrame {
                             mainFrame.setVisible(true);
                         }
                     } catch (Exception ex) {
-                        ex.printStackTrace();
+                        ShowMessage.showErrorMessage(ex.getStackTrace(),Language.get("startMainFrameErrTitle"));
                         ShowMessage.showErrorMessage(Language.get("startMainFrameErrMsg"), Language.get("startMainFrameErrTitle"));
                     }
                 }

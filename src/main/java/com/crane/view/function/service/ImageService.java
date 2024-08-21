@@ -1,5 +1,7 @@
 package com.crane.view.function.service;
 
+import com.crane.view.function.tools.PathTool;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.IOException;
@@ -24,7 +26,7 @@ public class ImageService {
      */
     public static Image getTitleImage() {
         try {
-            return ImageIO.read(Objects.requireNonNull(ActiveTimeService.class.getResource("/img/logo/FluentPassword48Regular.png")));
+            return ImageIO.read(PathTool.getResources2InputStream("img/logo/FluentPassword48Regular.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

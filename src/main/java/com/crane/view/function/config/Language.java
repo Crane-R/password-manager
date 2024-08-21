@@ -1,5 +1,6 @@
 package com.crane.view.function.config;
 
+import com.crane.view.function.tools.PathTool;
 import com.crane.view.function.tools.ShowMessage;
 import com.crane.model.jdbc.JdbcConnection;
 import lombok.extern.slf4j.Slf4j;
@@ -47,9 +48,7 @@ public final class Language {
         langFile = langFile + ".properties";
         langProperties = new Properties();
         try {
-            langProperties.load(JdbcConnection.IS_TEST ?
-                    ClassLoader.getSystemResourceAsStream(defaultPath + langFile)
-                    : Files.newInputStream(new File(Paths.get("").toAbsolutePath() + "/resources/" + defaultPath + langFile).toPath()));
+            langProperties.load(PathTool.getResources2InputStream(defaultPath + langFile));
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (NullPointerException e) {

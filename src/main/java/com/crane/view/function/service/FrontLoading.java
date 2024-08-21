@@ -2,6 +2,8 @@ package com.crane.view.function.service;
 
 import com.crane.constant.Constant;
 import com.crane.constant.MainFrameCst;
+import com.crane.view.function.config.Language;
+import com.crane.view.function.tools.ShowMessage;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -32,26 +34,29 @@ public final class FrontLoading {
     public static void checkKeysDirectory() {
         String path = Paths.get("keys").toAbsolutePath().toString();
         File keyFolder = new File(path);
-        if (!keyFolder.exists()) {
-            boolean isCreatedTrue = false;
+        if (keyFolder.exists()) {
+            return;
+        }
+
+        boolean isCreatedTrue = keyFolder.mkdirs();
+        if (!isCreatedTrue) {
+            String newKeyDir = "C://" + MainFrameCst.MAIN_TITLE + "//keys";
+            isCreatedTrue = new File(newKeyDir).mkdirs();
+            Constant.DIRECTORY_KEYS = newKeyDir;
+        }
+        log.info("创建key文件夹{}", isCreatedTrue);
+        if (isCreatedTrue) {
             try {
-                isCreatedTrue = keyFolder.mkdirs();
-            } catch (Exception e) {
-                String newKeyDir = "C://" + MainFrameCst.MAIN_TITLE + "//keys";
-                isCreatedTrue = new File(newKeyDir).mkdirs();
-                Constant.DIRECTORY_KEYS = newKeyDir;
+                //设为只读
+                Runtime.getRuntime().exec("attrib \"" + path + "\" +R");
+                //设为隐藏
+                Runtime.getRuntime().exec("attrib \"" + path + "\" +H");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-            log.info("创建key文件夹" + isCreatedTrue);
-            if (isCreatedTrue) {
-                try {
-                    //设为只读
-                    Runtime.getRuntime().exec("attrib \"" + path + "\" +R");
-                    //设为隐藏
-                    Runtime.getRuntime().exec("attrib \"" + path + "\" +H");
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+        } else {
+            ShowMessage.showErrorMessage(Language.get("createKeysFolderFailMsg"), Language.get("createKeysFolderFailTip"));
+            System.exit(0);
         }
     }
 

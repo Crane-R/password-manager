@@ -3,6 +3,7 @@ package com.crane.view.module;
 import com.crane.constant.Constant;
 import com.crane.view.CustomFrame;
 import com.crane.view.function.config.Config;
+import com.crane.view.function.tools.PathTool;
 import lombok.Getter;
 
 import javax.swing.*;
@@ -75,9 +76,9 @@ public class CustomTitle extends JPanel {
         this.addMouseListener(titleDragEvent);
         this.addMouseMotionListener(titleDragEvent);
 
-        ClassLoader classLoader = getClass().getClassLoader();
+
         //最小化图标
-        ImageIcon minimizeIcon = new ImageIcon(Objects.requireNonNull(classLoader.getResource("img/icon/z4.png")));
+        ImageIcon minimizeIcon = new ImageIcon(PathTool.getResources("img/icon/z4.png"));
         JButton miniBtn = new JButton();
         miniBtn.setBackground(Color.decode(colorConfig.get("titleBg")));
         miniBtn.setFocusPainted(false);
@@ -113,8 +114,8 @@ public class CustomTitle extends JPanel {
         this.add(miniBtn);
 
         //关闭图标
-        ImageIcon icon = new ImageIcon(Objects.requireNonNull(classLoader.getResource("img/icon/5h.png")));
-        ImageIcon inIcon = new ImageIcon(Objects.requireNonNull(classLoader.getResource("img/icon/5b.png")));
+        ImageIcon icon = new ImageIcon(PathTool.getResources("img/icon/5h.png"));
+        ImageIcon inIcon = new ImageIcon(PathTool.getResources("img/icon/5b.png"));
         closeBtn = new JButton();
         closeBtn.setBackground(Color.decode(colorConfig.get("titleBg")));
         closeBtn.setBounds(currentFrame.getWidth() - 45, 1, 42, 23);

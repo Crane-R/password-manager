@@ -4,6 +4,9 @@ import com.crane.constant.DefaultFont;
 
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Description: 自定义弹窗类
@@ -35,6 +38,26 @@ public class ShowMessage {
     public static void showErrorMessage(String message, String title) {
         setAlert();
         JOptionPane.showMessageDialog(null, message, title, JOptionPane.ERROR_MESSAGE);
+    }
+
+    /**
+     * 弹窗错误栈
+     *
+     * @Author CraneResigned
+     * @Date 2024/8/21 13:28:34
+     */
+    public static void showErrorMessage(StackTraceElement[] messages, String title) {
+        setAlert();
+        showErrorMessage(assembleErrorMsg(messages), title);
+    }
+
+    private static String assembleErrorMsg(StackTraceElement[] stackTraceElements) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (StackTraceElement stackTraceElement : stackTraceElements) {
+            stringBuilder.append(stackTraceElement);
+            stringBuilder.append("\n");
+        }
+        return stringBuilder.toString();
     }
 
     /**
