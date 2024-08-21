@@ -15,11 +15,14 @@ import com.crane.model.dao.LightDao;
 import com.crane.view.config.Language;
 import com.crane.view.frame.module.CustomFrame;
 import com.crane.view.tools.ExcelFileFilter;
+import com.crane.view.tools.PathTool;
 import com.crane.view.tools.ShowMessage;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.BufferedOutputStream;
@@ -47,6 +50,12 @@ public class ExportImportDataFrame extends CustomFrame {
 
     protected JLabel tipLabel;
 
+    protected JButton chooseFile;
+
+    protected JButton sureBtn;
+
+    protected ActionListener sureBtnactionListener;
+
     public ExportImportDataFrame(ExportImportCst exportImportCst) {
         super(500, 300, null);
         this.setTitle(exportImportCst.TITLE);
@@ -69,14 +78,18 @@ public class ExportImportDataFrame extends CustomFrame {
             public void keyPressed(KeyEvent e) {
                 //回车触发
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    exportFile();
+                    if (exportImportCst.IS_EXPORT) {
+                        exportFile();
+                    } else {
+                        importFile();
+                    }
                 }
             }
         });
         this.add(pathTextField);
 
         //文件选择器
-        JButton chooseFile = new JButton(Language.get("chooseFileBtn"));
+        chooseFile = new JButton(Language.get("chooseFileBtn"));
         chooseFile.setBounds(50, 226, 100, 30);
         chooseFile.setForeground(Color.decode(colorConfig.get("chooseFileBtnFore")));
         chooseFile.setFont(DefaultFont.WEI_RUAN_BOLD_12.getFont());
@@ -102,20 +115,22 @@ public class ExportImportDataFrame extends CustomFrame {
         this.add(chooseFile);
 
         //确认按钮
-        JButton sureBtn = new JButton(exportImportCst.IS_EXPORT ? Language.get("exportSureBtn") : Language.get("importSureBtn"));
+        sureBtn = new JButton(exportImportCst.IS_EXPORT ? Language.get("exportSureBtn") : Language.get("importSureBtn"));
         sureBtn.setBounds(330, 226, 100, 30);
         sureBtn.setForeground(Color.decode(colorConfig.get("sureBtnFore")));
         sureBtn.setFont(DefaultFont.WEI_RUAN_BOLD_12.getFont());
         sureBtn.setBorder(null);
         sureBtn.setFocusPainted(false);
         sureBtn.setBackground(Color.decode(colorConfig.get("sureBtnBg")));
-        sureBtn.addActionListener(e -> {
+        sureBtnactionListener = e -> {
             if (exportImportCst.IS_EXPORT) {
                 exportFile();
             } else {
                 importFile();
             }
-        });
+        };
+        sureBtn.addActionListener(sureBtnactionListener);
+
         this.add(sureBtn);
 
     }
@@ -248,12 +263,10 @@ public class ExportImportDataFrame extends CustomFrame {
      * Author: Crane Resigned
      * Date: 2022-12-31 14:18:32
      */
-    private static String getRecentlyPath() {
+    protected static String getRecentlyPath() {
         Properties recentlyPath = new Properties();
         try {
-            recentlyPath.load(JdbcConnection.IS_TEST ?
-                    ClassLoader.getSystemResourceAsStream("records/recently_path.properties")
-                    : Files.newInputStream(new File(Paths.get("").toAbsolutePath() + "/resources/records/recently_path.properties").toPath()));
+            recentlyPath.load(PathTool.getResources2InputStream("records/recently_path.properties"));
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
@@ -265,13 +278,11 @@ public class ExportImportDataFrame extends CustomFrame {
      * Author: Crane Resigned
      * Date: 2022-12-31 15:18:08
      */
-    private static void setRecentlyPath(String value) {
+    protected static void setRecentlyPath(String value) {
         Properties recentlyPath = new Properties();
         String resourcePath;
         try {
-            resourcePath = JdbcConnection.IS_TEST ?
-                    URLDecoder.decode(ClassLoader.getSystemResource("records/recently_path.properties").getFile(), "utf-8")
-                    : Paths.get("").toAbsolutePath() + "/resources/records/recently_path.properties";
+            resourcePath = PathTool.getResources("records/recently_path.properties");
             OutputStream writer = new BufferedOutputStream(Files.newOutputStream(new File(resourcePath).toPath()));
             recentlyPath.setProperty("recently_path", value);
             recentlyPath.store(writer, null);

@@ -292,6 +292,11 @@ public class AddFrame extends CustomFrame {
                     }
                 }
                 this.dispose();
+                //启动活性锁
+                if (!MainFrame.getActivistLockBtn().isSelected()) {
+                    ActiveTimeService.activeTimeLock();
+                }
+                mainFrame.setVisible(true);
             }
         });
         this.add(submitButton);

@@ -1,4 +1,6 @@
+import com.crane.constant.Constant;
 import com.crane.constant.MainFrameCst;
+import com.crane.model.service.SecurityService;
 
 import java.io.File;
 
@@ -13,10 +15,9 @@ public class Test {
     @org.junit.Test
     public void test(){
 
-        String newKeyDir = "C://" + "csjdlkfgjsdlfkj" + "//keys";
-        boolean mkdirs = new File(newKeyDir).mkdirs();
-        System.out.println(mkdirs);
-
+        Constant.CURRENT_KEY = "2002";
+        String s = SecurityService.decodeBase64Salt("\u007FwNmBQN5ZQZlZQRlZQNl");
+        System.out.println(s);
     }
 
 }

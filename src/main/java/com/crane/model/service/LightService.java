@@ -21,6 +21,7 @@ public class LightService {
 
     /**
      * 传入账户散数据，封装一条list调用写入
+     * 传进来的数据已经加密
      *
      * @Author Crane Resigned
      * @Date 2023-02-04 00:29:21
@@ -29,6 +30,7 @@ public class LightService {
         List<Account> accounts = new LightDao().readData();
         Account account = new Account(accounts.size() + 1, accountName, username, password, others, useKey);
         account.setAccountId(accounts.size() + 1);
+        //这里为甚在新增界面加密了这里又要解密，这是因为修改的时候修改完成后展示的是加密的，所以需要在新增界面加密
         account.setUsername(SecurityService.decodeBase64Salt(account.getUsername()));
         account.setPassword(SecurityService.decodeBase64Salt(account.getPassword()));
         account.setOther(SecurityService.decodeBase64Salt(account.getOther()));

@@ -65,4 +65,8 @@ public class LightDao {
         return EasyExcel.read(PATH).head(Account.class).sheet("账户数据").doReadSync();
     }
 
+    public List<Account> readData(String path){
+        return EasyExcel.read(path).head(Account.class).sheet("账户数据").doReadSync();
+    }
+
 }

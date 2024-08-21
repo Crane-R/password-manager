@@ -19,10 +19,12 @@ public final class PathTool {
 
     public static String getResources(String resourcesPath) {
         Path path = Paths.get("");
-        return JdbcConnection.IS_TEST ?
-                path.toAbsolutePath() + File.separator + "src" + File.separator + "main" + File.separator
-                        + "resources" + File.separator + resourcesPath
-                : path.toAbsolutePath() + File.separator + "resources" + File.separator + resourcesPath;
+        if (JdbcConnection.IS_TEST) {
+            return path.toAbsolutePath() + File.separator + "src" + File.separator + "main" + File.separator
+                    + "resources" + File.separator + resourcesPath;
+        } else {
+            return path.toAbsolutePath() + File.separator + "resources" + File.separator + resourcesPath;
+        }
     }
 
     public static InputStream getResources2InputStream(String resourcesPath) throws IOException {

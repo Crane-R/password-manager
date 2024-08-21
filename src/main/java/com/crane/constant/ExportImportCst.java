@@ -21,6 +21,11 @@ public enum ExportImportCst {
             Language.get("exportFrameTitle"),
             Language.get("exportTipLabel")
     ),
+    IMPORT_ENCRYPT(
+            false,
+            Language.get("importEncryptTit"),
+            Language.get("importEncryptLabel")
+    ),
     /**
      * 导入
      * Author: Crane Resigned

@@ -615,6 +615,22 @@ public class MainFrame extends CustomFrame {
                 colorConfig.get("exportBtnBlinkBorIn")), 2), null);
         this.add(exportBtn);
 
+        //去加密导入
+        JButton importByEncryptBtn = new JButton(Language.get("importByEncryptBtn"));
+        importByEncryptBtn.setBounds(1177, 376, 100, 30);
+        importByEncryptBtn.setForeground(Color.decode(colorConfig.get("exportBtnFore")));
+        importByEncryptBtn.setBackground(Color.decode(colorConfig.get("importByEncryptBtnBg")));
+        importByEncryptBtn.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
+        importByEncryptBtn.setHorizontalAlignment(JLabel.CENTER);
+        new AccessAnimationService(importByEncryptBtn).bind(80, 1, AccessAnimationService.Direction.Left);
+        importByEncryptBtn.addActionListener(e -> {
+            new ImportByEncryptFrame(ExportImportCst.IMPORT_ENCRYPT).setVisible(true);
+            ActiveTimeService.activeTimeFresh();
+        });
+        BlinkBorderHelper.addBorder(importByEncryptBtn, BorderFactory.createLineBorder(Color.decode(
+                colorConfig.get("exportBtnBlinkBorIn")), 2), null);
+        this.add(importByEncryptBtn);
+
         //导入
         importBtn = new JButton(Language.get("importBtn"));
         importBtn.setBounds(1177, 306, 100, 30);

@@ -3,3 +3,5 @@ out/
 *.class
 .idea/
 target/
+src/main/resources/light_weight_data
+keys/

@@ -6,6 +6,8 @@ import cn.hutool.core.util.StrUtil;
 import com.crane.constant.Constant;
 import com.crane.model.bean.Account;
 import com.crane.view.config.Config;
+import com.crane.view.tools.CloseTool;
+import com.crane.view.tools.ShowMessage;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
@@ -84,6 +86,10 @@ public final class SecurityService {
      * Date: 2022-11-27 13:14:59
      */
     public static String getKey(String targetKey) {
+        if (StrUtil.isBlank(targetKey)) {
+            ShowMessage.showErrorMessage("缺失密钥无法解密", "密钥为空");
+            return "";
+        }
         BufferedReader bufferedReader;
         String result = null;
         try {
@@ -93,6 +99,27 @@ public final class SecurityService {
             bufferedReader.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
+     * 去加密导入，给一个方法可以直接输入密钥文件获取密钥
+     *
+     * @Author CraneResigned
+     * @Date 2024/8/21 18:56:36
+     */
+    public static String getKeyByKeyFile(String keyFile) {
+        BufferedReader bufferedReader = null;
+        String result = null;
+        try {
+            bufferedReader = new BufferedReader(new FileReader(keyFile));
+            result = bufferedReader.readLine();
+            bufferedReader.close();
+        } catch (IOException e) {
+            ShowMessage.showErrorMessage(e.getStackTrace(), e.getMessage());
+        } finally {
+            CloseTool.close(bufferedReader);
         }
         return result;
     }
@@ -117,11 +144,15 @@ public final class SecurityService {
      */
     public static String getRealKey() {
         String uuidKey = getKey(Constant.CURRENT_KEY);
-        if (uuidKey.length() < Constant.MINIMUM_KEY_LENGTH) {
-            return "密匙长度不对";
+        return getRealKey(uuidKey);
+    }
+
+    public static String getRealKey(String fullKey) {
+        if (fullKey.length() < Constant.MINIMUM_KEY_LENGTH) {
+            return "密匙长度错误";
         }
         return RealKeyEncodeService.realKeyDecode(
-                new StringBuilder(new StringBuilder(uuidKey).reverse().substring(19, uuidKey.length())).reverse().toString()
+                new StringBuilder(new StringBuilder(fullKey).reverse().substring(19, fullKey.length())).reverse().toString()
         );
     }
 
@@ -136,6 +167,14 @@ public final class SecurityService {
         private RealKeyEncodeService() {
         }
 
+        /**
+         * 加密真实的密钥
+         * 非真实样例：1111 -->
+         * 每个字符转为int加一个.然后追加每个字符/10后不为0的次数
+         *
+         * @Author CraneResigned
+         * @Date 2024/8/21 17:38:54
+         */
         public static String realKeyEncode(String originRealKey) {
             StringBuilder result = new StringBuilder();
             int len = originRealKey.length();
@@ -177,22 +216,25 @@ public final class SecurityService {
      * Date: 2022-11-27 13:43:29
      */
     public static String decodeBase64Salt(String password) {
+        return decodeBase64Salt(password, getRealKey());
+    }
+
+    public static String decodeBase64Salt(String password, String realKey) {
         if (StrUtil.isEmpty(password)) {
             return password;
         }
         String decode;
         try {
-            decode = new String(Base64.getDecoder().decode(secondStageDecode(password)), StandardCharsets.UTF_8);
+            decode = new String(Base64.getDecoder().decode(secondStageDecode(password, realKey)), StandardCharsets.UTF_8);
         } catch (IllegalArgumentException e) {
-            log.error("该信息未加密，返回原值" + password);
+            log.error("该信息未加密，返回原值{}", password);
             return password;
         }
-        String key = getRealKey();
 
-        int keyLastIndex = key.length() - 1;
+        int keyLastIndex = realKey.length() - 1;
         int decodeLastIndex = decode.length() - 1;
         for (int i = 0; i < keyLastIndex + 1; i++) {
-            if (decode.charAt(decodeLastIndex--) != key.charAt(keyLastIndex--)) {
+            if (decode.charAt(decodeLastIndex--) != realKey.charAt(keyLastIndex--)) {
                 return "密钥校验失败";
             }
         }
@@ -228,9 +270,9 @@ public final class SecurityService {
      * Author: Crane Resigned
      * Date: 2022-12-01 19:44:23
      */
-    private static String secondStageDecode(String secondEncodePassword) {
+    private static String secondStageDecode(String secondEncodePassword, String realKey) {
         secondEncodePassword = Rot.decode13(secondEncodePassword);
-        return String.valueOf((char) ((int) secondEncodePassword.charAt(0) - (int) getRealKey().charAt(0)))
+        return String.valueOf((char) ((int) secondEncodePassword.charAt(0) - (int) realKey.charAt(0)))
                 .concat(secondEncodePassword.substring(1));
     }
 
@@ -334,6 +376,14 @@ public final class SecurityService {
         account.setPassword(decodeBase64Salt(account.getPassword()));
         account.setOther(decodeBase64Salt(account.getOther()));
         account.setUserKey(decodeBase64Salt(account.getUserKey()));
+    }
+
+    public static void decodeAccount(Account account, String realKey) {
+        account.setAccountName(decodeBase64Salt(account.getAccountName(), realKey));
+        account.setUsername(decodeBase64Salt(account.getUsername(), realKey));
+        account.setPassword(decodeBase64Salt(account.getPassword(), realKey));
+        account.setOther(decodeBase64Salt(account.getOther(), realKey));
+        account.setUserKey(decodeBase64Salt(account.getUserKey(), realKey));
     }
 
 }
