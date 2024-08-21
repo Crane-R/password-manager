@@ -18,6 +18,7 @@ public class PmApplication {
     public static void main(String[] args) {
         InitLogRecord.initLog();
         try {
+
             //版本检测
             VersionCheckTool.checkVersion();
             //检测keys
