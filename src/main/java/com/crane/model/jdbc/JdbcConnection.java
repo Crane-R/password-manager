@@ -1,6 +1,7 @@
 package com.crane.model.jdbc;
 
 import com.crane.model.service.AccountService;
+import com.crane.view.function.tools.PathTool;
 import com.crane.view.function.tools.ShowMessage;
 import com.crane.view.LockFrame;
 import lombok.extern.slf4j.Slf4j;
@@ -49,9 +50,7 @@ public class JdbcConnection {
             //加载测试or本地or服务器
             String sureConfig = IS_TEST ? LOCAL_TEST_NAME : LockFrame.isLocal.isSelected() ? LOCAL : SERVER;
             log.info("加载数据库配置：" + sureConfig);
-            config.load(IS_TEST ?
-                    ClassLoader.getSystemResourceAsStream(sureConfig)
-                    : Files.newInputStream(new File(Paths.get("").toAbsolutePath() + "/resources/" + sureConfig).toPath()));
+            config.load(PathTool.getResources2InputStream(sureConfig));
         } catch (IOException e) {
             log.error(e.getMessage());
         }

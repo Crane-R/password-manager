@@ -2,6 +2,7 @@ package com.crane.view.function.config;
 
 import cn.hutool.core.util.StrUtil;
 import com.crane.model.jdbc.JdbcConnection;
+import com.crane.view.function.tools.PathTool;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -23,12 +24,8 @@ public class Config {
         }
         defaultConfig = new Properties();
         try {
-            InputStream inputStream = JdbcConnection.IS_TEST ?
-                    ClassLoader.getSystemResourceAsStream(defaultPath)
-                    : Files.newInputStream(new File(Paths.get("").toAbsolutePath() + "/resources/" + defaultPath).toPath());
-            if (inputStream != null) {
-                defaultConfig.load(new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8)));
-            }
+            InputStream inputStream = PathTool.getResources2InputStream(defaultPath);
+            defaultConfig.load(new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8)));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
