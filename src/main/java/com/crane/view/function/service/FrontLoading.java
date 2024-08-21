@@ -38,7 +38,6 @@ public final class FrontLoading {
             return;
         }
 
-
         boolean isCreatedTrue = keyFolder.mkdirs();
         if (!isCreatedTrue) {
             String newKeyDir = "C://" + MainFrameCst.MAIN_TITLE + "//keys";
