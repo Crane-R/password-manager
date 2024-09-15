@@ -6,6 +6,7 @@ import com.crane.view.config.Config;
 import com.crane.view.config.Language;
 import com.crane.view.frame.MainFrame;
 import com.crane.view.frame.LockFrame;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -30,6 +31,7 @@ public class ActiveTimeService {
      * @Author Crane Resigned
      * @Date 2023-06-01 19:19:17
      */
+    @Getter
     private static boolean isActiveLock = false;
 
     /**
@@ -37,6 +39,7 @@ public class ActiveTimeService {
      * Author: Crane Resigned
      * Date: 2023-01-22 19:09:01
      */
+    @Getter
     private static boolean isStart = false;
 
     /**
@@ -112,7 +115,20 @@ public class ActiveTimeService {
      * @Date 2023-05-24 17:30:32
      */
     public static void activeTimeLock() {
-        if (Objects.isNull(ACTIVIST_TIMER)) {
+        activeTimeLock(false);
+    }
+
+
+    /**
+     * 方法重载
+     *
+     * @param isIgnoreActiveBtnSelect 是否无视锁按钮是否选择，适用于主界面锁按钮本身的切换
+     * @Author Crane Resigned
+     * @Date 2024/9/15 17:28
+     **/
+    public static void activeTimeLock(boolean isIgnoreActiveBtnSelect) {
+        //如果锁定按钮已经是选中状态，即是已经锁定的，那这个方法应当是无响应
+        if ((!isIgnoreActiveBtnSelect && MainFrame.getActivistLockBtn().isSelected()) || Objects.isNull(ACTIVIST_TIMER)) {
             return;
         }
         isStart = false;
