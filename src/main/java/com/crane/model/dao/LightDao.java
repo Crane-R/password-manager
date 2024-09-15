@@ -19,9 +19,20 @@ import java.util.List;
 @Slf4j
 public class LightDao {
 
-    private static final String PATH;
+    private static String PATH;
 
     static {
+        updatePath();
+    }
+
+    /**
+     * 这个方法本来是在静态块里的，为什么要抽出来：
+     * 因为静态path只加载一次，所以需要在切换场景的时候切换path，切换currenkey的时候同时切换path就可以了
+     *
+     * @Author Crane Resigned
+     * @Date 2024/9/15 18:24
+     **/
+    public static void updatePath() {
         //获取程序运行的当前路径
         String userCurrentPath = System.getProperty("user.dir");
         log.info(userCurrentPath);
@@ -29,7 +40,6 @@ public class LightDao {
                 userCurrentPath + "\\src\\main\\resources\\light_weight_data\\" + SecurityService.getUuidKey() + "_data.xlsx"
                 : userCurrentPath + "\\resources\\light_weight_data\\" + SecurityService.getUuidKey() + "_data.xlsx";
     }
-
 
     /**
      * 数据写入
@@ -65,7 +75,7 @@ public class LightDao {
         return EasyExcel.read(PATH).head(Account.class).sheet("账户数据").doReadSync();
     }
 
-    public List<Account> readData(String path){
+    public List<Account> readData(String path) {
         return EasyExcel.read(path).head(Account.class).sheet("账户数据").doReadSync();
     }
 

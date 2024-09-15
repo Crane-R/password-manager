@@ -5,6 +5,7 @@ import cn.hutool.core.lang.generator.SnowflakeGenerator;
 import cn.hutool.core.util.StrUtil;
 import com.crane.constant.Constant;
 import com.crane.model.bean.Account;
+import com.crane.model.dao.LightDao;
 import com.crane.view.config.Config;
 import com.crane.view.tools.CloseTool;
 import com.crane.view.tools.ShowMessage;
@@ -49,6 +50,7 @@ public final class SecurityService {
         boolean b = file.exists() && Objects.isNull(file.listFiles());
         if (b) {
             Constant.CURRENT_KEY = inputKey;
+            LightDao.updatePath();
         }
         return b;
     }
@@ -78,6 +80,7 @@ public final class SecurityService {
             e.printStackTrace();
         }
         Constant.CURRENT_KEY = keyPre;
+        LightDao.updatePath();
     }
 
     /**
