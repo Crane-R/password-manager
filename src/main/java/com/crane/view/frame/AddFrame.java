@@ -57,13 +57,13 @@ public class AddFrame extends CustomFrame {
 
     public AddFrame(LinkedList<String> list, MainFrame mainFrame) {
         super(410, 390, e -> {
-
             //启动活性锁
-            if (!MainFrame.getActivistLockBtn().isSelected()) {
-                ActiveTimeService.activeTimeLock();
-            }
+            ActiveTimeService.activeTimeLock();
             mainFrame.setVisible(true);
         });
+
+        //不论何时，启动此界面时，始终暂停活性锁，并在界面被杀死时刷新活性锁
+        ActiveTimeService.activeTimeLock();
 
         //当前处理账户的id
         Integer currentId = "".equals(list.get(0)) ? null : Integer.valueOf(list.get(0));
@@ -293,9 +293,7 @@ public class AddFrame extends CustomFrame {
                 }
                 this.dispose();
                 //启动活性锁
-                if (!MainFrame.getActivistLockBtn().isSelected()) {
-                    ActiveTimeService.activeTimeLock();
-                }
+                ActiveTimeService.activeTimeLock();
                 mainFrame.setVisible(true);
             }
         });

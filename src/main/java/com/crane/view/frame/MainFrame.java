@@ -461,9 +461,7 @@ public class MainFrame extends CustomFrame {
             list.add(Language.get("purposeAdd"));
             new AddFrame(list, this).setVisible(true);
             this.setVisible(false);
-            if (!activistLockBtn.isSelected()) {
-                ActiveTimeService.activeTimeLock();
-            }
+            ActiveTimeService.activeTimeLock();
         });
         BlinkBorderHelper.addBorder(addButton, BorderFactory.createLineBorder(Color.decode(
                 colorConfig.get("addBtnBlinkBorIn")), 2), null);
@@ -678,7 +676,7 @@ public class MainFrame extends CustomFrame {
                 activistLockBtn.setText(Language.get("activistBtn"));
                 activistLockBtn.setForeground(Color.decode(colorConfig.get("activeBtnFore")));
             }
-            ActiveTimeService.activeTimeLock();
+            ActiveTimeService.activeTimeLock(true);
         });
         BlinkBorderHelper.addBorder(activistLockBtn, BorderFactory.createLineBorder(Color.decode(
                 colorConfig.get("activeBtnBlinkBorIn")), 2), null);
