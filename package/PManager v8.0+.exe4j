@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exe4j version="9.0" transformSequenceNumber="3">
+  <directoryPresets config="D:/Projects/IntelliJIDEA/password-manager/target" />
+  <application name="PManager v8.1-beta" distributionSourceDir="D:/Projects/IntelliJIDEA/password-manager/package" />
+  <executable name="PManager v8.1-beta" wrapperType="embed" iconSet="true" iconFile="D:/Projects/IntelliJIDEA/password-manager/package/logo.ico" executableDir="." stderrFile="err.log" redirectStdout="true" stdoutFile="log.log" executableMode="gui" />
+  <java mainClass="com.crane.PmApplication" minVersion="1.8">
+    <searchSequence>
+      <directory location="./jre" />
+    </searchSequence>
+    <classPath>
+      <archive location="D:/Projects/IntelliJIDEA/password-manager/target/password-manager-8.0+-beta-jar-with-dependencies.jar" failOnError="false" />
+    </classPath>
+  </java>
+</exe4j>
