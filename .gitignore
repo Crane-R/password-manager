@@ -3,5 +3,10 @@ out/
 *.class
 .idea/
 target/
-src/main/resources/light_weight_data
+src/main/resources/light_weight_data/
 keys/
+.html
+package/resources
+package/resources-innosetup
+package/logs
+*.xlsx
