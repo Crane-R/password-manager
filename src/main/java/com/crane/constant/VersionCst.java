@@ -17,7 +17,7 @@ public interface VersionCst {
      * @Author Crane Resigned
      * @Date 2023-02-02 21:33:50
      */
-    String VERSION = "v8.1-beta";
+    String VERSION = "v8.1.1-beta";
 
     /**
      * 最近更新日期

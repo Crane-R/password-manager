@@ -22,9 +22,8 @@ public final class PathTool {
         if (JdbcConnection.IS_TEST) {
             return path.toAbsolutePath() + File.separator + "src" + File.separator + "main" + File.separator
                     + "resources" + File.separator + resourcesPath;
-        } else {
-            return path.toAbsolutePath() + File.separator + "resources" + File.separator + resourcesPath;
         }
+        return path.toAbsolutePath() + File.separator + "resources" + File.separator + resourcesPath;
     }
 
     public static InputStream getResources2InputStream(String resourcesPath) throws IOException {
