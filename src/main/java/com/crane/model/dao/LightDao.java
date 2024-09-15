@@ -25,6 +25,7 @@ public class LightDao {
         updatePath();
     }
 
+
     /**
      * 这个方法本来是在静态块里的，为什么要抽出来：
      * 因为静态path只加载一次，所以需要在切换场景的时候切换path，切换currenkey的时候同时切换path就可以了
