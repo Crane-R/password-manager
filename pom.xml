@@ -115,26 +115,18 @@
             <version>1.7.30</version>
             <!--            <scope>test</scope>-->
         </dependency>
-
-
-        <!--        <dependency>-->
-        <!--            <groupId>org.slf4j</groupId>-->
-        <!--            <artifactId>slf4j-simple</artifactId>-->
-        <!--            <version>2.0.5</version>-->
-        <!--        </dependency>-->
-
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>5.8.25</version>
         </dependency>
-
-
+        <!-- https://mvnrepository.com/artifact/com.alibaba/easyexcel -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>easyexcel</artifactId>
-            <version>3.1.4</version>
+            <version>3.3.2</version>
         </dependency>
+
         <!--常用工具库-->
         <dependency>
             <groupId>com.google.guava</groupId>

@@ -461,7 +461,6 @@ public class MainFrame extends CustomFrame {
             list.add(Language.get("purposeAdd"));
             new AddFrame(list, this).setVisible(true);
             this.setVisible(false);
-            ActiveTimeService.activeTimeLock();
         });
         BlinkBorderHelper.addBorder(addButton, BorderFactory.createLineBorder(Color.decode(
                 colorConfig.get("addBtnBlinkBorIn")), 2), null);

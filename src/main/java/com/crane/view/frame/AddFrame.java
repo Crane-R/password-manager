@@ -60,6 +60,7 @@ public class AddFrame extends CustomFrame {
             //启动活性锁
             ActiveTimeService.activeTimeLock();
             mainFrame.setVisible(true);
+            System.out.println("执行关闭方法");
         });
 
         //不论何时，启动此界面时，始终暂停活性锁，并在界面被杀死时刷新活性锁
@@ -295,6 +296,7 @@ public class AddFrame extends CustomFrame {
                 //启动活性锁
                 ActiveTimeService.activeTimeLock();
                 mainFrame.setVisible(true);
+                System.out.println("执行关闭方法");
             }
         });
         this.add(submitButton);

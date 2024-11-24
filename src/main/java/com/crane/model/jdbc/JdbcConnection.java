@@ -46,7 +46,7 @@ public class JdbcConnection {
         try {
             //加载测试or本地or服务器
             String sureConfig = IS_TEST ? LOCAL_TEST_NAME : LockFrame.isLocal.isSelected() ? LOCAL : SERVER;
-            log.info("加载数据库配置：" + sureConfig);
+            log.info("加载数据库配置：{}", sureConfig);
             config.load(PathTool.getResources2InputStream(sureConfig));
         } catch (IOException e) {
             log.error(e.getMessage());

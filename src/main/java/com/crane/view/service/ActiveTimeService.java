@@ -93,7 +93,7 @@ public class ActiveTimeService {
                 }
                 if (TIME[0] <= 0) {
                     //表格失活
-                    log.info("主界面失活" + DateUtil.now());
+                    log.info("主界面失活{}", DateUtil.now());
                     MainFrame.mainFrame.dispose();
                     LockFrame lockFrame = new LockFrame();
                     //窗体最小化
