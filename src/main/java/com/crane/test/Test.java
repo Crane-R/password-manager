@@ -16,7 +16,6 @@ import java.io.IOException;
 @Slf4j
 public class Test {
 
-    @org.junit.Test
     public void test() {
         String a = "abc123";
         a = Rot.encode13(a);
