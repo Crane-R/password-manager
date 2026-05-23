@@ -38,6 +38,11 @@ public class Constant {
     public static String CURRENT_KEY = null;
 
     /**
+     * 当前场景标识
+     */
+    public static String CURRENT_SCENE_LABEL = "";
+
+    /**
      * 记录是否是轻量版
      *
      * @Author Crane Resigned

@@ -65,6 +65,11 @@ public class ExcelService {
         File targetFile = new File(path);
         if (!targetFile.exists()) {
             try {
+                File parentFile = targetFile.getParentFile();
+                if (parentFile != null && !parentFile.exists() && !parentFile.mkdirs()) {
+                    log.error("create parent directory failed: {}", parentFile.getAbsolutePath());
+                    return false;
+                }
                 return targetFile.createNewFile();
             } catch (IOException e) {
                 log.error(path);

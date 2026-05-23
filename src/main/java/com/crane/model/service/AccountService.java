@@ -45,7 +45,7 @@ public class AccountService {
     public static Object[][] listToTwoObj(List<Account> list) {
         //开始处理数据
         int length = list.size();
-        Object[][] objects = new Object[length][5];
+        Object[][] objects = new Object[length][6];
         for (int i = 0; i < length; i++) {
             Account account = list.get(i);
             objects[i][0] = account.getAccountId();
@@ -53,6 +53,7 @@ public class AccountService {
             objects[i][2] = account.getUsername().trim();
             objects[i][3] = account.getPassword().trim();
             objects[i][4] = null == account.getOther() ? "" : account.getOther().trim();
+            objects[i][5] = null == account.getUpdateTime() ? "" : account.getUpdateTime().trim();
         }
         return objects;
     }
@@ -121,6 +122,7 @@ public class AccountService {
         try {
             //这里因为文本框事件频繁触发而导致的异常
             MainFrame.jTable.setModel(new DefaultTableModel(new AccountService().selectData(text), MainFrameCst.getTitles()));
+            MainFrame.applyTableColumnWidth();
         } catch (Exception e) {
             log.info("事件并发异常（使用了线程池）");
             e.printStackTrace();
@@ -129,6 +131,7 @@ public class AccountService {
 
     public static void setTableMessages(Object[][] data) {
         MainFrame.jTable.setModel(new DefaultTableModel(data, MainFrameCst.getTitles()));
+        MainFrame.applyTableColumnWidth();
     }
 
     /**
@@ -147,6 +150,7 @@ public class AccountService {
             result[i][2] = account.getUsername();
             result[i][3] = account.getPassword();
             result[i][4] = account.getOther();
+            result[i][5] = account.getUpdateTime();
         }
         setTableMessages(result);
     }
@@ -164,7 +168,7 @@ public class AccountService {
         for (int i = 0; i < rowCount; i++) {
             for (int j = 0; j < columnCount; j++) {
                 resultData[i][j] = j == 3 || j == 2 || j == 4 ?
-                        SecurityService.decodeBase64Salt(String.valueOf(jTable.getValueAt(i, j)))
+                        SecurityService.decodeIfEncrypted(String.valueOf(jTable.getValueAt(i, j)))
                         : String.valueOf(jTable.getValueAt(i, j));
             }
         }
@@ -203,11 +207,11 @@ public class AccountService {
      */
     public static void decodeList(List<String> list) {
         //密码
-        list.set(3, SecurityService.decodeBase64Salt(list.get(3)));
+        list.set(3, SecurityService.decodeIfEncrypted(list.get(3)));
         //用户名
-        list.set(2, SecurityService.decodeBase64Salt(list.get(2)));
+        list.set(2, SecurityService.decodeIfEncrypted(list.get(2)));
         //其他信息
-        list.set(4, SecurityService.decodeBase64Salt(list.get(4)));
+        list.set(4, SecurityService.decodeIfEncrypted(list.get(4)));
     }
 
 }

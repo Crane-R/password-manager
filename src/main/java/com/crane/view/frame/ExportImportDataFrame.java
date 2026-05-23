@@ -7,13 +7,12 @@ import com.crane.constant.DefaultFont;
 import com.crane.constant.ExportImportCst;
 import com.crane.model.bean.Account;
 import com.crane.model.dao.AccountDao;
-import com.crane.model.jdbc.JdbcConnection;
-import com.crane.model.service.AccountService;
-import com.crane.model.service.ExcelService;
-import com.crane.model.service.SecurityService;
 import com.crane.model.dao.LightDao;
+import com.crane.model.service.AccountService;
+import com.crane.model.service.SecurityService;
 import com.crane.view.config.Language;
 import com.crane.view.frame.module.CustomFrame;
+import com.crane.view.service.ExportService;
 import com.crane.view.tools.ExcelFileFilter;
 import com.crane.view.tools.PathTool;
 import com.crane.view.tools.ShowMessage;
@@ -21,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -29,19 +27,13 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URLDecoder;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Description: 导出数据窗口
- * Author: ZhouXingxue
- * Date: 2022/12/30 23:30
- *
- * @author Crane Resigned
+ * 导入导出数据窗口。
  */
 @Slf4j
 public class ExportImportDataFrame extends CustomFrame {
@@ -132,60 +124,35 @@ public class ExportImportDataFrame extends CustomFrame {
         sureBtn.addActionListener(sureBtnactionListener);
 
         this.add(sureBtn);
-
     }
 
     /**
-     * 导出方法
-     * Author: Crane Resigned
-     * Date: 2022-12-31 14:07:18
+     * 导出方法。
      */
     private void exportFile() {
         String path = getPath();
         if (path == null) {
             return;
         }
-        List<Account> accounts;
-        if (!Constant.IS_LIGHT) {
-            accounts = new AccountDao().select(null);
-        } else {
-            accounts = new LightDao().readData();
-        }
-        //清除key
-        accounts.forEach(account -> {
-            account.setUserKey(null);
-            account.setAccountId(null);
-            //解密
-            account.setAccountName(SecurityService.decodeBase64Salt(account.getAccountName()));
-            account.setUsername(SecurityService.decodeBase64Salt(account.getUsername()));
-            account.setPassword(SecurityService.decodeBase64Salt(account.getPassword()));
-            account.setOther(SecurityService.decodeBase64Salt(account.getOther()));
-        });
-        //执行导出
-        boolean b = ExcelService.exportDataToExcel(accounts, path);
-        ShowMessage.showInformationMessage(b ? Language.get("exportSuccessiveTipMsg1") + accounts.size()
+        boolean success = ExportService.exportCurrentScenePlaintext(path);
+        int count = ExportService.getCurrentSceneAccountCount();
+        ShowMessage.showInformationMessage(success ? Language.get("exportSuccessiveTipMsg1") + count
                 + Language.get("exportSuccessiveTipMsg2") : Language.get("exportSuccessiveTipMsg3"), Language.get("exportSuccessiveTipTit"));
         this.dispose();
     }
 
     /**
-     * 导入方法
-     * Author: Crane Resigned
-     * Date: 2022-12-31 16:52:46
+     * 导入方法。
      */
     protected void importFile() {
         String path = getPath();
         if (path != null) {
             List<Account> accounts = EasyExcel.read(path).head(Account.class).sheet().doReadSync();
             if (!Constant.IS_LIGHT) {
-                //TODO：这个集合，每新增一条数据就需要重新连接一次数据库，因为是使用的jdbc，这样效率非常低，考虑建立线程池或上mybatis
                 AccountDao accountDao = new AccountDao();
-                //状态数组，成功，失败，总计
                 int[] records = new int[3];
                 for (Account account : accounts) {
-                    //替换密钥
                     account.setUserKey(SecurityService.getUuidKey());
-                    //加密
                     account.setUsername(SecurityService.encodeBase64Salt(account.getUsername()));
                     account.setPassword(SecurityService.encodeBase64Salt(account.getPassword()));
                     account.setOther(SecurityService.encodeBase64Salt(account.getOther()));
@@ -225,11 +192,7 @@ public class ExportImportDataFrame extends CustomFrame {
     }
 
     /**
-     * 当前版本的导入数据至少需要做的操作
-     * 向以前的版本导入数据提供
-     * 这个方法也就是为3.0和4.2做的，不具有扩展性，仅作为不触发警告的封装方法
-     * Author: Crane Resigned
-     * Date: 2023-01-22 21:23:56
+     * 兼容旧版本导入时使用。
      */
     protected static void newEditionInsert(AccountDao accountDao, int[] records, Account account) {
         account.setOther(SecurityService.encodeBase64Salt(account.getOther()));
@@ -244,13 +207,10 @@ public class ExportImportDataFrame extends CustomFrame {
     }
 
     /**
-     * 获取路径
-     * Author: Crane Resigned
-     * Date: 2023-01-22 21:02:58
+     * 获取路径。
      */
     protected String getPath() {
         String path = pathTextField.getText();
-        //TODO:需要单独封装一个检验路径的方法
         if (StrUtil.isEmpty(path)) {
             ShowMessage.showWarningMessage(Language.get("errPathTipMsg"), Language.get("errPathTipTit"));
             return null;
@@ -259,9 +219,7 @@ public class ExportImportDataFrame extends CustomFrame {
     }
 
     /**
-     * 获取固定配置文件的属性值
-     * Author: Crane Resigned
-     * Date: 2022-12-31 14:18:32
+     * 获取最近一次路径。
      */
     protected static String getRecentlyPath() {
         Properties recentlyPath = new Properties();
@@ -274,15 +232,12 @@ public class ExportImportDataFrame extends CustomFrame {
     }
 
     /**
-     * 写入属性配置
-     * Author: Crane Resigned
-     * Date: 2022-12-31 15:18:08
+     * 写入最近一次路径。
      */
     protected static void setRecentlyPath(String value) {
         Properties recentlyPath = new Properties();
-        String resourcePath;
         try {
-            resourcePath = PathTool.getResources("records/recently_path.properties");
+            String resourcePath = PathTool.getResources("records/recently_path.properties");
             OutputStream writer = new BufferedOutputStream(Files.newOutputStream(new File(resourcePath).toPath()));
             recentlyPath.setProperty("recently_path", value);
             recentlyPath.store(writer, null);
@@ -290,5 +245,4 @@ public class ExportImportDataFrame extends CustomFrame {
             throw new RuntimeException(ex);
         }
     }
-
 }

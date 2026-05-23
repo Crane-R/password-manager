@@ -59,16 +59,24 @@ public class Account implements Serializable {
     @ExcelProperty("user_key")
     private String userKey;
 
+    @ExcelProperty("update_time")
+    private String updateTime;
+
     public Account() {
     }
 
     public Account(Integer accountId, String accountName, String username, String password, String other, String userKey) {
+        this(accountId, accountName, username, password, other, userKey, null);
+    }
+
+    public Account(Integer accountId, String accountName, String username, String password, String other, String userKey, String updateTime) {
         this.accountId = accountId;
         this.accountName = accountName;
         this.username = username;
         this.password = password;
         this.other = other;
         this.userKey = userKey;
+        this.updateTime = updateTime;
     }
 
     public void setAccountId(Integer accountId) {
@@ -95,6 +103,10 @@ public class Account implements Serializable {
         this.userKey = userKey;
     }
 
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
+    }
+
     @Override
     public String toString() {
         return "Account{" +
@@ -104,6 +116,7 @@ public class Account implements Serializable {
                 ", password='" + password + '\'' +
                 ", other='" + other + '\'' +
                 ", userKey='" + userKey + '\'' +
+                ", updateTime='" + updateTime + '\'' +
                 '}';
     }
 }

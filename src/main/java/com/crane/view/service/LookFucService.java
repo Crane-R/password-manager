@@ -87,6 +87,33 @@ public class LookFucService {
         functionList.addDataByLanguage("function.head1.f8", "function.head1.d8");
         functionList.addDataByLanguage("function.head1.f9", "function.head1.d9");
 
+        functionList.addHead("function.head2", "function.head2.function", "function.head2.des");
+        functionList.addDataByLanguage("searchTextMouseEntered", "function.head2.d1");
+        functionList.addDataByLanguage("copyBtn", "function.head2.d2");
+        functionList.addDataByLanguage("copyAccountBtn", "function.head2.d3");
+        functionList.addDataByLanguage("rightBtnMenuUpdate", "function.head2.d4");
+        functionList.addDataByLanguage("deleteBtn", "function.head2.d5");
+        functionList.addDataByLanguage("singleAcDecode", "function.head2.d6");
+        functionList.addDataByLanguage("switchBtn", "function.head2.d7");
+        functionList.addDataByLanguage("lookLogBtn", "function.head2.d8");
+        functionList.addDataByLanguage("configurableBtn", "function.head2.d9");
+        functionList.addDataByLanguage("mainLookFunBtn", "function.head2.d10");
+        functionList.addDataByLanguage("exportBtn", "function.head2.d11");
+        functionList.addDataByLanguage("importBtn", "function.head2.d12");
+        functionList.addDataByLanguage("importByEncryptBtn", "function.head2.d13");
+        functionList.addDataByLanguage("aboutBtn", "function.head2.d14");
+        functionList.addDataByLanguage("timedExportBtn", "function.head2.d15");
+
+        functionList.addHead("function.head3", "function.head3.function", "function.head3.des");
+        functionList.addDataByLanguage("purposeAdd", "function.head3.d1");
+        functionList.addDataByLanguage("purposeUpdate", "function.head3.d2");
+        functionList.addDataByLanguage("purposeDelete", "function.head3.d3");
+        functionList.addDataByLanguage("resetBtn", "function.head3.d4");
+        functionList.addDataByLanguage("generateBtn", "function.head3.d5");
+        functionList.addDataByLanguage("chooseFileBtn", "function.head3.d6");
+        functionList.addDataByLanguage("exportSureBtn", "function.head3.d7");
+        functionList.addDataByLanguage("importSureBtn", "function.head3.d8");
+
         return functionList;
     }
 

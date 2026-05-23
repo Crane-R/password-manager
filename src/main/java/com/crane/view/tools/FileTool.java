@@ -5,10 +5,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * 文件工具
- *
- * @Author Crane Resigned
- * @Date 2023-09-01 17:33:16
+ * 文件工具。
  */
 public final class FileTool {
 
@@ -16,10 +13,7 @@ public final class FileTool {
     }
 
     /**
-     * 打开文件
-     *
-     * @Author Crane Resigned
-     * @Date 2023-09-01 17:37:51
+     * 打开文件。
      */
     public static void openFile(String path) {
         try {
@@ -29,5 +23,4 @@ public final class FileTool {
             e.printStackTrace();
         }
     }
-
 }
