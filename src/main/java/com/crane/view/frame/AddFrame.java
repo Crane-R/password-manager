@@ -282,7 +282,7 @@ public class AddFrame extends CustomFrame {
                 //如果是更新或新增
                 if (StrUtil.equals(ADD, purpose) || StrUtil.equals(UPDATE, purpose)) {
                     AccountService.setTableMessages(
-                            new Object[][]{{Objects.isNull(currentId) ? Language.get("addSuccessiveTip") : currentId, accountName, username, password, other, ""}}
+                            new Object[][]{{Objects.isNull(currentId) ? Language.get("addSuccessiveTip") : currentId, accountName, username, password, other}}
                     );
                 } else if (StrUtil.equals(purpose, DELETE)) {
                     //如果是删除就更新当前搜索的信息

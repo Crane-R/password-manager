@@ -45,7 +45,7 @@ public class AccountService {
     public static Object[][] listToTwoObj(List<Account> list) {
         //开始处理数据
         int length = list.size();
-        Object[][] objects = new Object[length][6];
+        Object[][] objects = new Object[length][5];
         for (int i = 0; i < length; i++) {
             Account account = list.get(i);
             objects[i][0] = account.getAccountId();
@@ -53,7 +53,6 @@ public class AccountService {
             objects[i][2] = account.getUsername().trim();
             objects[i][3] = account.getPassword().trim();
             objects[i][4] = null == account.getOther() ? "" : account.getOther().trim();
-            objects[i][5] = null == account.getUpdateTime() ? "" : account.getUpdateTime().trim();
         }
         return objects;
     }
@@ -150,7 +149,6 @@ public class AccountService {
             result[i][2] = account.getUsername();
             result[i][3] = account.getPassword();
             result[i][4] = account.getOther();
-            result[i][5] = account.getUpdateTime();
         }
         setTableMessages(result);
     }
