@@ -29,8 +29,9 @@ public class JdbcConnection {
      * 是否是测试/开发环境
      * Author: Crane Resigned
      * Date: 2022-12-27 23:31:58
+     * 对路径标识有作用
      */
-    public static final boolean IS_TEST = false;
+    public static final boolean IS_TEST = true;
 
     static {
         try {
