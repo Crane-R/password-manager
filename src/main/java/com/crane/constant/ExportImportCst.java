@@ -3,18 +3,12 @@ package com.crane.constant;
 import com.crane.view.config.Language;
 
 /**
- * Description: 构建窗口枚举
- * Author: ZhouXingxue
- * Date: 2022/12/31 15:52
- *
- * @author Crane Resigned
+ * 导入导出窗口枚举。
  */
 public enum ExportImportCst {
 
     /**
-     * 导出
-     * Author: Crane Resigned
-     * Date: 2022-12-31 15:55:34
+     * 导出。
      */
     EXPORT(
             true,
@@ -27,9 +21,7 @@ public enum ExportImportCst {
             Language.get("importEncryptLabel")
     ),
     /**
-     * 导入
-     * Author: Crane Resigned
-     * Date: 2022-12-31 15:56:58
+     * 导入。
      */
     IMPORT(
             false,
@@ -37,10 +29,7 @@ public enum ExportImportCst {
             Language.get("importTipLabel"));
 
     /**
-     * true是导出
-     * false是导入
-     * Author: Crane Resigned
-     * Date: 2022-12-31 16:37:32
+     * true 是导出，false 是导入。
      */
     public final boolean IS_EXPORT;
 

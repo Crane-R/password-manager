@@ -5,11 +5,9 @@ import com.crane.constant.Constant;
 import com.crane.view.config.Config;
 import com.crane.view.config.Language;
 import com.crane.view.frame.MainFrame;
-import com.crane.view.frame.LockFrame;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.Date;
 import java.util.Objects;
@@ -94,13 +92,9 @@ public class ActiveTimeService {
                 if (TIME[0] <= 0) {
                     //表格失活
                     log.info("主界面失活{}", DateUtil.now());
-                    MainFrame.mainFrame.dispose();
-                    LockFrame lockFrame = new LockFrame();
-                    //窗体最小化
-                    lockFrame.setExtendedState(JFrame.ICONIFIED);
-                    lockFrame.setVisible(true);
                     isStart = false;
                     ACTIVIST_TIMER.shutdown();
+                    System.exit(0);
                 }
                 TIME[0] -= 1000;
             }, 0, 1, TimeUnit.SECONDS);

@@ -59,7 +59,7 @@ public class SingleDecodingModule extends JMenuItem {
             for (int i = 2; i < columnCount; i++) {
                 jTable.setValueAt(!(isNotMatch == switchSearch) ?
                                 SecurityService.encodeBase64Salt(String.valueOf(jTable.getValueAt(selectedRow, i))) :
-                                SecurityService.decodeBase64Salt(String.valueOf(jTable.getValueAt(selectedRow, i)))
+                                SecurityService.decodeIfEncrypted(String.valueOf(jTable.getValueAt(selectedRow, i)))
                         , selectedRow, i);
             }
             if (isNotMatch) {

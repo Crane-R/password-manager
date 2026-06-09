@@ -9,21 +9,23 @@ import com.crane.constant.MainFrameCst;
 import com.crane.model.jdbc.JdbcConnection;
 import com.crane.model.service.AccountService;
 import com.crane.model.service.LightService;
+import com.crane.model.service.SecurityService;
 import com.crane.view.config.Config;
 import com.crane.view.config.Language;
 import com.crane.view.frame.module.CustomFrame;
-import com.crane.view.tools.FileTool;
-import com.crane.view.tools.ShowMessage;
-import com.crane.view.tools.TextTools;
-import com.crane.view.frame.module.SingleDecodingModule;
 import com.crane.view.frame.module.QueueTextArea;
 import com.crane.view.frame.module.ScrollBarUi;
+import com.crane.view.frame.module.SingleDecodingModule;
 import com.crane.view.frame.module.stylehelper.BlinkBorderHelper;
 import com.crane.view.frame.module.stylehelper.MenuBlinkBackHelper;
 import com.crane.view.service.AccessAnimationService;
 import com.crane.view.service.ActiveTimeService;
 import com.crane.view.service.LogService;
 import com.crane.view.service.LookFucService;
+import com.crane.view.tools.FileTool;
+import com.crane.view.tools.PathTool;
+import com.crane.view.tools.ShowMessage;
+import com.crane.view.tools.TextTools;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,89 +37,40 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Timer;
-import java.util.*;
+import java.util.TimerTask;
 import java.util.concurrent.*;
 
 /**
- * @author Crane Resigned
+ * 主界面。
  */
 @Slf4j
 public class MainFrame extends CustomFrame {
 
-    /**
-     * 搜索文本
-     *
-     * @Author Crane Resigned
-     * @Date 2022-06-11 23:49:42
-     */
     @Getter
     protected static JTextField searchText;
 
-    /**
-     * 数据表条数
-     *
-     * @Author Crane Resigned
-     * @Date 2022-06-11 23:49:12
-     */
     @Getter
     protected static JLabel resultNumbers;
 
-    /**
-     * 数据表格
-     *
-     * @Author Crane Resigned
-     * @Date 2022-06-02 23:19:34
-     */
     public static JTable jTable;
 
-    /**
-     * 鼠标右键弹出菜单
-     *
-     * @Author Crane Resigned
-     * @Date 2022-06-02 23:19:39
-     */
-    protected final JPopupMenu jPopupMenu = new JPopupMenu();
-
-    /**
-     * 搜索按钮的文本切换标记
-     * true为解密
-     * false为查询
-     * Author: Crane Resigned
-     * Date: 2022-11-27 02:03:43
-     */
     public static boolean switchRecord = false;
 
-    /**
-     * 实时搜索开关
-     * Author: Crane Resigned
-     * Date: 2022-11-26 23:50:37
-     */
+    protected final JPopupMenu jPopupMenu = new JPopupMenu();
+
     protected final JToggleButton realTimeSearchBtn;
 
     public String SEARCH_BTN_TXT1 = Language.get("searchBtn");
 
-    /**
-     * 搜索按钮
-     * Author: Crane Resigned
-     * Date: 2022-11-27 15:22:53
-     */
     public static JButton searchButton;
 
-    /**
-     * 活性时间
-     * Author: Crane Resigned
-     * Date: 2023-01-22 18:30:55
-     */
     public static JLabel activistTimeLabel = new JLabel(String.valueOf(Constant.ACTIVE_TIME));
 
-    /**
-     * 载存主窗体对象
-     *
-     * @Author Crane Resigned
-     * @Date 2023-05-24 17:16:36
-     */
     public static MainFrame mainFrame;
 
     protected JButton aboutBtn;
@@ -132,6 +85,8 @@ public class MainFrame extends CustomFrame {
     protected JButton importBtn;
 
     protected JLabel disclaimerLabel;
+
+    protected JLabel currentSceneLabel;
 
     @Getter
     private static QueueTextArea outputArea;
@@ -152,6 +107,7 @@ public class MainFrame extends CustomFrame {
         jTable.setSelectionBackground(Color.decode(colorConfig.get("tableSelectBg")));
         jTable.setSelectionForeground(Color.decode(colorConfig.get("tableSelectFore")));
         jTable.setGridColor(Color.decode(colorConfig.get("tableGrid")));
+        applyTableColumnWidth();
 
         JTableHeader tableHeader = jTable.getTableHeader();
         tableHeader.setBorder(null);
@@ -271,7 +227,12 @@ public class MainFrame extends CustomFrame {
         searchTip.setFont(new Font("微软雅黑", Font.PLAIN, 16));
         this.add(searchTip);
 
-        //搜索文本
+        currentSceneLabel = new JLabel(Language.get("currentSceneLabel") + SecurityService.getCurrentSceneLabel());
+        currentSceneLabel.setBounds(42, 754, 560, 20);
+        currentSceneLabel.setForeground(Color.decode(colorConfig.get("searchTipFore")));
+        currentSceneLabel.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
+        this.add(currentSceneLabel);
+
         searchText = new JTextField("");
         searchText.setBounds(280, 76, 380, 30);
         searchText.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
@@ -315,20 +276,18 @@ public class MainFrame extends CustomFrame {
         searchText.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
             }
 
             @Override
             public void mousePressed(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON3) {
-                    log.info("鼠标右击，清空搜索框");
+                if (e.getButton() == MouseEvent.BUTTON1) {
+                    log.info("鼠标左击，清空搜索框");
                     searchText.setText(null);
                 }
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-
             }
 
             @Override
@@ -371,75 +330,20 @@ public class MainFrame extends CustomFrame {
         BlinkBorderHelper.addBorder(searchButton, BorderFactory.createLineBorder(Color.decode(
                 colorConfig.get("searchBtnBlinkBorIn")), 2), null);
 
-        //值改变事件
         searchText.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                ExecutorService threadPool = new ThreadPoolExecutor(2, 5,
-                        1L, TimeUnit.SECONDS,
-                        new LinkedBlockingQueue<>(3),
-                        Executors.defaultThreadFactory(),
-                        new ThreadPoolExecutor.AbortPolicy());
-                threadPool.execute(() -> {
-                    if (realTimeSearchBtn.isSelected()) {
-                        if (StrUtil.isEmpty(searchText.getText())) {
-                            jTable.setModel(new DefaultTableModel(new Object[0][0], MainFrameCst.getTitles()));
-                            //查询
-                        } else if (Constant.IS_LIGHT) {
-                            new LightService().searchAndSetTableMsg();
-                        } else {
-                            AccountService.setTableMessages();
-                        }
-                    }
-                });
-                ActiveTimeService.activeTimeFresh();
-                AccountService.toggleStatus(true);
+                handleRealtimeSearch();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                ExecutorService threadPool = new ThreadPoolExecutor(2, 5,
-                        1L, TimeUnit.SECONDS,
-                        new LinkedBlockingQueue<>(3),
-                        Executors.defaultThreadFactory(),
-                        new ThreadPoolExecutor.AbortPolicy());
-                threadPool.execute(() -> {
-                    if (realTimeSearchBtn.isSelected()) {
-                        if (StrUtil.isEmpty(searchText.getText())) {
-                            jTable.setModel(new DefaultTableModel(new Object[0][0], MainFrameCst.getTitles()));
-                            //查询
-                        } else if (Constant.IS_LIGHT) {
-                            new LightService().searchAndSetTableMsg();
-                        } else {
-                            AccountService.setTableMessages();
-                        }
-                    }
-                });
-                ActiveTimeService.activeTimeFresh();
-                AccountService.toggleStatus(true);
+                handleRealtimeSearch();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                ExecutorService threadPool = new ThreadPoolExecutor(2, 5,
-                        1L, TimeUnit.SECONDS,
-                        new LinkedBlockingQueue<>(3),
-                        Executors.defaultThreadFactory(),
-                        new ThreadPoolExecutor.AbortPolicy());
-                threadPool.execute(() -> {
-                    if (realTimeSearchBtn.isSelected()) {
-                        if (StrUtil.isEmpty(searchText.getText())) {
-                            jTable.setModel(new DefaultTableModel(new Object[0][0], MainFrameCst.getTitles()));
-                            //查询
-                        } else if (Constant.IS_LIGHT) {
-                            new LightService().searchAndSetTableMsg();
-                        } else {
-                            AccountService.setTableMessages();
-                        }
-                    }
-                });
-                ActiveTimeService.activeTimeFresh();
-                AccountService.toggleStatus(true);
+                handleRealtimeSearch();
             }
         });
         this.add(searchButton);
@@ -475,6 +379,7 @@ public class MainFrame extends CustomFrame {
         clearBtn.addActionListener(e -> {
             searchText.setText(null);
             jTable.setModel(new DefaultTableModel(new Object[0][0], MainFrameCst.getTitles()));
+            applyTableColumnWidth();
             AccountService.toggleStatus(false);
             outputArea.clearMessage();
             ActiveTimeService.activeTimeFresh();
@@ -559,13 +464,24 @@ public class MainFrame extends CustomFrame {
         configurableBtn.setBackground(Color.decode(colorConfig.get("configurableBtnBg")));
         configurableBtn.setFont(DefaultFont.WEI_RUAN_PLAIN_15.getFont());
         configurableBtn.setHorizontalAlignment(JLabel.CENTER);
-        configurableBtn.addActionListener(e -> {
-            String path = Objects.requireNonNull(getClass().getClassLoader().getResource("config/configurable.properties")).getPath();
-            FileTool.openFile(path);
-        });
+        configurableBtn.addActionListener(e -> FileTool.openFile(PathTool.getResources("config/configurable.properties")));
         this.add(configurableBtn);
 
-        //查看功能按钮
+        JButton timedExportBtn = new JButton(Language.get("timedExportBtn"));
+        timedExportBtn.setBounds(1177, 411, 100, 30);
+        timedExportBtn.setForeground(Color.decode(colorConfig.get("exportBtnFore")));
+        timedExportBtn.setBackground(Color.decode(colorConfig.get("exportBtnBg")));
+        timedExportBtn.setFont(DefaultFont.WEI_RUAN_BOLD_13.getFont());
+        timedExportBtn.setHorizontalAlignment(JLabel.CENTER);
+        new AccessAnimationService(timedExportBtn).bind(80, 1, AccessAnimationService.Direction.Left);
+        timedExportBtn.addActionListener(e -> {
+            new TimedExportFrame().setVisible(true);
+            ActiveTimeService.activeTimeFresh();
+        });
+        BlinkBorderHelper.addBorder(timedExportBtn, BorderFactory.createLineBorder(Color.decode(
+                colorConfig.get("exportBtnBlinkBorIn")), 2), null);
+        this.add(timedExportBtn);
+
         JButton lookFunBtn = new JButton(Language.get("mainLookFunBtn"));
         lookFunBtn.setBounds(1177, 61, 100, 30);
         new AccessAnimationService(lookFunBtn).bind(80, 1, AccessAnimationService.Direction.Left);
@@ -732,9 +648,39 @@ public class MainFrame extends CustomFrame {
         mainFrame = this;
     }
 
+    private void handleRealtimeSearch() {
+        ExecutorService threadPool = new ThreadPoolExecutor(2, 5,
+                1L, TimeUnit.SECONDS,
+                new LinkedBlockingQueue<>(3),
+                Executors.defaultThreadFactory(),
+                new ThreadPoolExecutor.AbortPolicy());
+        threadPool.execute(() -> {
+            if (realTimeSearchBtn.isSelected()) {
+                if (StrUtil.isEmpty(searchText.getText())) {
+                    jTable.setModel(new DefaultTableModel(new Object[0][0], MainFrameCst.getTitles()));
+                    applyTableColumnWidth();
+                } else if (Constant.IS_LIGHT) {
+                    new LightService().searchAndSetTableMsg();
+                } else {
+                    AccountService.setTableMessages();
+                }
+            }
+        });
+        ActiveTimeService.activeTimeFresh();
+        AccountService.toggleStatus(true);
+    }
+
+    public static void applyTableColumnWidth() {
+        if (jTable == null || jTable.getColumnModel().getColumnCount() == 0) {
+            return;
+        }
+        jTable.getColumnModel().getColumn(0).setMinWidth(60);
+        jTable.getColumnModel().getColumn(0).setPreferredWidth(70);
+        jTable.getColumnModel().getColumn(0).setMaxWidth(90);
+    }
+
     public void stickAndShowCopySuccessMsg(String value, String specialMsg) {
         outputArea.outputMessage(StrUtil.isEmpty(specialMsg) ? Language.get("copySuccessive").concat(value) : specialMsg);
         TextTools.stick(value);
     }
-
 }

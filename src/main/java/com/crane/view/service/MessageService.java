@@ -13,7 +13,9 @@ public class MessageService {
     private MessageService(){}
 
     public static void outputMessage(String message) {
-        MainFrame.getOutputArea().outputMessage(message);
+        if (MainFrame.getOutputArea() != null) {
+            MainFrame.getOutputArea().outputMessage(message);
+        }
     }
 
 }

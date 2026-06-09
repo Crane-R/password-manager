@@ -2,7 +2,7 @@ package com.crane.view.tools;
 
 import lombok.SneakyThrows;
 
-import java.io.Reader;
+import java.io.Closeable;
 
 /**
  * 关闭流工具
@@ -13,9 +13,9 @@ import java.io.Reader;
 public class CloseTool {
 
     @SneakyThrows
-    public static void close(Reader readable){
-        if(readable!=null){
-            readable.close();
+    public static void close(Closeable closeable){
+        if(closeable != null){
+            closeable.close();
         }
     }
 

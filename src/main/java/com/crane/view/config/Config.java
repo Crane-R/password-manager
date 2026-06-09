@@ -5,7 +5,11 @@ import com.crane.model.jdbc.JdbcConnection;
 import com.crane.view.tools.PathTool;
 import com.crane.view.tools.ShowMessage;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,6 +17,9 @@ import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.Properties;
 
+/**
+ * 配置文件读写。
+ */
 public class Config {
 
     private final Properties defaultConfig;
@@ -34,20 +41,14 @@ public class Config {
     }
 
     /**
-     * 获取属性
-     *
-     * @Author Crane Resigned
-     * @Date 2023-06-13 19:02:24
+     * 获取属性。
      */
     public String get(String key) {
         return defaultConfig.getProperty(key);
     }
 
     /**
-     * 设置属性
-     *
-     * @Author Crane Resigned
-     * @Date 2023-06-13 19:03:05
+     * 设置属性。
      */
     public void set(String key, String value) {
         if (value == null) {
@@ -64,5 +65,4 @@ public class Config {
             throw new RuntimeException(e);
         }
     }
-
 }
